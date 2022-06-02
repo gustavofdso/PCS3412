@@ -66,8 +66,8 @@ architecture arch of FD is
     
     -- Branch signals
     signal mux_1:       std_logic_vector(31 downto 0);
-    signal adder_1:     std_logic_vector(31 downto 0);
-    signal adder_2:     std_logic_vector(31 downto 0);
+    signal add_1:       std_logic_vector(31 downto 0);
+    signal add_2:       std_logic_vector(31 downto 0);
     signal sl2_1:       std_logic_vector(31 downto 0);
     signal sext:        std_logic_vector(31 downto 0);
     signal sl2_2:       std_logic_vector(31 downto 0);
@@ -88,5 +88,24 @@ architecture arch of FD is
     signal alu:         std_logic_vector(31 downto 0);
 
 begin
+    -- PC
+    program_counter: entity.work.registrador port map (
+
+    );
+
+    -- IR
+    instruction_register: entity.work.registrador port map (
+        
+    );
+
+    -- Branch
+
+    -- Instruction Memory
+
+    -- Data Memory
+
+    -- Register Bank
+
+    -- ALU
 
 end arch;

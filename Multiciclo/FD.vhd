@@ -212,7 +212,10 @@ begin
             O => mux_3
         );
 
-    register_bank: entity work.Mux2x1
+    register_bank: entity work.
+
+    -- ALU
+    multiplexer_4: entity work.Mux2x1
         generic map (
             NB => 32
         )
@@ -223,23 +226,20 @@ begin
             O => mux_4
         );
 
-    -- ALU
-    multiplexer_4: entity work.Mux2x1
-
     ALU: entity work.ULA
-    generic(
-        NB => 32
-    );
-    port(
-        Veum => '0',
-        A => mux_4,
-        B => ,
-        cUla => ALUOpe,
-        Sinal => open,
-        Vaum => open,
-        Zero => Zero,
-        C => open
-    );
+        generic map (
+            NB => 32
+        )
+        port map (
+            Veum => '0',
+            A => mux_4,
+            B => ,
+            cUla => ALUOpe,
+            Sinal => open,
+            Vaum => open,
+            Zero => Zero,
+            C => open
+        );
 
     
 end arch;

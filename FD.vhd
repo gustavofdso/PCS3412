@@ -89,11 +89,11 @@ architecture arch of FD is
 
 begin
     -- PC
-    program_counter: entity.work.resistrador
-        generic map(
+    program_counter: entity work.registrador
+        generic map (
             NumeroBits => 32
         )
-        port map(
+        port map (
             C => clk,
             R => rst,
             S => ce_pc,
@@ -102,72 +102,72 @@ begin
         );
 
     -- IR
-    instruction_register: entity.work. port map (
-        generic map(
+    instruction_register: entity work.registrador
+        generic map (
             NumeroBits => 32
         )
-        port map(
+        port map (
             C => clk,
             R => rst,
             S => ce_ri,
             D => dout_i,
             Q => ri
         );
-        
+
     -- Branch
-    adder_1: entity.work. port map (
+    adder_1: entity work.
         
     );
 
-    adder_2: entity.work. port map (
+    adder_2: entity work.
         
     );
 
-    shift_left_1: entity.work. port map (
+    shift_left_1: entity work.
         
     );
 
-    sign_extend: entity.work. port map (
+    sign_extend: entity work.
         
     );
 
-    shift_left_2: entity.work. port map (
+    shift_left_2: entity work.
         
     );
 
-    multiplexer_1: entity.work. port map (
+    multiplexer_1: entity work.
         
     );
 
     -- Instruction Memory
-    instruction_memory: entity.work. port map (
+    instruction_memory: entity work.
         
     );
 
     -- Data Memory
-    data_memory: entity.work. port map (
+    data_memory: entity work.
         
     );
 
     -- Register Bank
-    multiplexer_2: entity.work. port map (
+    multiplexer_2: entity work.
         
     );
         
-    multiplexer_3: entity.work. port map (
+    multiplexer_3: entity work.
         
     );
 
-    register_bank: entity.work. port map (
+    register_bank: entity work.
         
     );
 
     -- ALU
-    multiplexer_4: entity.work. port map (
+    multiplexer_4: entity work.
         
     );
 
-    ALU: entity.work. port map (
+    ALU: entity work.
         
     );
 

@@ -225,7 +225,7 @@ begin
             O => mux_4
         );
 
-    ALU: entity work.ULA
+    ALU: entity work.
 
     
 end arch;

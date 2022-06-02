@@ -134,11 +134,23 @@ begin
     );
 
     -- Register Bank
+    multiplexer_2: entity.work. port map (
+        
+    );
+        
+    multiplexer_3: entity.work. port map (
+        
+    );
+
     register_bank: entity.work. port map (
         
     );
 
     -- ALU
+    multiplexer_4: entity.work. port map (
+        
+    );
+
     ALU: entity.work. port map (
         
     );

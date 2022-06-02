@@ -10,7 +10,6 @@
 -- Description : Implementation of the Dataflow entity with its components.
 --
 -------------------------------------------------------------------------------
-
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
@@ -91,12 +90,11 @@ begin
             NumeroBits => 32
         )
         port map (
-            C => clk,
+            clk => clk,
             CE => ce_pc,
-            R => rst,
-            S => '1',
-            D => mux_1,
-            Q => pc
+            rst => rst,
+            din => mux_1,
+            dout => pc
         );
 
     -- IR
@@ -105,12 +103,11 @@ begin
             NumeroBits => 32
         )
         port map (
-            C => clk,
+            clk => clk,
             CE => ce_ri,
-            R => rst,
-            S => '1',
-            D => dout_i,
-            Q => ri
+            rst => rst,
+            din => dout_i,
+            dout => ri
         );
 
     -- Branch
@@ -227,19 +224,6 @@ begin
         );
 
     ALU: entity work.ULA
-        generic map (
-            NB => 32
-        )
-        port map (
-            Veum => '0',
-            A => mux_4,
-            B => ,
-            cUla => ALUOpe,
-            Sinal => open,
-            Vaum => open,
-            Zero => Zero,
-            C => open
-        );
 
     
 end arch;

@@ -149,7 +149,7 @@ begin
 
     sign_extend: entity work.xsign
         generic map (
-            NBE => 16,
+            NBE => 12,
             NBS => 32
         )
         port map (
@@ -158,8 +158,28 @@ begin
         );
 
     shift_left_2: entity work.deslocador_combinatorio
+        generic map (
+            NB => 32,
+            NBD => 2
+        )
+        port map (
+            DE => '1',
+            I => sext,
+            O => sl_2
+        );
 
-    multiplexer_1: entity work.
+    multiplexer_1: entity work.Mux4x1
+        generic map (
+            NB => 32
+        )
+        port map (
+            I0 => add_1,
+            I1 => sl_1,
+            I2 => add_2,
+            I3 => (others => '0'),
+            Sel => Brch,
+            O => mux_1
+        );
 
     -- Instruction Memory
     instruction_memory: entity work.

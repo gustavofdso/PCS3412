@@ -60,9 +60,6 @@ architecture arch of FD is
 
     -- IR signals
     signal ri:          std_logic_vector(31 downto 0);
-    signal rs:          std_logic_vector(5 downto 0);
-    signal rt:          std_logic_vector(5 downto 0);
-    signal rd:          std_logic_vector(5 downto 0);
     
     -- Branch signals
     signal mux_1:       std_logic_vector(31 downto 0);
@@ -120,11 +117,11 @@ begin
             NumeroBits => 32
         )
         port map (
-                S => '1',
-                Vum => '0',
-                A  => pc,
-                B  => "0100",
-                C => add_1
+            S => '1',
+            Vum => '0',
+            A  => pc,
+            B  => "0100",
+            C => add_1
         );
         
     adder_2: entity work.Somador
@@ -132,11 +129,11 @@ begin
             NumeroBits => 32
         )
         port map (
-                S => '1',
-                Vum => '0',
-                A  => add_1,
-                B  => sext,
-                C => add_2
+            S => '1',
+            Vum => '0',
+            A  => add_1,
+            B  => sext,
+            C => add_2
         );
 
     shift_left_1: entity work.deslocador_combinatorio
@@ -151,6 +148,14 @@ begin
         );
 
     sign_extend: entity work.
+        generic(
+            NBE => 16,
+            NBS => 32
+        );
+        port(
+            I => ri(31 downto 20),
+            O => sext
+        );
 
     shift_left_2: entity work.
 

@@ -118,10 +118,10 @@ begin
     adder_1: entity work.Somador
         generic map (
             NumeroBits => 32
-        );
+        )
         port map (
                 S => '1',
-                Vum => '0'
+                Vum => '0',
                 A  => pc,
                 B  => "0100",
                 C => add_1

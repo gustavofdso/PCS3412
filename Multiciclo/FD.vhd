@@ -131,7 +131,7 @@ begin
             NumeroBits => 32
         )
         port map (
-            S => '1',
+            S => '0',
             Vum => '0',
             A  => add_1,
             B  => sext,
@@ -190,15 +190,56 @@ begin
     data_memory: entity work.
 
     -- Register Bank
-    multiplexer_2: entity work.
+    multiplexer_2: entity work.Mux2x1
+        generic map (
+            NB => 32
+        )
+        port map (
+            I0 => dout_d,
+            I1 => alu,
+            Sel => MemtoReg,
+            O => mux_2
+        );
         
-    multiplexer_3: entity work.
+    multiplexer_3: entity work.Mux2x1
+        generic map (
+            NB => 32
+        )
+        port map (
+            I0 => ri(11 downto 7),
+            I1 => ri(19 downto 15),
+            Sel => RegDest,
+            O => mux_3
+        );
 
-    register_bank: entity work.
+    register_bank: entity work.Mux2x1
+        generic map (
+            NB => 32
+        )
+        port map (
+            I0 => sext,
+            I1 => ri(19 downto 15),
+            Sel => ALUSrc,
+            O => mux_4
+        );
 
     -- ALU
-    multiplexer_4: entity work.
+    multiplexer_4: entity work.Mux2x1
 
-    ALU: entity work.
+    ALU: entity work.ULA
+    generic(
+        NB => 32
+    );
+    port(
+        Veum => '0',
+        A => mux_4,
+        B => ,
+        cUla => ALUOpe,
+        Sinal => open,
+        Vaum => open,
+        Zero => Zero,
+        C => open
+    );
 
+    
 end arch;

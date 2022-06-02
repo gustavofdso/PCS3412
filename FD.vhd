@@ -89,15 +89,31 @@ architecture arch of FD is
 
 begin
     -- PC
-    program_counter: entity.work. port map (
-
-    );
+    program_counter: entity.work.resistrador
+        generic map(
+            NumeroBits => 32
+        )
+        port map(
+            C => clk,
+            R => rst,
+            S => ce_pc,
+            D => mux_1,
+            Q => pc
+        );
 
     -- IR
     instruction_register: entity.work. port map (
+        generic map(
+            NumeroBits => 32
+        )
+        port map(
+            C => clk,
+            R => rst,
+            S => ce_ri,
+            D => dout_i,
+            Q => ri
+        );
         
-    );
-
     -- Branch
     adder_1: entity.work. port map (
         

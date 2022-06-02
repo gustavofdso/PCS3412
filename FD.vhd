@@ -128,6 +128,16 @@ begin
         );
         
     adder_2: entity work.Somador
+        generic map (
+            NumeroBits => 32
+        )
+        port map (
+                S => '1',
+                Vum => '0',
+                A  => add_1,
+                B  => sext,
+                C => add_2
+        );
 
     shift_left_1: entity work.
 

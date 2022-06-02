@@ -137,27 +137,27 @@ begin
         );
 
     shift_left_1: entity work.deslocador_combinatorio
-        generic(
+        generic map (
             NB => 32,
             NBD => 2
         )
-        port(
+        port map (
             DE => '1',
             I => ri,
             O => sl_1
         );
 
-    sign_extend: entity work.
-        generic(
+    sign_extend: entity work.xsign
+        generic map (
             NBE => 16,
             NBS => 32
-        );
-        port(
+        )
+        port map (
             I => ri(31 downto 20),
             O => sext
         );
 
-    shift_left_2: entity work.
+    shift_left_2: entity work.deslocador_combinatorio
 
     multiplexer_1: entity work.
 

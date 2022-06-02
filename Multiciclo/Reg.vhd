@@ -14,18 +14,18 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 
 entity Reg is
-  generic(
-       NumberBits : INTEGER := 8;
-       Tprop : time := 5 ns;
-       Tsetup : time := 2 ns
-  );
-  port(
-       clk:         in std_logic;
-       ce:          in std_logic;
-       rst:         in std_logic;
-       din:         in std_logic_vector(NumberBits - 1 downto 0);
-       dout:        out std_logic_vector(NumberBits - 1 downto 0)
-  );
+     generic(
+          NumberBits : INTEGER := 8;
+          Tprop : time := 5 ns;
+          Tsetup : time := 2 ns
+     );
+     port(
+          clk:         in std_logic;
+          ce:          in std_logic;
+          rst:         in std_logic;
+          din:         in std_logic_vector(NumberBits - 1 downto 0);
+          dout:        out std_logic_vector(NumberBits - 1 downto 0)
+     );
 end Reg;
 
 architecture arch of Reg is

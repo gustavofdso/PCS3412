@@ -56,25 +56,34 @@ end FD;
 
 architecture arch of FD is
     -- PC signals
-    signal o_pc:        std_logic_vector(31 downto 0);
+    signal pc:          std_logic_vector(31 downto 0);
 
     -- IR signals
-    signal o_ri:        std_logic_vector(31 downto 0);
+    signal ri:          std_logic_vector(31 downto 0);
     signal rs:          std_logic_vector(5 downto 0);
     signal rt:          std_logic_vector(5 downto 0);
     signal rd:          std_logic_vector(5 downto 0);
-
+    
     -- Branch signals
-    signal o_mux1:      std_logic_vector(31 downto 0);
-    signal o_adder_1:   std_logic_vector(31 downto 0);
-    signal o_sl2_1:     std_logic_vector(31 downto 0);
-    signal o_sl2_2:     std_logic_vector(31 downto 0);
+    signal mux_1:       std_logic_vector(31 downto 0);
+    signal adder_1:     std_logic_vector(31 downto 0);
+    signal adder_2:     std_logic_vector(31 downto 0);
+    signal sl2_1:       std_logic_vector(31 downto 0);
+    signal sext:        std_logic_vector(31 downto 0);
+    signal sl2_2:       std_logic_vector(31 downto 0);
+
+    -- Instruction Memory signals
+    signal dout_i:      std_logic_vector(31 downto 0);
 
     -- Data Memory signals
+    signal dout_d:      std_logic_vector(31 downto 0);
 
     -- Register Bank signals
+    signal mux_2:       std_logic_vector(31 downto 0);
+    signal mux_3:       std_logic_vector(31 downto 0);
 
     -- ALU signals
+    signal mux_4:       std_logic_vector(31 downto 0); 
 
 begin
 

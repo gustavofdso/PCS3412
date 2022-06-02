@@ -86,27 +86,29 @@ architecture arch of FD is
 
 begin
     -- PC
-    program_counter: entity work.registrador
+    program_counter: entity work.Reg_ClkEnable
         generic map (
             NumeroBits => 32
         )
         port map (
             C => clk,
+            CE => ce_pc,
             R => rst,
-            S => ce_pc,
+            S => '1',
             D => mux_1,
             Q => pc
         );
 
     -- IR
-    instruction_register: entity work.registrador
+    instruction_register: entity work.Reg_ClkEnable
         generic map (
             NumeroBits => 32
         )
         port map (
             C => clk,
+            CE => ce_ri,
             R => rst,
-            S => ce_ri,
+            S => '1',
             D => dout_i,
             Q => ri
         );

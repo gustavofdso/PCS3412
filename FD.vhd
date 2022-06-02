@@ -120,11 +120,11 @@ begin
             NumeroBits => 32
         );
         port map (
-                S => 
-                Vum => 
-                A  => 
-                B  => 
-                C => 
+                S => '1',
+                Vum => '0'
+                A  => pc,
+                B  => "0100",
+                C => add_1
         );
         
     adder_2: entity work.Somador

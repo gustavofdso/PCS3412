@@ -81,9 +81,11 @@ architecture arch of FD is
     -- Register Bank signals
     signal mux_2:       std_logic_vector(31 downto 0);
     signal mux_3:       std_logic_vector(31 downto 0);
+    signal dout_r:      std_logic_vector(31 downto 0);
 
     -- ALU signals
-    signal mux_4:       std_logic_vector(31 downto 0); 
+    signal mux_4:       std_logic_vector(31 downto 0);
+    signal alu:         std_logic_vector(31 downto 0);
 
 begin
 

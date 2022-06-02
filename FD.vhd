@@ -68,9 +68,9 @@ architecture arch of FD is
     signal mux_1:       std_logic_vector(31 downto 0);
     signal add_1:       std_logic_vector(31 downto 0);
     signal add_2:       std_logic_vector(31 downto 0);
-    signal sl2_1:       std_logic_vector(31 downto 0);
+    signal sl_1:        std_logic_vector(31 downto 0);
     signal sext:        std_logic_vector(31 downto 0);
-    signal sl2_2:       std_logic_vector(31 downto 0);
+    signal sl_2:        std_logic_vector(31 downto 0);
 
     -- Instruction Memory signals
     signal dout_i:      std_logic_vector(31 downto 0);
@@ -89,23 +89,58 @@ architecture arch of FD is
 
 begin
     -- PC
-    program_counter: entity.work.registrador port map (
+    program_counter: entity.work. port map (
 
     );
 
     -- IR
-    instruction_register: entity.work.registrador port map (
+    instruction_register: entity.work. port map (
         
     );
 
     -- Branch
+    adder_1: entity.work. port map (
+        
+    );
+
+    adder_2: entity.work. port map (
+        
+    );
+
+    shift_left_1: entity.work. port map (
+        
+    );
+
+    sign_extend: entity.work. port map (
+        
+    );
+
+    shift_left_2: entity.work. port map (
+        
+    );
+
+    multiplexer_1: entity.work. port map (
+        
+    );
 
     -- Instruction Memory
+    instruction_memory: entity.work. port map (
+        
+    );
 
     -- Data Memory
+    data_memory: entity.work. port map (
+        
+    );
 
     -- Register Bank
+    register_bank: entity.work. port map (
+        
+    );
 
     -- ALU
+    ALU: entity.work. port map (
+        
+    );
 
 end arch;

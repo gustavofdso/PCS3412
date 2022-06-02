@@ -115,60 +115,44 @@ begin
         );
 
     -- Branch
-    adder_1: entity work.
+    adder_1: entity work.Somador
+        generic map (
+            NumeroBits => 32
+        );
+        port map (
+                S => 
+                Vum => 
+                A  => 
+                B  => 
+                C => 
+        );
         
-    );
-
-    adder_2: entity work.
-        
-    );
+    adder_2: entity work.Somador
 
     shift_left_1: entity work.
-        
-    );
 
     sign_extend: entity work.
-        
-    );
 
     shift_left_2: entity work.
-        
-    );
 
     multiplexer_1: entity work.
-        
-    );
 
     -- Instruction Memory
     instruction_memory: entity work.
-        
-    );
 
     -- Data Memory
     data_memory: entity work.
-        
-    );
 
     -- Register Bank
     multiplexer_2: entity work.
         
-    );
-        
     multiplexer_3: entity work.
-        
-    );
 
     register_bank: entity work.
-        
-    );
 
     -- ALU
     multiplexer_4: entity work.
-        
-    );
 
     ALU: entity work.
-        
-    );
 
 end arch;

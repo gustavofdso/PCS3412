@@ -139,7 +139,16 @@ begin
                 C => add_2
         );
 
-    shift_left_1: entity work.
+    shift_left_1: entity work.deslocador_combinatorio
+        generic(
+            NB => 32,
+            NBD => 2
+        )
+        port(
+            DE => '1',
+            I => ri,
+            O => sl_1
+        );
 
     sign_extend: entity work.
 

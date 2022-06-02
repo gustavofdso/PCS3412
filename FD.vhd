@@ -7,7 +7,7 @@
 --
 -------------------------------------------------------------------------------
 --
--- Description : Contains the details of the Data Flow entity and its components.
+-- Description : Implementation of the Dataflow entity with its components.
 --
 -------------------------------------------------------------------------------
 

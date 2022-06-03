@@ -63,9 +63,9 @@ architecture arch of FD is
     signal mux_1:       std_logic_vector(31 downto 0);
     signal add_1:       std_logic_vector(31 downto 0);
     signal add_2:       std_logic_vector(31 downto 0);
-    signal sl_1:        std_logic_vector(31 downto 0);
+    signal sl2_1:       std_logic_vector(31 downto 0);
     signal sext:        std_logic_vector(31 downto 0);
-    signal sl_2:        std_logic_vector(31 downto 0);
+    signal sl2_2:       std_logic_vector(31 downto 0);
 
     -- Instruction Memory signals
     signal dout_i:      std_logic_vector(31 downto 0);
@@ -76,8 +76,8 @@ architecture arch of FD is
     -- Register Bank signals
     signal mux_2:       std_logic_vector(31 downto 0);
     signal mux_3:       std_logic_vector(31 downto 0);
-    signal dout_r1:     std_logic_vector(31 downto 0);
-    signal dout_r2:     std_logic_vector(31 downto 0);
+    signal dout_r_1:    std_logic_vector(31 downto 0);
+    signal dout_r_2:    std_logic_vector(31 downto 0);
 
     -- ALU signals
     signal mux_4:       std_logic_vector(31 downto 0);
@@ -85,7 +85,7 @@ architecture arch of FD is
 
 begin
     -- PC
-    program_counter: entity work.Reg_ClkEnable
+    PROGRAM_COUNTER: entity work.Reg_ClkEnable
         generic map (
             NumeroBits => 32
         )
@@ -99,7 +99,7 @@ begin
         );
 
     -- IR
-    instruction_register: entity work.Reg_ClkEnable
+    INSTRUCTION_REGISTER: entity work.Reg_ClkEnable
         generic map (
             NumeroBits => 32
         )
@@ -113,7 +113,7 @@ begin
         );
 
     -- Branch
-    adder_1: entity work.Somador
+    ADDER_1: entity work.Somador
         generic map (
             NumeroBits => 32
         )
@@ -125,7 +125,7 @@ begin
             C => add_1
         );
         
-    adder_2: entity work.Somador
+    ADDER_2: entity work.Somador
         generic map (
             NumeroBits => 32
         )
@@ -133,11 +133,12 @@ begin
             S => '1',
             Vum => '0',
             A  => add_1,
-            B  => sl_2,
+            B  => sl2_2,
             C => add_2
         );
 
-    shift_left_1: entity work.deslocador_combinatorio
+    -- TODO: CONFIRMAR ESSE
+    SHIFT_LEFT_2_1: entity work.deslocador_combinatorio
         generic map (
             NB => 32,
             NBD => 2
@@ -145,10 +146,11 @@ begin
         port map (
             DE => '1',
             I => ri,
-            O => sl_1
+            O => sl2_1
         );
 
-    sign_extend: entity work.xsign
+    -- TODO: CONFIRMAR ESSE
+    SIGN_EXTEND: entity work.xsign
         generic map (
             NBE => 20,
             NBS => 32
@@ -158,7 +160,7 @@ begin
             O => sext
         );
 
-    shift_left_2: entity work.deslocador_combinatorio
+    SHIFT_LEFT_2_2: entity work.deslocador_combinatorio
         generic map (
             NB => 32,
             NBD => 2
@@ -166,30 +168,32 @@ begin
         port map (
             DE => '1',
             I => sext,
-            O => sl_2
+            O => sl2_2
         );
 
-    multiplexer_1: entity work.Mux4x1
+    MULTIPLEXER_1: entity work.Mux4x1
         generic map (
             NB => 32
         )
         port map (
             I0 => add_1,
-            I1 => sl_1,
+            I1 => sl2_1,
             I2 => add_2,
             I3 => (others => '0'),
             Sel => Brch,
             O => mux_1
         );
 
+    -- TODO: FAZER O INSTRUCTION MEMORY
     -- Instruction Memory
-    instruction_memory: entity work.
+    INSTRUCTION_MEMORY: entity work.
 
+    -- TODO: FAZER O DATA MEMORY
     -- Data Memory
-    data_memory: entity work.
+    DATA_MEMORY: entity work.
 
     -- Register Bank
-    multiplexer_2: entity work.Mux2x1
+    MULTIPLEXER_2: entity work.Mux2x1
         generic map (
             NB => 32
         )
@@ -200,40 +204,28 @@ begin
             O => mux_2
         );
         
-    multiplexer_3: entity work.Mux2x1
+    MULTIPLEXER_3: entity work.Mux2x1
         generic map (
             NB => 32
         )
         port map (
-            I0 => ri(24 downto 20),
+            I0 => ri(11 downto 7),
             I1 => ri(19 downto 15),
             Sel => RegDest,
             O => mux_3
         );
 
-    register_bank: entity work.DualRegFile
-    generic(
-        NBend : integer := 5,
-        NBdado => 32
-    );
-    port(
-        clk => clk,
-        we => RegWrite,
-        dadoina => mux_2,
-        enda => ,
-        endb => ,
-        dadoouta => dout_r1,
-        dadooutb => dout_r2
-    );
+    -- TODO: FAZER O REGISTER FILE
+    REGISTER_BANK: entity work.
 
     -- ALU
-    multiplexer_4: entity work.Mux2x1
+    MULTIPLEXER_4: entity work.Mux2x1
         generic map (
             NB => 32
         )
         port map (
             I0 => sext,
-            I1 => dout_r2,
+            I1 => dout_r_2,
             Sel => ALUSrc,
             O => mux_4
         );
@@ -244,7 +236,7 @@ begin
         );
         port(
             Veum => '0',
-            A => dout_r1,
+            A => dout_r_1,
             B => mux_4,
             cUla => ALUOpe(2 downto 0);
             Sinal => open,
@@ -252,5 +244,7 @@ begin
             Zero => Zero,
             C => alu
         );
+
+    Cop <= ri(5 downto 0);
 
 end arch;

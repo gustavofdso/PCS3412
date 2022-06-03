@@ -7,7 +7,7 @@
 --
 -------------------------------------------------------------------------------
 --
--- Description : Implementation of the Dataflow entity with its components.
+-- Description : Implementation of the Data path entity with its components.
 --
 -------------------------------------------------------------------------------
 library IEEE;
@@ -53,10 +53,10 @@ entity FD is
 end FD;
 
 architecture arch of FD is
-    -- PC signals
+    -- Program Counter signals
     signal pc:          std_logic_vector(31 downto 0);
 
-    -- IR signals
+    -- Instruction Resgister signals
     signal ri:          std_logic_vector(31 downto 0);
     
     -- Branch signals
@@ -76,7 +76,8 @@ architecture arch of FD is
     -- Register Bank signals
     signal mux_2:       std_logic_vector(31 downto 0);
     signal mux_3:       std_logic_vector(31 downto 0);
-    signal dout_r:      std_logic_vector(31 downto 0);
+    signal dout_r1:     std_logic_vector(31 downto 0);
+    signal dout_r2:     std_logic_vector(31 downto 0);
 
     -- ALU signals
     signal mux_4:       std_logic_vector(31 downto 0);
@@ -120,7 +121,7 @@ begin
             S => '1',
             Vum => '0',
             A  => pc,
-            B  => "0100",
+            B  => 4,
             C => add_1
         );
         
@@ -129,10 +130,10 @@ begin
             NumeroBits => 32
         )
         port map (
-            S => '0',
+            S => '1',
             Vum => '0',
             A  => add_1,
-            B  => sext,
+            B  => sl_2,
             C => add_2
         );
 
@@ -149,11 +150,11 @@ begin
 
     sign_extend: entity work.xsign
         generic map (
-            NBE => 12,
+            NBE => 20,
             NBS => 32
         )
         port map (
-            I => ri(31 downto 20),
+            I => ri(31 downto 12),
             O => sext
         );
 
@@ -204,13 +205,26 @@ begin
             NB => 32
         )
         port map (
-            I0 => ri(11 downto 7),
+            I0 => ri(24 downto 20),
             I1 => ri(19 downto 15),
             Sel => RegDest,
             O => mux_3
         );
 
-    register_bank: entity work.
+    register_bank: entity work.DualRegFile
+    generic(
+        NBend : integer := 5,
+        NBdado => 32
+    );
+    port(
+        clk => clk,
+        we => RegWrite,
+        dadoina => mux_2,
+        enda => ,
+        endb => ,
+        dadoouta => dout_r1,
+        dadooutb => dout_r2
+    );
 
     -- ALU
     multiplexer_4: entity work.Mux2x1
@@ -219,7 +233,7 @@ begin
         )
         port map (
             I0 => sext,
-            I1 => ri(19 downto 15),
+            I1 => dout_r2,
             Sel => ALUSrc,
             O => mux_4
         );
@@ -230,8 +244,8 @@ begin
         );
         port(
             Veum => '0',
-            A => mux_4,
-            B => ,
+            A => dout_r1,
+            B => mux_4,
             cUla => ALUOpe(2 downto 0);
             Sinal => open,
             Vaum => open,
@@ -239,5 +253,4 @@ begin
             C => alu
         );
 
-    
 end arch;

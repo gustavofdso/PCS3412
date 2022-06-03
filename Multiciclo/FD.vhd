@@ -224,7 +224,20 @@ begin
             O => mux_4
         );
 
-    ALU: entity work.
+    ALU: entity work.ULA
+        generic(
+            NB => 32
+        );
+        port(
+            Veum => '0',
+            A => mux_4,
+            B => ,
+            cUla => ALUOpe(2 downto 0);
+            Sinal => open,
+            Vaum => open,
+            Zero => Zero,
+            C => alu
+        );
 
     
 end arch;

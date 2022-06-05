@@ -7,8 +7,6 @@ Escola Politécnica da USP
 
 2022
 
---------------------
-
 Alunos:
 * Alessandro Jiã Iong Li - 10291791        
 * Felipe Daniel Rodrigues Marques - 11325312
@@ -16,6 +14,8 @@ Alunos:
 * Jong Hwan Hong - 11261083
 * Rafael Xavier Souza Lattari - 9853130
 * Roberta Boaventura Andrade - 11260832
+
+--------------------
 
 ## Documentos relevantes:
 

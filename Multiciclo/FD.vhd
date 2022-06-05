@@ -150,7 +150,6 @@ begin
             O => sl2_1
         );
 
-    -- TODO: CONFIRMAR ESSE
     SIGN_EXTEND: entity work.xsign
         generic map (
             NBE => 20,
@@ -185,7 +184,6 @@ begin
             O => mux_1
         );
 
-    -- TODO: FAZER O INSTRUCTION MEMORY
     -- Instruction Memory
     INSTRUCTION_MEMORY: entity work.Ram
         generic map (
@@ -202,7 +200,6 @@ begin
             dado => dout_i
         );
 
-    -- TODO: FAZER O DATA MEMORY
     -- Data Memory
     DATA_MEMORY: entity work.Ram
         generic map (
@@ -242,7 +239,6 @@ begin
             O => mux_3
         );
 
-    -- TODO: FAZER O REGISTER FILE
     REGISTER_FILE: entity work.RegisterFile
         generic map (
             NBend => 5,

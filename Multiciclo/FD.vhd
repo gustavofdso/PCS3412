@@ -51,7 +51,7 @@ entity FD is
     ) ;
 end FD;
 
-architecture FD_ARCH of FD is
+architecture architecture_fd of FD is
     -- Program Counter signals
     signal pc:          std_logic_vector(31 downto 0);
 
@@ -312,4 +312,4 @@ begin
 
     Cop <= ri(5 downto 0);
 
-end FD_ARCH;
+end architecture_fd;

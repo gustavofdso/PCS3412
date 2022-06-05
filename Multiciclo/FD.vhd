@@ -60,6 +60,7 @@ architecture architecture_fd of FD is
     signal rs:          std_logic_vector(4 downto 0);
     signal rt:          std_logic_vector(4 downto 0);
     signal rd:          std_logic_vector(4 downto 0);
+    signal immed:       std_logic_vector(19 downto 0);
     
     -- Branch signals
     signal mux_1:       std_logic_vector(31 downto 0);
@@ -163,7 +164,7 @@ begin
             NBS => 32
         )
         port map (
-            I => ri(31 downto 12),
+            I => immed,
             O => sext
         );
 
@@ -309,6 +310,7 @@ begin
     rs <= ri(19 downto 15);
     rt <= ri(24 downto 20);
     rd <= ri(11 downto 7);
+    immed <= ri(31 downto 12);
 
     Cop <= ri(5 downto 0);
 

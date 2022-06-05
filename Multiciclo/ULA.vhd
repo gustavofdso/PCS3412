@@ -55,29 +55,29 @@ begin
 
 ---- User Signal Assignments ----
 With cUla select
-		S_NB <=	(('0' &  A) + Veum )		when "000",
-				(('0' &  A) + B + Veum )	when "001",
-				(('0' &  B) + Veum )		when "010",
-				(('0' &  A) - B + Veum )	when "011",
-				('0' &  (A and B))			when "100",
-				('0' &  (A or B))			when "101",
-				('0' &  (A xor B))			when "110",
+		S_NB <=	(('0' &  A) + Veum )		     when "000",
+				(('0' &  A) + B + Veum )	          when "001",
+				(('0' &  B) + Veum )		     when "010",
+				(('0' &  A) - B + Veum )	          when "011",
+				('0' &  (A and B))			     when "100",
+				('0' &  (A or B))			     when "101",
+				('0' &  (A xor B))			     when "110",
 				('0' & (not A))				when "111",
 				(others => '0')				when others;
--- Saída de Vai um
+-- Saï¿½da de Vai um
 Vaum <=	S_NB(NB) after Tsom;
--- Resultado da Operação
-C <= 		S_NB(NB - 1 downto 0) after Ttrans  when cUla = "000" else
-			S_NB(NB - 1 downto 0) after Tsom  	when cUla = "001" else
-			S_NB(NB - 1 downto 0) after Ttrans  when cUla = "010" else
-			S_NB(NB - 1 downto 0) after Tsub  	when cUla = "011" else
-			S_NB(NB - 1 downto 0) after Tgate 	when cUla = "100" else
-			S_NB(NB - 1 downto 0) after Tgate 	when cUla = "101" else
-			S_NB(NB - 1 downto 0) after 2*Tgate when cUla = "110" else
-			S_NB(NB - 1 downto 0) after Tgate 	when cUla = "111";
--- Atualização do sinal
+-- Resultado da Operaï¿½ï¿½o
+C <= 		S_NB(NB - 1 downto 0) after Ttrans      when cUla = "000" else
+			S_NB(NB - 1 downto 0) after Tsom  	     when cUla = "001" else
+			S_NB(NB - 1 downto 0) after Ttrans      when cUla = "010" else
+			S_NB(NB - 1 downto 0) after Tsub  	     when cUla = "011" else
+			S_NB(NB - 1 downto 0) after Tgate 	     when cUla = "100" else
+			S_NB(NB - 1 downto 0) after Tgate 	     when cUla = "101" else
+			S_NB(NB - 1 downto 0) after 2*Tgate     when cUla = "110" else
+			S_NB(NB - 1 downto 0) after Tgate 	     when cUla = "111";
+-- Atualizaï¿½ï¿½o do sinal
 Sinal <= S_NB(NB - 1) after Tsom;
--- Atualização de Zero
+-- Atualizaï¿½ï¿½o de Zero
 Zero <= '1'  after Tsom when S_NB(NB - 1 downto 0) = Zer else
 					'0' after Tsom ;
 

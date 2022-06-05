@@ -51,7 +51,7 @@ entity FD is
     ) ;
 end FD;
 
-architecture arch of FD is
+architecture FD_ARCH of FD is
     -- Program Counter signals
     signal pc:          std_logic_vector(31 downto 0);
 
@@ -128,7 +128,7 @@ begin
             S => '1',
             Vum => '0',
             A  => pc,
-            B  => 4,
+            B  => x"0100",
             C => add_1
         );
         
@@ -183,7 +183,7 @@ begin
         generic map (
             NB => 32,
             Tsel => 0.5 ns,
-            Tdata => 0.25 ns,
+            Tdata => 0.25 ns
         )
         port map (
             I0 => add_1,
@@ -235,7 +235,7 @@ begin
         generic map (
             NB => 32,
             Tsel => 0.5 ns,
-            Tdata => 0.25 ns,
+            Tdata => 0.25 ns
         )
         port map (
             I0 => alu,
@@ -248,7 +248,7 @@ begin
         generic map (
             NB => 32,
             Tsel => 0.5 ns,
-            Tdata => 0.25 ns,
+            Tdata => 0.25 ns
         )
         port map (
             I0 => rd,
@@ -280,7 +280,7 @@ begin
         generic map (
             NB => 32,
             Tsel => 0.5 ns,
-            Tdata => 0.25 ns,
+            Tdata => 0.25 ns
         )
         port map (
             I0 => sext,
@@ -312,4 +312,4 @@ begin
 
     Cop <= ri(5 downto 0);
 
-end arch;
+end FD_ARCH;

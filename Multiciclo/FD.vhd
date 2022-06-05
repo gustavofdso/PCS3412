@@ -322,9 +322,11 @@ begin
     rs <= ri(19 downto 15);
     rt <= ri(24 downto 20);
     rd <= ri(11 downto 7);
+    
     immed <= ri(31 downto 20);
     jump <= ri(31 downto 12);
 
     Cop <= ri(5 downto 0);
+    CopExt <= ri(5 downto 0);
 
 end architecture_fd;

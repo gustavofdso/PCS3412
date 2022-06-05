@@ -67,9 +67,8 @@ architecture architecture_fd of FD is
     signal mux_1:       std_logic_vector(31 downto 0);
     signal add_1:       std_logic_vector(31 downto 0);
     signal add_2:       std_logic_vector(31 downto 0);
-    signal sext_1:      std_logic_vector(31 downto 0);
     signal sl2_1:       std_logic_vector(31 downto 0);
-    signal sext_2:      std_logic_vector(31 downto 0);
+    signal sext:        std_logic_vector(31 downto 0);
     signal sl2_2:       std_logic_vector(31 downto 0);
 
     -- Instruction Memory signals
@@ -148,16 +147,6 @@ begin
             C => add_2
         );
 
-    SIGN_EXTEND_1: entity work.xsign
-        generic map (
-            NBE => 20,
-            NBS => 32
-        )
-        port map (
-            I => jump,
-            O => sext_1
-        );
-
     SHIFT_LEFT_2_1: entity work.deslocador_combinatorio
         generic map (
             NB => 32,
@@ -166,18 +155,18 @@ begin
         )
         port map (
             DE => '1',
-            I => sext_1,
+            I => jump,
             O => sl2_1
         );
 
-    SIGN_EXTEND_2: entity work.xsign
+    SIGN_EXTEND: entity work.xsign
         generic map (
             NBE => 12,
             NBS => 32
         )
         port map (
             I => immed,
-            O => sext_2
+            O => sext
         );
 
     SHIFT_LEFT_2_2: entity work.deslocador_combinatorio
@@ -188,7 +177,7 @@ begin
         )
         port map (
             DE => '1',
-            I => sext_2,
+            I => sext,
             O => sl2_2
         );
 
@@ -296,7 +285,7 @@ begin
             Tdata => 0.25 ns
         )
         port map (
-            I0 => sext_2,
+            I0 => sext,
             I1 => dout_r_2,
             Sel => ALUSrc,
             O => mux_4

@@ -154,7 +154,7 @@ begin
         )
         port map (
             DE => '1',
-            I => ri,
+            I => immed,
             O => sl2_1
         );
 

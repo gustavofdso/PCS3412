@@ -60,14 +60,16 @@ architecture architecture_fd of FD is
     signal rs:          std_logic_vector(4 downto 0);
     signal rt:          std_logic_vector(4 downto 0);
     signal rd:          std_logic_vector(4 downto 0);
-    signal immed:       std_logic_vector(19 downto 0);
+    signal immed:       std_logic_vector(11 downto 0);
+    signal jump:        std_logic_vector(19 downto 0);
     
     -- Branch signals
     signal mux_1:       std_logic_vector(31 downto 0);
     signal add_1:       std_logic_vector(31 downto 0);
     signal add_2:       std_logic_vector(31 downto 0);
+    signal sext_1:      std_logic_vector(31 downto 0);
     signal sl2_1:       std_logic_vector(31 downto 0);
-    signal sext:        std_logic_vector(31 downto 0);
+    signal sext_2:      std_logic_vector(31 downto 0);
     signal sl2_2:       std_logic_vector(31 downto 0);
 
     -- Instruction Memory signals
@@ -146,6 +148,16 @@ begin
             C => add_2
         );
 
+    SIGN_EXTEND_1: entity work.xsign
+        generic map (
+            NBE => 20,
+            NBS => 32
+        )
+        port map (
+            I => jump,
+            O => sext_1
+        );
+
     SHIFT_LEFT_2_1: entity work.deslocador_combinatorio
         generic map (
             NB => 32,
@@ -154,18 +166,18 @@ begin
         )
         port map (
             DE => '1',
-            I => immed,
+            I => sext_1,
             O => sl2_1
         );
 
-    SIGN_EXTEND: entity work.xsign
+    SIGN_EXTEND_2: entity work.xsign
         generic map (
-            NBE => 20,
+            NBE => 12,
             NBS => 32
         )
         port map (
             I => immed,
-            O => sext
+            O => sext_2
         );
 
     SHIFT_LEFT_2_2: entity work.deslocador_combinatorio
@@ -176,7 +188,7 @@ begin
         )
         port map (
             DE => '1',
-            I => sext,
+            I => sext_2,
             O => sl2_2
         );
 
@@ -284,7 +296,7 @@ begin
             Tdata => 0.25 ns
         )
         port map (
-            I0 => sext,
+            I0 => sext_2,
             I1 => dout_r_2,
             Sel => ALUSrc,
             O => mux_4
@@ -310,7 +322,8 @@ begin
     rs <= ri(19 downto 15);
     rt <= ri(24 downto 20);
     rd <= ri(11 downto 7);
-    immed <= ri(31 downto 12);
+    immed <= ri(31 downto 20);
+    jump <= ri(31 downto 12);
 
     Cop <= ri(5 downto 0);
 

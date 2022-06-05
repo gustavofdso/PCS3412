@@ -15,7 +15,6 @@ use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
 library work;
-use work.types.all;
 
 entity FD is
     port (
@@ -188,11 +187,37 @@ begin
 
     -- TODO: FAZER O INSTRUCTION MEMORY
     -- Instruction Memory
-    INSTRUCTION_MEMORY: entity work.
+    INSTRUCTION_MEMORY: entity work.Ram
+        generic map (
+            BE => 32,
+            BP => 32,
+            NA => "instruction_memory.txt"
+        )
+        port map (
+            Clock => clk,
+            enable => '1',
+            rw => '0',
+            ender => pc,
+            pronto => open,
+            dado => dout_i
+        );
 
     -- TODO: FAZER O DATA MEMORY
     -- Data Memory
-    DATA_MEMORY: entity work.
+    DATA_MEMORY: entity work.Ram
+        generic map (
+            BE => 32,
+            BP => 32,
+            NA => "data_memory.txt"
+        )
+        port map (
+            Clock => clk,
+            enable => menable,
+            rw => rw,
+            ender => dout_r_2,
+            pronto => open,
+            dado => dout_d
+        );
 
     -- Register File
     MULTIPLEXER_2: entity work.Mux2x1
@@ -246,7 +271,7 @@ begin
             O => mux_4
         );
 
-    ALU: entity work.ULA
+    MULTIFUNCIONAL_ALU: entity work.ULA
         generic map (
             NB => 32
         )
@@ -261,7 +286,7 @@ begin
             C => alu
         );
 
-    rs <= ri(19 downto 5);
+    rs <= ri(19 downto 15);
     rt <= ri(24 downto 20);
     rd <= ri(11 downto 7);
 

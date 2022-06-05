@@ -57,9 +57,9 @@ architecture arch of FD is
 
     -- Instruction Resgister signals
     signal ri:          std_logic_vector(31 downto 0);
-    signal rs:          std_logic_vector(5 downto 0);
-    signal rt:          std_logic_vector(5 downto 0);
-    signal rd:          std_logic_vector(5 downto 0);
+    signal rs:          std_logic_vector(4 downto 0);
+    signal rt:          std_logic_vector(4 downto 0);
+    signal rd:          std_logic_vector(4 downto 0);
     
     -- Branch signals
     signal mux_1:       std_logic_vector(31 downto 0);
@@ -89,7 +89,9 @@ begin
     -- PC
     PROGRAM_COUNTER: entity work.Reg_ClkEnable
         generic map (
-            NumeroBits => 32
+            NumeroBits => 32,
+            Tprop => 1 ns,
+            Tsetup => 0.25 ns
         )
         port map (
             C => clk,
@@ -103,7 +105,9 @@ begin
     -- IR
     INSTRUCTION_REGISTER: entity work.Reg_ClkEnable
         generic map (
-            NumeroBits => 32
+            NumeroBits => 32,
+            Tprop => 1 ns,
+            Tsetup => 0.25 ns
         )
         port map (
             C => clk,
@@ -117,7 +121,8 @@ begin
     -- Branch
     ADDER_1: entity work.Somador
         generic map (
-            NumeroBits => 32
+            NumeroBits => 32,
+            Tsoma => 1 ns
         )
         port map (
             S => '1',
@@ -129,7 +134,8 @@ begin
         
     ADDER_2: entity work.Somador
         generic map (
-            NumeroBits => 32
+            NumeroBits => 32,
+            Tsoma => 1 ns
         )
         port map (
             S => '1',
@@ -142,7 +148,8 @@ begin
     SHIFT_LEFT_2_1: entity work.deslocador_combinatorio
         generic map (
             NB => 32,
-            NBD => 2
+            NBD => 2,
+            Tprop => 0 ns
         )
         port map (
             DE => '1',
@@ -163,7 +170,8 @@ begin
     SHIFT_LEFT_2_2: entity work.deslocador_combinatorio
         generic map (
             NB => 32,
-            NBD => 2
+            NBD => 2,
+            Tprop => 0 ns
         )
         port map (
             DE => '1',
@@ -173,7 +181,9 @@ begin
 
     MULTIPLEXER_1: entity work.Mux4x1
         generic map (
-            NB => 32
+            NB => 32,
+            Tsel => 0.5 ns,
+            Tdata => 0.25 ns,
         )
         port map (
             I0 => add_1,

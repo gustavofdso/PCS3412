@@ -26,7 +26,9 @@ use IEEE.std_logic_unsigned.all;
 
 entity Mux2x1 is
   generic(
-       NB : integer := 8
+       NB : integer := 8;
+       Tsel : time := 3 ns;
+       Tdata : time := 2 ns
   );
   port(
        Sel : in std_logic;
@@ -50,9 +52,9 @@ process (I0, I1, Sel)
 begin
 -- statements
 	Case Sel is
-		when '0' => O <= I0;
-		when '1' => O <= I1;
-		when others => O <= (others => 'X');
+		when '0' => O <= I0                     after Tsel;
+		when '1' => O <= I1                     after Tsel;
+		when others => O <= (others => 'X')     after Tsel;
 	end case;
 end process Mux2x1;
 

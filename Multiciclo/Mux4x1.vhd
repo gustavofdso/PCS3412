@@ -53,11 +53,11 @@ process (I0, I1, I2, I3, Sel)
 -- "Update sensitivity list automatically" option status
 begin
 	case Sel is
-		when "00" 	=> O <= I0 				after Tsel;
-		when "01" 	=> O <= I1 				after Tsel;
-		when "10"	=> O <= I2				after Tsel;
-		when "11"	=> O <= I3				after Tsel;
-		when others => O <= (others => 'X') after Tsel;
+		when "00" => O <= I0 	               after Tsel;
+		when "01" => O <= I1 	               after Tsel;
+		when "10"	=> O <= I2		          after Tsel;
+		when "11"	=> O <= I3		          after Tsel;
+		when others => O <= (others => 'X')     after Tsel;
 	end case;
 end process;
 

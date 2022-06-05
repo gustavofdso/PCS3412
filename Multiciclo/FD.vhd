@@ -34,7 +34,7 @@ entity FD is
         menable:        in std_logic;
         rw:             in std_logic;
 
-        -- Register Bank Control signals
+        -- Register File Control signals
         MemtoReg:       in std_logic;
         RegWrite:       in std_logic;
         RegDest:        in std_logic;
@@ -58,6 +58,9 @@ architecture arch of FD is
 
     -- Instruction Resgister signals
     signal ri:          std_logic_vector(31 downto 0);
+    signal rs:          std_logic_vector(5 downto 0);
+    signal rt:          std_logic_vector(5 downto 0);
+    signal rd:          std_logic_vector(5 downto 0);
     
     -- Branch signals
     signal mux_1:       std_logic_vector(31 downto 0);
@@ -73,7 +76,7 @@ architecture arch of FD is
     -- Data Memory signals
     signal dout_d:      std_logic_vector(31 downto 0);
 
-    -- Register Bank signals
+    -- Register File signals
     signal mux_2:       std_logic_vector(31 downto 0);
     signal mux_3:       std_logic_vector(31 downto 0);
     signal dout_r_1:    std_logic_vector(31 downto 0);
@@ -191,14 +194,14 @@ begin
     -- Data Memory
     DATA_MEMORY: entity work.
 
-    -- Register Bank
+    -- Register File
     MULTIPLEXER_2: entity work.Mux2x1
         generic map (
             NB => 32
         )
         port map (
-            I0 => dout_d,
-            I1 => alu,
+            I0 => alu,
+            I1 => dout_d,
             Sel => MemtoReg,
             O => mux_2
         );
@@ -208,14 +211,28 @@ begin
             NB => 32
         )
         port map (
-            I0 => ri(11 downto 7),
-            I1 => ri(19 downto 15),
+            I0 => rd,
+            I1 => rt,
             Sel => RegDest,
             O => mux_3
         );
 
     -- TODO: FAZER O REGISTER FILE
-    REGISTER_BANK: entity work.
+    REGISTER_FILE: entity work.RegisterFile
+        generic map (
+            NBend => 5,
+            NBdado => 32
+        )
+        port map (
+            clk => clk,
+            we => RegWrite,
+            din => mux_2,
+            addrin => mux_3,
+            addra => rs,
+            addrb => rt,
+            douta => dout_r_1,
+            doutb => dout_r_2
+        );
 
     -- ALU
     MULTIPLEXER_4: entity work.Mux2x1
@@ -230,19 +247,23 @@ begin
         );
 
     ALU: entity work.ULA
-        generic(
+        generic map (
             NB => 32
-        );
-        port(
+        )
+        port map (
             Veum => '0',
             A => dout_r_1,
             B => mux_4,
-            cUla => ALUOpe(2 downto 0);
+            cUla => ALUOpe(2 downto 0),
             Sinal => open,
             Vaum => open,
             Zero => Zero,
             C => alu
         );
+
+    rs <= ri(19 downto 5);
+    rt <= ri(24 downto 20);
+    rd <= ri(11 downto 7);
 
     Cop <= ri(5 downto 0);
 

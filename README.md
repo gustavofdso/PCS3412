@@ -19,7 +19,7 @@ Alunos:
 
 Documentos relevantes:
 
-Enunciado do projeto: https://ae4.tidia-ae.usp.br/access/content/group/2865d401-913f-476b-b1fa-b381819f4eda/Projeto%202022/PCS3412_Projeto%20Final_2022.pdf
-RISC-V Reference: https://ae4.tidia-ae.usp.br/access/content/group/2865d401-913f-476b-b1fa-b381819f4eda/Projeto%202022/RISCV_CARD.pdf
-The RISC-V Instruction Set Manual: https://ae4.tidia-ae.usp.br/access/content/group/2865d401-913f-476b-b1fa-b381819f4eda/Projeto%202022/riscv-spec-v2.2.pdf
-Tiny Risc-V: https://www.csl.cornell.edu/courses/ece5745/handouts/ece5745-tinyrv-isa.txt
+* Enunciado do projeto: https://ae4.tidia-ae.usp.br/access/content/group/2865d401-913f-476b-b1fa-b381819f4eda/Projeto%202022/PCS3412_Projeto%20Final_2022.pdf
+* RISC-V Reference: https://ae4.tidia-ae.usp.br/access/content/group/2865d401-913f-476b-b1fa-b381819f4eda/Projeto%202022/RISCV_CARD.pdf
+* The RISC-V Instruction Set Manual: https://ae4.tidia-ae.usp.br/access/content/group/2865d401-913f-476b-b1fa-b381819f4eda/Projeto%202022/riscv-spec-v2.2.pdf
+* Tiny Risc-V: https://www.csl.cornell.edu/courses/ece5745/handouts/ece5745-tinyrv-isa.txt

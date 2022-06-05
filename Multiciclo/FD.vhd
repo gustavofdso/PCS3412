@@ -199,7 +199,9 @@ begin
         generic map (
             BE => 32,
             BP => 32,
-            NA => "instruction_memory.txt"
+            NA => "instruction_memory.txt",
+            Twrite => 5 ns,
+            Tread => 5 ns
         )
         port map (
             Clock => clk,
@@ -215,7 +217,9 @@ begin
         generic map (
             BE => 32,
             BP => 32,
-            NA => "data_memory.txt"
+            NA => "data_memory.txt",
+            Twrite => 5 ns,
+            Tread => 5 ns
         )
         port map (
             Clock => clk,
@@ -229,7 +233,9 @@ begin
     -- Register File
     MULTIPLEXER_2: entity work.Mux2x1
         generic map (
-            NB => 32
+            NB => 32,
+            Tsel => 0.5 ns,
+            Tdata => 0.25 ns,
         )
         port map (
             I0 => alu,
@@ -240,7 +246,9 @@ begin
         
     MULTIPLEXER_3: entity work.Mux2x1
         generic map (
-            NB => 32
+            NB => 32,
+            Tsel => 0.5 ns,
+            Tdata => 0.25 ns,
         )
         port map (
             I0 => rd,
@@ -252,7 +260,9 @@ begin
     REGISTER_FILE: entity work.RegisterFile
         generic map (
             NBend => 5,
-            NBdado => 32
+            NBdado => 32,
+            Tread => 5 ns,
+            Twrite => 5 ns
         )
         port map (
             clk => clk,
@@ -268,7 +278,9 @@ begin
     -- ALU
     MULTIPLEXER_4: entity work.Mux2x1
         generic map (
-            NB => 32
+            NB => 32,
+            Tsel => 0.5 ns,
+            Tdata => 0.25 ns,
         )
         port map (
             I0 => sext,
@@ -279,7 +291,9 @@ begin
 
     MULTIFUNCIONAL_ALU: entity work.ULA
         generic map (
-            NB => 32
+            NB => 32,
+            Tsom => 1 ns,
+            Tsub => 1.25 ns
         )
         port map (
             Veum => '0',

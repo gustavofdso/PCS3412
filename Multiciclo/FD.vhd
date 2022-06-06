@@ -147,6 +147,7 @@ begin
             C => add_2
         );
 
+    -- TODO: adicionar os primeiros bits do PC antes do jump adress, como entrada desse SL2
     SHIFT_LEFT_2_1: entity work.deslocador_combinatorio
         generic map (
             NB => 32,

@@ -87,6 +87,22 @@ architecture architecture_fd of FD is
     signal mux_4:       std_logic_vector(31 downto 0);
     signal alu:         std_logic_vector(31 downto 0);
 
+    -- Buffers
+    signal b1_1:        std_logic_vector(31 downto 0);
+    signal b1_2:        std_logic_vector(31 downto 0);
+
+    signal b2_1:        std_logic_vector(31 downto 0);
+    signal b2_2:        std_logic_vector(31 downto 0);
+    signal b2_3:        std_logic_vector(31 downto 0);
+
+    signal b3_1:        std_logic_vector(31 downto 0);
+    signal b3_2:        std_logic_vector(31 downto 0);
+    signal b3_3:        std_logic;
+    signal b3_4:        std_logic_vector(31 downto 0);
+
+    signal b4_1:        std_logic_vector(31 downto 0);
+    signal b4_2:        std_logic_vector(31 downto 0);
+
 begin
     -- PC
     PROGRAM_COUNTER: entity work.Reg_ClkEnable
@@ -216,6 +232,7 @@ begin
         );
 
     BUFFER_1_1: entity work.Reg_ClkEnable
+
 
     BUFFER_1_2: entity work.Reg_ClkEnable
 

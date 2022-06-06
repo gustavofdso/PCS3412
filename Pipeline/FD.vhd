@@ -231,9 +231,10 @@ begin
             dado => dout_i
         );
 
+    -- TODO: adicionar esse
     BUFFER_1_1: entity work.Reg_ClkEnable
 
-
+    -- TODO: adicionar esse
     BUFFER_1_2: entity work.Reg_ClkEnable
 
     -- Data Memory
@@ -254,8 +255,10 @@ begin
             dado => dout_d
         );
 
+    -- TODO: adicionar esse
     BUFFER_4_1: entity work.Reg_ClkEnable
 
+    -- TODO: adicionar esse
     BUFFER_4_2: entity work.Reg_ClkEnable
 
     -- Register File
@@ -303,10 +306,13 @@ begin
             doutb => dout_r_2
         );
 
+    -- TODO: adicionar esse
     BUFFER_2_1: entity work.Reg_ClkEnable
 
+    -- TODO: adicionar esse
     BUFFER_2_2: entity work.Reg_ClkEnable
 
+    -- TODO: adicionar esse
     BUFFER_2_3: entity work.Reg_ClkEnable
 
     -- ALU
@@ -340,12 +346,16 @@ begin
             C => alu
         );
 
+    -- TODO: adicionar esse
     BUFFER_3_1: entity work.Reg_ClkEnable
 
+    -- TODO: adicionar esse
     BUFFER_3_2: entity work.Reg_ClkEnable
 
+    -- TODO: adicionar esse
     BUFFER_3_3: entity work.Reg_ClkEnable
 
+    -- TODO: adicionar esse
     BUFFER_3_4: entity work.Reg_ClkEnable
 
     rs <= ri(19 downto 15);

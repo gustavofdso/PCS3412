@@ -39,7 +39,7 @@ entity FD is
         RegDest:        in std_logic;
 
         -- ALU Control signals
-        ALUSrc:         in std_logic;
+        ALUSrc:         in std_logic_vector(1 downto 0);
         ALUOpe:         in std_logic_vector(3 downto 0);
 
         -- Operation code
@@ -417,15 +417,17 @@ begin
         );
 
     -- ALU
-    MULTIPLEXER_4: entity work.Mux2x1
+    MULTIPLEXER_4: entity work.Mux4x1
         generic map (
             NB => 32,
             Tsel => 0.5 ns,
             Tdata => 0.25 ns
         )
         port map (
-            I0 => b2_3,
-            I1 => b2_4,
+            I0 => b2_4,
+            I1 => b2_1,
+            I2 => b2_3,
+            I3 => (others => '0'),
             Sel => ALUSrc,
             O => mux_4
         );

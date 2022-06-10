@@ -86,6 +86,7 @@ architecture architecture_fd of FD is
     -- ALU signals
     signal mux_4:       std_logic_vector(31 downto 0);
     signal alu:         std_logic_vector(31 downto 0);
+    signal aluzero:     std_logic;
 
     -- Buffers
     signal b1_1:        std_logic_vector(31 downto 0);
@@ -94,6 +95,7 @@ architecture architecture_fd of FD is
     signal b2_1:        std_logic_vector(31 downto 0);
     signal b2_2:        std_logic_vector(31 downto 0);
     signal b2_3:        std_logic_vector(31 downto 0);
+    signal b2_4:        std_logic_vector(31 downto 0);
 
     signal b3_1:        std_logic_vector(31 downto 0);
     signal b3_2:        std_logic_vector(31 downto 0);
@@ -231,11 +233,35 @@ begin
             dado => dout_i
         );
 
-    -- TODO: adicionar esse
     BUFFER_1_1: entity work.Reg_ClkEnable
+        generic map (
+            NumeroBits => 32,
+            Tprop => 1 ns,
+            Tsetup => 0.25 ns
+        )
+        port map (
+            C => clk,
+            CE => ce_ri,
+            R => rst,
+            S => '0',
+            D => add_1,
+            Q => b1_1
+        );
 
-    -- TODO: adicionar esse
     BUFFER_1_2: entity work.Reg_ClkEnable
+        generic map (
+            NumeroBits => 32,
+            Tprop => 1 ns,
+            Tsetup => 0.25 ns
+        )
+        port map (
+            C => clk,
+            CE => ce_ri,
+            R => rst,
+            S => '0',
+            D => ri,
+            Q => b1_2
+        );
 
     -- Data Memory
     DATA_MEMORY: entity work.Ram
@@ -255,11 +281,35 @@ begin
             dado => dout_d
         );
 
-    -- TODO: adicionar esse
     BUFFER_4_1: entity work.Reg_ClkEnable
+        generic map (
+            NumeroBits => 32,
+            Tprop => 1 ns,
+            Tsetup => 0.25 ns
+        )
+        port map (
+            C => clk,
+            CE => ce_ri,
+            R => rst,
+            S => '0',
+            D => dout_d,
+            Q => b4_1
+        );
 
-    -- TODO: adicionar esse
     BUFFER_4_2: entity work.Reg_ClkEnable
+        generic map (
+            NumeroBits => 32,
+            Tprop => 1 ns,
+            Tsetup => 0.25 ns
+        )
+        port map (
+            C => clk,
+            CE => ce_ri,
+            R => rst,
+            S => '0',
+            D => b3_2,
+            Q => b4_1
+        );
 
     -- Register File
     MULTIPLEXER_2: entity work.Mux2x1
@@ -306,14 +356,67 @@ begin
             doutb => dout_r_2
         );
 
-    -- TODO: adicionar esse
     BUFFER_2_1: entity work.Reg_ClkEnable
+        generic map (
+            NumeroBits => 32,
+            Tprop => 1 ns,
+            Tsetup => 0.25 ns
+        )
+        port map (
+            C => clk,
+            CE => ce_ri,
+            R => rst,
+            S => '0',
+            D => b1_1,
+            Q => b2_1
+        );
 
-    -- TODO: adicionar esse
     BUFFER_2_2: entity work.Reg_ClkEnable
+        generic map (
+            NumeroBits => 32,
+            Tprop => 1 ns,
+            Tsetup => 0.25 ns
+        )
+        port map (
+            C => clk,
+            CE => ce_ri,
+            R => rst,
+            S => '0',
+            D => dout_r_1,
+            Q => b2_2
+        );
 
     -- TODO: adicionar esse
     BUFFER_2_3: entity work.Reg_ClkEnable
+        generic map (
+            NumeroBits => 32,
+            Tprop => 1 ns,
+            Tsetup => 0.25 ns
+        )
+        port map (
+            C => clk,
+            CE => ce_ri,
+            R => rst,
+            S => '0',
+            D => dout_r_2,
+            Q => b2_3
+        );
+
+    -- TODO: adicionar esse
+    BUFFER_2_4: entity work.Reg_ClkEnable
+        generic map (
+            NumeroBits => 32,
+            Tprop => 1 ns,
+            Tsetup => 0.25 ns
+        )
+        port map (
+            C => clk,
+            CE => ce_ri,
+            R => rst,
+            S => '0',
+            D => sext,
+            Q => b2_4
+        );
 
     -- ALU
     MULTIPLEXER_4: entity work.Mux2x1
@@ -337,35 +440,91 @@ begin
         )
         port map (
             Veum => '0',
-            A => dout_r_1,
+            A => b2_1,
             B => mux_4,
             cUla => ALUOpe(2 downto 0),
             Sinal => open,
             Vaum => open,
-            Zero => Zero,
+            Zero => aluzero,
             C => alu
         );
 
     -- TODO: adicionar esse
     BUFFER_3_1: entity work.Reg_ClkEnable
+        generic map (
+            NumeroBits => 32,
+            Tprop => 1 ns,
+            Tsetup => 0.25 ns
+        )
+        port map (
+            C => clk,
+            CE => ce_ri,
+            R => rst,
+            S => '0',
+            D => add_2,
+            Q => b3_1
+        );
 
     -- TODO: adicionar esse
     BUFFER_3_2: entity work.Reg_ClkEnable
+        generic map (
+            NumeroBits => 1,
+            Tprop => 1 ns,
+            Tsetup => 0.25 ns
+        )
+        port map (
+            C => clk,
+            CE => ce_ri,
+            R => rst,
+            S => '0',
+            D => aluzero,
+            Q => b3_2
+        );
 
     -- TODO: adicionar esse
     BUFFER_3_3: entity work.Reg_ClkEnable
+        generic map (
+            NumeroBits => 32,
+            Tprop => 1 ns,
+            Tsetup => 0.25 ns
+        )
+        port map (
+            C => clk,
+            CE => ce_ri,
+            R => rst,
+            S => '0',
+            D => alu,
+            Q => b3_3
+        );
 
     -- TODO: adicionar esse
     BUFFER_3_4: entity work.Reg_ClkEnable
+        generic map (
+            NumeroBits => 32,
+            Tprop => 1 ns,
+            Tsetup => 0.25 ns
+        )
+        port map (
+            C => clk,
+            CE => ce_ri,
+            R => rst,
+            S => '0',
+            D => b2_3,
+            Q => b3_4
+        );
 
-    rs <= ri(19 downto 15);
-    rt <= ri(24 downto 20);
-    rd <= ri(11 downto 7);
+    Zero <= aluzero;
+
+    rs <= b1_1(19 downto 15);
+    rt <= b1_1(24 downto 20);
+    rd <= b1_1(11 downto 7);
     
-    immed <= ri(31 downto 20);
+    immed <= b1_1(31 downto 20);
     jump <= ri(31 downto 12);
 
     Cop <= ri(5 downto 0);
     CopExt <= ri(5 downto 0);
+
+
 
 end architecture_fd;

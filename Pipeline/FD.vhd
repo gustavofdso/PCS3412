@@ -98,8 +98,8 @@ architecture architecture_fd of FD is
     signal b2_4:        std_logic_vector(31 downto 0);
 
     signal b3_1:        std_logic_vector(31 downto 0);
-    signal b3_2:        std_logic_vector(31 downto 0);
-    signal b3_3:        std_logic;
+    signal b3_2:        std_logic;
+    signal b3_3:        std_logic_vector(31 downto 0);
     signal b3_4:        std_logic_vector(31 downto 0);
 
     signal b4_1:        std_logic_vector(31 downto 0);
@@ -160,7 +160,7 @@ begin
         port map (
             S => '1',
             Vum => '0',
-            A  => add_1,
+            A  => b2_1,
             B  => sl2_2,
             C => add_2
         );
@@ -196,7 +196,7 @@ begin
         )
         port map (
             DE => '1',
-            I => sext,
+            I => b2_4,
             O => sl2_2
         );
 
@@ -209,7 +209,7 @@ begin
         port map (
             I0 => add_1,
             I1 => sl2_1,
-            I2 => add_2,
+            I2 => b3_1,
             I3 => (others => '0'),
             Sel => Brch,
             O => mux_1
@@ -276,7 +276,7 @@ begin
             Clock => clk,
             enable => menable,
             rw => rw,
-            ender => dout_r_2,
+            ender => b3_3,
             pronto => open,
             dado => dout_d
         );
@@ -307,7 +307,7 @@ begin
             CE => ce_ri,
             R => rst,
             S => '0',
-            D => b3_2,
+            D => b3_3,
             Q => b4_1
         );
 
@@ -319,8 +319,8 @@ begin
             Tdata => 0.25 ns
         )
         port map (
-            I0 => alu,
-            I1 => dout_d,
+            I0 => b4_2,
+            I1 => b4_1,
             Sel => MemtoReg,
             O => mux_2
         );
@@ -386,7 +386,6 @@ begin
             Q => b2_2
         );
 
-    -- TODO: adicionar esse
     BUFFER_2_3: entity work.Reg_ClkEnable
         generic map (
             NumeroBits => 32,
@@ -402,7 +401,6 @@ begin
             Q => b2_3
         );
 
-    -- TODO: adicionar esse
     BUFFER_2_4: entity work.Reg_ClkEnable
         generic map (
             NumeroBits => 32,
@@ -426,8 +424,8 @@ begin
             Tdata => 0.25 ns
         )
         port map (
-            I0 => sext,
-            I1 => dout_r_2,
+            I0 => b2_3,
+            I1 => b2_4,
             Sel => ALUSrc,
             O => mux_4
         );
@@ -449,7 +447,6 @@ begin
             C => alu
         );
 
-    -- TODO: adicionar esse
     BUFFER_3_1: entity work.Reg_ClkEnable
         generic map (
             NumeroBits => 32,
@@ -465,7 +462,6 @@ begin
             Q => b3_1
         );
 
-    -- TODO: adicionar esse
     BUFFER_3_2: entity work.Reg_ClkEnable
         generic map (
             NumeroBits => 1,
@@ -477,11 +473,10 @@ begin
             CE => ce_ri,
             R => rst,
             S => '0',
-            D => aluzero,
-            Q => b3_2
+            D(0) => aluzero,
+            Q(0) => b3_2
         );
 
-    -- TODO: adicionar esse
     BUFFER_3_3: entity work.Reg_ClkEnable
         generic map (
             NumeroBits => 32,
@@ -524,7 +519,5 @@ begin
 
     Cop <= ri(5 downto 0);
     CopExt <= ri(5 downto 0);
-
-
-
+    
 end architecture_fd;

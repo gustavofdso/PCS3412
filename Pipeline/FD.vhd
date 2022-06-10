@@ -1,7 +1,7 @@
 -------------------------------------------------------------------------------
 --
 -- Title       : FD
--- Design      : T-FIVE-MC
+-- Design      : T-FIVE-PL
 -- Author      : Gustavo Oliveira
 -- Company     : LARC-EPUSP
 --
@@ -519,5 +519,5 @@ begin
 
     Cop <= ri(5 downto 0);
     CopExt <= ri(5 downto 0);
-    
+
 end architecture_fd;

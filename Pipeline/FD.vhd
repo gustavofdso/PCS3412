@@ -1,7 +1,7 @@
 -------------------------------------------------------------------------------
 --
 -- Title       : FD
--- Design      : T-FIVE-PL
+-- Design      : T-FIVE-Pipe
 -- Author      : Gustavo Oliveira
 -- Company     : LARC-EPUSP
 --

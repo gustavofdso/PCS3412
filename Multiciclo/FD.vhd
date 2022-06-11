@@ -43,8 +43,8 @@ entity FD is
         ALUOpe:         in std_logic_vector(3 downto 0);
 
         -- Operation code
-        Cop:            out std_logic_vector(5 downto 0);
-        CopExt:         out std_logic_vector(5 downto 0);
+        Cop:            out std_logic_vector(6 downto 0);
+        CopExt:         out std_logic_vector(6 downto 0);
 
         -- Zero indication for ALU
         Zero:           out std_logic
@@ -318,7 +318,7 @@ begin
     immed <= ri(31 downto 20);
     jump <= ri(31 downto 12);
 
-    Cop <= ri(5 downto 0);
-    CopExt <= ri(5 downto 0);
+    Cop <= ri(6 downto 0);
+    CopExt <= ri(6 downto 0);
 
 end architecture_fd;

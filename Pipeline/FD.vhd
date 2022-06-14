@@ -83,29 +83,32 @@ architecture architecture_fd of FD is
     signal dout_d:      std_logic_vector(31 downto 0);
     signal mux_4:       std_logic_vector(31 downto 0);
 
-    -- Buffers
+    -- PC Buffers
     signal pc_if_de:            std_logic_vector(31 downto 0);
     signal pc_de_ex:            std_logic_vector(31 downto 0);
-    signal pc_ex_mem:           std_logic_vector(31 downto 0);
-    signal pc_mem_wb:           std_logic_vector(31 downto 0);
 
+    -- ADD4 Buffers
     signal add_if_de:           std_logic_vector(31 downto 0);
     signal add_de_ex:           std_logic_vector(31 downto 0);
     signal add_ex_mem:          std_logic_vector(31 downto 0);
     signal add_mem_wb:          std_logic_vector(31 downto 0);
     
-    signal alu_ex_mem:          std_logic_vector(31 downto 0);
-    signal alu_mem_wb:          std_logic_vector(31 downto 0);
-
+    -- Instruction Memory Buffers
     signal dout_i_if_de:        std_logic_vector(31 downto 0);
 
+    -- Register File Buffers
     signal dout_r_a_de_ex:      std_logic_vector(31 downto 0);
-    
     signal dout_r_b_de_ex:      std_logic_vector(31 downto 0);
     signal dout_r_b_ex_mem:     std_logic_vector(31 downto 0);
 
+    -- Immediate Buffers
     signal immed_de_ex:   std_logic_vector(31 downto 0);
 
+    -- ALU Result Buffers
+    signal alu_ex_mem:          std_logic_vector(31 downto 0);
+    signal alu_mem_wb:          std_logic_vector(31 downto 0);
+    
+    -- Data Memory Buffers
     signal dout_d_mem_wb:   std_logic_vector(31 downto 0);
 
 begin
@@ -230,7 +233,7 @@ begin
             dout => dout_r_b_de_ex
         );
 
-    IMMEDIATE_GENERATOR_DE_EX: entity work.Reg
+    IMMED_GENERATOR_DE_EX: entity work.Reg
         port map(
             clk => clk,
             ce => '1',
@@ -285,15 +288,6 @@ begin
             rst => rst,
             din => add_de_ex,
             dout => add_ex_mem
-        );
-
-    PROGRAM_COUNTER_EX_MEM: entity work.Reg
-        port map(
-            clk => clk,
-            ce => '1',
-            rst => rst,
-            din => pc_de_ex,
-            dout => pc_ex_mem
         );
 
     MULTIFUNCIONAL_ALU_EX_MEM: entity work.Reg

@@ -38,7 +38,7 @@ entity FD is
         ASEl:           in std_logic;
         BSEl:           in std_logic;
 
-        ALUSEl:         in std_logic_vector(1 downto 0);
+        ALUSEl:         in std_logic_vector(3 downto 0);
 
         menable:        in std_logic;
         MemRW:          in std_logic;
@@ -141,7 +141,10 @@ begin
             A => dout_r_a,
             B => dout_r_b,
             eq => BrEq,
-            lt => BrLt
+            lt => BrLt,
+            gt => open,
+            le => open,
+            ge => open
         );
 
     MULTIPLEXER_2: entity work.Mux2
@@ -160,16 +163,16 @@ begin
             O => mux_3
         );
 
-    MULTIFUNCIONAL_ALU: entity work.ULA
+    MULTIFUNCIONAL_ALU: entity work.ALU
         port map (
-            Veum => '0',
+            cin => '0',
             A => mux_2,
             B => mux_3,
-            cUla => ALUSel(2 downto 0),
-            Sinal => open,
-            Vaum => open,
-            Zero => open,
-            C => alu
+            ALUOpe => ALUSel,
+            cout => open,
+            zero => open,
+            negative => open,
+            result => alu
         );
 
     DATA_MEMORY: entity work.Ram

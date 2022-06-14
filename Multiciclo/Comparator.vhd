@@ -27,7 +27,7 @@ entity Comparator is
         lt:       out std_logic;
         gt:       out std_logic;
         le:       out std_logic;
-        ge:       out std_logic;
+        ge:       out std_logic
     );
 end Comparator;
 

@@ -24,18 +24,18 @@ entity RegFile is
     port(
         clk:            in std_logic;
         we:             in std_logic;
-        din:            in std_logic_vector(DatBitOcunt - 1 downto 0);
+        din:            in std_logic_vector(DatBitCount - 1 downto 0);
         addrin:         in std_logic_vector(AdrBitCount - 1 downto 0);
         addra:          in std_logic_vector(AdrBitCount - 1 downto 0);
         addrb:          in std_logic_vector(AdrBitCount - 1 downto 0);
-        douta:          out std_logic_vector(DatBitOcunt - 1 downto 0);
-        doutb:          out std_logic_vector(DatBitOcunt - 1 downto 0)
+        douta:          out std_logic_vector(DatBitCount - 1 downto 0);
+        doutb:          out std_logic_vector(DatBitCount - 1 downto 0)
     );
 end;
 
 architecture RegFile of RegFile is
 
-type ram_type is array (0 to 2**AdrBitCount - 1) of std_logic_vector (DatBitOcunt - 1 downto 0);
+type ram_type is array (0 to 2**AdrBitCount - 1) of std_logic_vector (DatBitCount - 1 downto 0);
 signal ram: ram_type;
 
 signal enda_reg:    std_logic_vector(AdrBitCount - 1 downto 0);

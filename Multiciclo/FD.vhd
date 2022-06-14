@@ -27,7 +27,7 @@ entity FD is
         ce_ri:          in std_logic;
 
         -- Branch Control signal
-        Brch:           in std_logic_vector(1 downto 0);
+        brch:           in std_logic;
 
         -- Data Memory Control signals
         menable:        in std_logic;
@@ -41,10 +41,12 @@ entity FD is
         -- ALU Control signals
         ALUSrc:         in std_logic_vector(1 downto 0);
         ALUOpe:         in std_logic_vector(3 downto 0);
+        ImmSel:         in std_logic_vector(1 downto 0);
 
         -- Operation code
-        Cop:            out std_logic_vector(6 downto 0);
+        opcode:         out std_logic_vector(6 downto 0);
         funct3:         out std_logic_vector(2 downto 0);
+        funct7:         out std_logic_vector(6 downto 0);
 
         -- Zero indication for ALU
         Zero:           out std_logic
@@ -57,19 +59,15 @@ architecture architecture_fd of FD is
 
     -- Instruction Resgister signals
     signal ri:          std_logic_vector(31 downto 0);
-    signal rs:          std_logic_vector(4 downto 0);
-    signal rt:          std_logic_vector(4 downto 0);
+    signal rs1:         std_logic_vector(4 downto 0);
+    signal rs2:         std_logic_vector(4 downto 0);
     signal rd:          std_logic_vector(4 downto 0);
-    signal immed:       std_logic_vector(11 downto 0);
-    signal jump:        std_logic_vector(19 downto 0);
+
+    signal immed:       std_logic_vector(32 downto 0);
     
     -- Branch signals
     signal mux_1:       std_logic_vector(31 downto 0);
-    signal add_1:       std_logic_vector(31 downto 0);
-    signal add_2:       std_logic_vector(31 downto 0);
-    signal sl2_1:       std_logic_vector(31 downto 0);
-    signal sext:        std_logic_vector(31 downto 0);
-    signal sl2_2:       std_logic_vector(31 downto 0);
+    signal add:         std_logic_vector(31 downto 0);
 
     -- Instruction Memory signals
     signal dout_i:      std_logic_vector(31 downto 0);
@@ -80,124 +78,53 @@ architecture architecture_fd of FD is
     -- Register File signals
     signal mux_2:       std_logic_vector(31 downto 0);
     signal mux_3:       std_logic_vector(31 downto 0);
-    signal dout_r_1:    std_logic_vector(31 downto 0);
-    signal dout_r_2:    std_logic_vector(31 downto 0);
+    signal dout_r_a:    std_logic_vector(31 downto 0);
+    signal dout_r_b:    std_logic_vector(31 downto 0);
 
     -- ALU signals
     signal mux_4:       std_logic_vector(31 downto 0);
     signal alu:         std_logic_vector(31 downto 0);
 
 begin
-    -- PC
-    PROGRAM_COUNTER: entity work.Reg_ClkEnable
-        generic map (
-            NumeroBits => 32,
-            Tprop => 1 ns,
-            Tsetup => 0.25 ns
-        )
-        port map (
-            C => clk,
-            CE => ce_pc,
-            R => rst,
-            S => '0',
-            D => mux_1,
-            Q => pc
-        );
-
-    -- IR
-    INSTRUCTION_REGISTER: entity work.Reg_ClkEnable
-        generic map (
-            NumeroBits => 32,
-            Tprop => 1 ns,
-            Tsetup => 0.25 ns
-        )
-        port map (
-            C => clk,
-            CE => ce_ri,
-            R => rst,
-            S => '0',
-            D => dout_i,
-            Q => ri
-        );
-
-    -- Branch
-    ADDER_1: entity work.Somador
-        generic map (
-            NumeroBits => 32,
-            Tsoma => 1 ns
-        )
-        port map (
-            S => '1',
-            Vum => '0',
-            A  => pc,
-            B  => B"0100",
-            C => add_1
-        );
-        
-    ADDER_2: entity work.Somador
-        generic map (
-            NumeroBits => 32,
-            Tsoma => 1 ns
-        )
-        port map (
-            S => '1',
-            Vum => '0',
-            A  => add_1,
-            B  => sl2_2,
-            C => add_2
-        );
-
-    -- TODO: adicionar os primeiros bits do PC antes do jump adress, como entrada desse SL2
-    SHIFT_LEFT_2_1: entity work.deslocador_combinatorio
-        generic map (
-            NB => 32,
-            NBD => 2,
-            Tprop => 0 ns
-        )
-        port map (
-            DE => '1',
-            I => jump,
-            O => sl2_1
-        );
-
-    SIGN_EXTEND: entity work.xsign
-        generic map (
-            NBE => 12,
-            NBS => 32
-        )
-        port map (
-            I => immed,
-            O => sext
-        );
-
-    SHIFT_LEFT_2_2: entity work.deslocador_combinatorio
-        generic map (
-            NB => 32,
-            NBD => 2,
-            Tprop => 0 ns
-        )
-        port map (
-            DE => '1',
-            I => sext,
-            O => sl2_2
-        );
-
-    MULTIPLEXER_1: entity work.Mux4x1
+    MULTIPLEXER_1: entity work.Mux2x1
         generic map (
             NB => 32,
             Tsel => 0.5 ns,
             Tdata => 0.25 ns
         )
         port map (
-            I0 => add_1,
-            I1 => sl2_1,
-            I2 => add_2,
-            I3 => alu,
-            Sel => Brch,
+            I0 => add,
+            I1 => alu,
+            Sel => brch,
             O => mux_1
         );
 
-    -- Instruction Memory
+    PROGRAM_COUNTER: entity work.Reg
+        generic map (
+            NumeroBits => 32,
+            Tprop => 1 ns,
+            Tsetup => 0.25 ns
+        )
+        port map (
+            clk => clk,
+            ce => ce_pc,
+            rst => rst,
+            din => mux_1,
+            dout => pc
+        );
+
+    ADD4: entity work.Adder
+        generic map (
+            NumeroBits => 32,
+            Tsoma => 1 ns
+        )
+        port map (
+            cin => '0',
+            A => pc,
+            B => B"0100",
+            sum => add
+        );
+
     INSTRUCTION_MEMORY: entity work.Ram
         generic map (
             BE => 32,
@@ -215,7 +142,48 @@ begin
             dado => dout_i
         );
 
-    -- Data Memory
+    INSTRUCTION_REGISTER: entity work.Reg
+        generic map (
+            NumeroBits => 32,
+            Tprop => 1 ns,
+            Tsetup => 0.25 ns
+        )
+        port map (
+            clk => clk,
+            ce => ce_ri,
+            rst => rst,
+            din => dout_i,
+            dout => ri
+        );
+
+    REGISTER_FILE: entity work.RegisterFile
+        generic map (
+            NBend => 5,
+            NBdado => 32,
+            Tread => 5 ns,
+            Twrite => 5 ns
+        )
+        port map (
+            clk => clk,
+            we => RegWrite,
+            din => ,
+            addrin => rd,
+            addra => rs1,
+            addrb => rs2,
+            douta => dout_r_a,
+            doutb => dout_r_b
+        );
+
+    IMMED_GENERATOR: entity work.ImmediateGenerator
+        generic map (
+            Tsel => 0.5 ns
+        )
+        port map (
+            ri => ri,
+            ImmedSel => ImmedSel,
+            immed => immed
+        );
+
     DATA_MEMORY: entity work.Ram
         generic map (
             BE => 32,
@@ -228,12 +196,11 @@ begin
             Clock => clk,
             enable => menable,
             rw => rw,
-            ender => dout_r_2,
+            ender => dout_r_b,
             pronto => open,
             dado => dout_d
         );
 
-    -- Register File
     MULTIPLEXER_2: entity work.Mux2x1
         generic map (
             NB => 32,
@@ -255,30 +222,11 @@ begin
         )
         port map (
             I0 => rd,
-            I1 => rt,
+            I1 => rs2,
             Sel => RegDest,
             O => mux_3
         );
 
-    REGISTER_FILE: entity work.RegisterFile
-        generic map (
-            NBend => 5,
-            NBdado => 32,
-            Tread => 5 ns,
-            Twrite => 5 ns
-        )
-        port map (
-            clk => clk,
-            we => RegWrite,
-            din => mux_2,
-            addrin => mux_3,
-            addra => rs,
-            addrb => rt,
-            douta => dout_r_1,
-            doutb => dout_r_2
-        );
-
-    -- ALU
     MULTIPLEXER_4: entity work.Mux4x1
         generic map (
             NB => 32,
@@ -287,8 +235,8 @@ begin
         )
         port map (
             I0 => sext,
-            I1 => add_1,
-            I2 => dout_r_2,
+            I1 => add,
+            I2 => dout_r_b,
             I3 => (others => '0'),
             Sel => ALUSrc,
             O => mux_4
@@ -302,7 +250,7 @@ begin
         )
         port map (
             Veum => '0',
-            A => dout_r_1,
+            A => dout_r_a,
             B => mux_4,
             cUla => ALUOpe(2 downto 0),
             Sinal => open,
@@ -311,14 +259,12 @@ begin
             C => alu
         );
 
-    rs <= ri(19 downto 15);
-    rt <= ri(24 downto 20);
+    rs1 <= ri(19 downto 15);
+    rs2 <= ri(24 downto 20);
     rd <= ri(11 downto 7);
-    
-    immed <= ri(31 downto 20);
-    jump <= ri(31 downto 12);
 
-    Cop <= ri(6 downto 0);
+    opcode <= ri(6 downto 0);
     funct3 <= ri(14 downto 12);
+    funct7 <= ri(31 downto 25);
 
 end architecture_fd;

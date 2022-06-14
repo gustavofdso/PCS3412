@@ -65,6 +65,8 @@ With cUla select
                ('0' & (not A))				when "0111",
                (shift_left(signed(A), signed(B)))         when "1000",
                (shift_right(signed(A), signed(B)))        when "1001",
+               (x"01" if (A>B) else x"00")        when "1010"
+               (x"01" if (A=B) else x"00")        when "1011"
                (others => '0')				when others;
 -- Sa�da de Vai um
 Vaum <=	S_NB(NB) after Tsom;

@@ -21,3 +21,4 @@ Alunos:
 * RISC-V Reference: https://ae4.tidia-ae.usp.br/access/content/group/2865d401-913f-476b-b1fa-b381819f4eda/Projeto%202022/RISCV_CARD.pdf
 * The RISC-V Instruction Set Manual: https://ae4.tidia-ae.usp.br/access/content/group/2865d401-913f-476b-b1fa-b381819f4eda/Projeto%202022/riscv-spec-v2.2.pdf
 * Tiny RISC-V Instruction Set Architecture: https://www.csl.cornell.edu/courses/ece5745/handouts/ece5745-tinyrv-isa.txt
+* RISC-V CPU Datapath, Control Intro: https://inst.eecs.berkeley.edu/~cs61c/resources/su18_lec/Lecture11.pdf

@@ -34,9 +34,7 @@ architecture Mux2 of Mux2 is
 
 begin
 
-     Mux2:
      process (I0, I1, Sel)
-
      begin
           Case Sel is
                when '0' => O <= I0                     after Tsel;

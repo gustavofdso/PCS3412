@@ -15,17 +15,17 @@ use IEEE.std_logic_1164.all;
 
 entity Reg is
      generic(
-          BitCount: INTEGER := 32;
-          Tsetup:   time := 0.25 ns;
-          Thold:    time := 0.25 ns;
-          Tprop:    time := 1 ns
+          BitCount:      INTEGER := 32;
+          Tsetup:        time := 0.25 ns;
+          Thold:         time := 0.25 ns;
+          Tprop:         time := 1 ns
      );
      port(
-          clk:      in std_logic;
-          ce:       in std_logic;
-          rst:      in std_logic;
-          din:      in std_logic_vector(BitCount - 1 downto 0);
-          dout:     out std_logic_vector(BitCount - 1 downto 0)
+          clk:           in std_logic;
+          ce:            in std_logic;
+          rst:           in std_logic;
+          din:           in std_logic_vector(BitCount - 1 downto 0);
+          dout:          out std_logic_vector(BitCount - 1 downto 0)
      );
 end Reg;
 
@@ -35,9 +35,7 @@ signal qi : std_logic_vector(BitCount - 1 downto 0);
 
 begin
 
-     Reg:
      process (clk, rst, ce)
-
      begin
           if rst = '1' then
                qi(BitCount -1 downto 0) <= (others => '0');

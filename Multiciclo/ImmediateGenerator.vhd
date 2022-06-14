@@ -31,9 +31,7 @@ architecture ImmediateGenerator of ImmediateGenerator is
 
 begin
 
-    Gen:
     process (ImmSel)
-
     begin
         case ImmSel is
             -- R-Type
@@ -53,7 +51,6 @@ begin
                 immed(31 downto 20) <= (others => ri(31))                   after Tsel;
             when others => immed <= (others => 'X')                         after Tsel;
         end case;
-
     end process;
 
 end ImmediateGenerator;

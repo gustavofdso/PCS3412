@@ -35,9 +35,8 @@ end Mux4;
 architecture Mux4 of Mux4 is
 
 begin
-     Mux4:
-     process (I0, I1, I2, I3, Sel)
 
+     process (I0, I1, I2, I3, Sel)
      begin
           case Sel is
                when "00" => O <= I0 	               after Tsel;

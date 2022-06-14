@@ -43,7 +43,6 @@ signal endb_reg:    std_logic_vector(AdrBitCount - 1 downto 0);
 
 begin
 
-    RegisterMemory:
     process (clk)
     begin
         if (rising_edge(clk)) then

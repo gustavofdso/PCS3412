@@ -18,7 +18,7 @@ use IEEE.std_logic_signed.all;
 entity Comparator is
     generic(
         BitCount: integer := 32;
-        Tcomp:    time := 1.25 ns
+        Tsub:    time := 1.25 ns
     );
     port(
         A:        in std_logic_vector(BitCount - 1 downto 0);
@@ -34,10 +34,10 @@ end Comparator;
 architecture Comparator of Comparator is
 
 begin
-    eq <= '1' when (A = B)  else '0' after Tcomp;
-    lt <= '1' when (A < B)  else '0' after Tcomp;
-    gt <= '1' when (A > B)  else '0' after Tcomp;
-    le <= '1' when (A <= B) else '0' after Tcomp;
-    ge <= '1' when (A >= B) else '0' after Tcomp;
+    eq <= '1' when (A = B)  else '0' after Tsub;
+    lt <= '1' when (A < B)  else '0' after Tsub;
+    gt <= '1' when (A > B)  else '0' after Tsub;
+    le <= '1' when (A <= B) else '0' after Tsub;
+    ge <= '1' when (A >= B) else '0' after Tsub;
 
 end Comparator;

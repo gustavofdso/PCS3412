@@ -19,7 +19,9 @@ entity ALU is
      generic(
           BitCount:      integer := 32;
           Tadd:          time := 1 ns;
-          Tsub:          time := 1.25 ns
+          Tsub:          time := 1.25 ns;
+          Tgate:         time := 0.25 ns;
+          Tsetup:        time := 0.25 ns
      );
      port(
           cin:           in std_logic;
@@ -47,40 +49,40 @@ begin
                when "0001" => -- Subtraction
                     qi <= A - B after Tsub;
                when "0010" => -- Multiplication
-                    qi <= std_logic_vector(to_unsigned((to_integer(unsigned(A)) * to_integer(unsigned(B))),8));
+                    qi <= std_logic_vector(to_unsigned((to_integer(unsigned(A)) * to_integer(unsigned(B))), BitCount));
                when "0011" => -- Division
-                    qi <= std_logic_vector(to_unsigned(to_integer(unsigned(A)) / to_integer(unsigned(B)),8));
+                    qi <= std_logic_vector(to_unsigned(to_integer(unsigned(A)) / to_integer(unsigned(B)), BitCount));
                when "0100" => -- Logical shift left
-                    qi <= std_logic_vector(unsigned(A) sll to_integer(signed(B)));
+                    qi <= std_logic_vector(unsigned(A) sll to_integer(signed(B))) after Tsetup;
                when "0101" => -- Logical shift right
-                    qi <= std_logic_vector(unsigned(A) srl to_integer(signed(B)));
+                    qi <= std_logic_vector(unsigned(A) srl to_integer(signed(B))) after Tsetup;
                when "0110" => --  Rotate left
-                    qi <= std_logic_vector(unsigned(A) rol to_integer(signed(B)));
+                    qi <= std_logic_vector(unsigned(A) rol to_integer(signed(B))) after Tsetup;
                when "0111" => -- Rotate right
-                    qi <= std_logic_vector(unsigned(A) ror to_integer(signed(B)));
+                    qi <= std_logic_vector(unsigned(A) ror to_integer(signed(B))) after Tsetup;
                when "1000" => -- Logical and 
-                    qi <= A and B;
+                    qi <= A and B after Tgate;
                when "1001" => -- Logical or
-                    qi <= A or B;
+                    qi <= A or B after Tgate;
                when "1010" => -- Logical xor 
-                    qi <= A xor B;
+                    qi <= A xor B after 2*Tgate;
                when "1011" => -- Logical nor
-                    qi <= A nor B;
+                    qi <= A nor B after Tgate;
                when "1100" => -- Logical nand 
-                    qi <= A nand B;
+                    qi <= A nand B after Tgate;
                when "1101" => -- Logical xnor
-                    qi <= A xnor B;
+                    qi <= A xnor B after 2*Tgate;
                when "1110" => -- Greater comparison
                     if(A > B) then
-                         qi <= x"01";
+                         qi <= x"01" after Tsub;
                     else
-                         qi <= x"00";
+                         qi <= x"00" after Tsub;
                     end if; 
                when "1111" => -- Equal comparison   
                     if(A = B) then
-                         qi <= x"01";
+                         qi <= x"01" after Tsub;
                     else
-                         qi <= x"00";
+                         qi <= x"00" after Tsub;
                     end if;
                when others => qi <= A + B; 
           end case;

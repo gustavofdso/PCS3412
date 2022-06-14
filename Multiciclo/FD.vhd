@@ -22,34 +22,32 @@ entity FD is
         clk:            in std_logic;
         rst:            in std_logic;
 
-        -- Clock enable for PC and IR
+        -- Clock enable for PC
         ce_pc:          in std_logic;
-        ce_ri:          in std_logic;
 
-        -- Branch Control signal
-        brch:           in std_logic;
+        PCsel:          in std_logic;
 
-        -- Data Memory Control signals
-        menable:        in std_logic;
-        rw:             in std_logic;
-
-        -- Register File Control signals
-        MemtoReg:       in std_logic;
-        RegWrite:       in std_logic;
-        RegDest:        in std_logic;
-
-        -- ALU Control signals
-        ALUSrc:         in std_logic_vector(1 downto 0);
-        ALUOpe:         in std_logic_vector(3 downto 0);
         ImmSel:         in std_logic_vector(1 downto 0);
 
-        -- Operation code
+        RegWEn:         in std_logic;
+
+        BrUn:           in std_logic;
+        BrEq:           out std_logic;
+        BrLt:           out std_logic;
+
+        ASEl:           in std_logic;
+        BSEl:           in std_logic;
+
+        ALUSEl:         in std_logic_vector(1 downto 0);
+
+        menable:        in std_logic;
+        MemRW:          in std_logic;
+
+        WBSel:          in std_logic_vector(1 downto 0);
+        
         opcode:         out std_logic_vector(6 downto 0);
         funct3:         out std_logic_vector(2 downto 0);
-        funct7:         out std_logic_vector(6 downto 0);
-
-        -- Zero indication for ALU
-        Zero:           out std_logic
+        funct7:         out std_logic_vector(6 downto 0)
     ) ;
 end FD;
 
@@ -57,13 +55,8 @@ architecture architecture_fd of FD is
     -- Program Counter signals
     signal pc:          std_logic_vector(31 downto 0);
 
-    -- Instruction Resgister signals
-    signal ri:          std_logic_vector(31 downto 0);
-    signal rs1:         std_logic_vector(4 downto 0);
-    signal rs2:         std_logic_vector(4 downto 0);
-    signal rd:          std_logic_vector(4 downto 0);
-
-    signal immed:       std_logic_vector(32 downto 0);
+    -- Instruction signals
+    signal immed:       std_logic_vector(31 downto 0);
     
     -- Branch signals
     signal mux_1:       std_logic_vector(31 downto 0);
@@ -86,16 +79,15 @@ architecture architecture_fd of FD is
     signal alu:         std_logic_vector(31 downto 0);
 
 begin
-    MULTIPLEXER_1: entity work.Mux2x1
+    MULTIPLEXER_1: entity work.Mux2
         generic map (
             NB => 32,
-            Tsel => 0.5 ns,
-            Tdata => 0.25 ns
+            Tsel => 0.5 ns
         )
         port map (
             I0 => add,
             I1 => alu,
-            Sel => brch,
+            Sel => PCSel,
             O => mux_1
         );
 
@@ -142,20 +134,6 @@ begin
             dado => dout_i
         );
 
-    INSTRUCTION_REGISTER: entity work.Reg
-        generic map (
-            NumeroBits => 32,
-            Tprop => 1 ns,
-            Tsetup => 0.25 ns
-        )
-        port map (
-            clk => clk,
-            ce => ce_ri,
-            rst => rst,
-            din => dout_i,
-            dout => ri
-        );
-
     REGISTER_FILE: entity work.RegisterFile
         generic map (
             NBend => 5,
@@ -165,11 +143,11 @@ begin
         )
         port map (
             clk => clk,
-            we => RegWrite,
-            din => ,
-            addrin => rd,
-            addra => rs1,
-            addrb => rs2,
+            we => RegWEn,
+            din => mux_4,
+            addrin => dout_i(11 downto 7),
+            addra => dout_i(19 downto 15),
+            addrb => dout_i(24 downto 20),
             douta => dout_r_a,
             doutb => dout_r_b
         );
@@ -179,9 +157,62 @@ begin
             Tsel => 0.5 ns
         )
         port map (
-            ri => ri,
-            ImmedSel => ImmedSel,
+            ri => dout_i,
+            ImmSel => ImmSel,
             immed => immed
+        );
+
+    BRANCH_COMP: entity work.Comparator
+        generic map (
+            NumeroBits => 32,
+            Tcomp => 1 ns
+        )
+        port map (
+            A => dout_r_a,
+            B => dout_r_b,
+            eq => BrEq,
+            lt => BrLt
+        );
+
+    MULTIPLEXER_2: entity work.Mux2
+        generic map (
+            NB => 32,
+            Tsel => 0.5 ns
+        )
+        port map (
+            I0 => dout_r_a,
+            I1 => pc,
+            Sel => ASel,
+            O => mux_2
+        );
+        
+    MULTIPLEXER_3: entity work.Mux2
+        generic map (
+            NB => 32,
+            Tsel => 0.5 ns
+        )
+        port map (
+            I0 => dout_r_b,
+            I1 => immed,
+            Sel => BSel,
+            O => mux_3
+        );
+
+    MULTIFUNCIONAL_ALU: entity work.ULA
+        generic map (
+            NB => 32,
+            Tsom => 1 ns,
+            Tsub => 1.25 ns
+        )
+        port map (
+            Veum => '0',
+            A => mux_2,
+            B => mux_3,
+            cUla => ALUSel(2 downto 0),
+            Sinal => open,
+            Vaum => open,
+            Zero => open,
+            C => alu
         );
 
     DATA_MEMORY: entity work.Ram
@@ -195,76 +226,28 @@ begin
         port map (
             Clock => clk,
             enable => menable,
-            rw => rw,
+            rw => MemRW,
             ender => dout_r_b,
             pronto => open,
             dado => dout_d
         );
 
-    MULTIPLEXER_2: entity work.Mux2x1
+    MULTIPLEXER_4: entity work.Mux4
         generic map (
             NB => 32,
-            Tsel => 0.5 ns,
-            Tdata => 0.25 ns
+            Tsel => 0.5 ns
         )
         port map (
-            I0 => alu,
-            I1 => dout_d,
-            Sel => MemtoReg,
-            O => mux_2
-        );
-        
-    MULTIPLEXER_3: entity work.Mux2x1
-        generic map (
-            NB => 32,
-            Tsel => 0.5 ns,
-            Tdata => 0.25 ns
-        )
-        port map (
-            I0 => rd,
-            I1 => rs2,
-            Sel => RegDest,
-            O => mux_3
-        );
-
-    MULTIPLEXER_4: entity work.Mux4x1
-        generic map (
-            NB => 32,
-            Tsel => 0.5 ns,
-            Tdata => 0.25 ns
-        )
-        port map (
-            I0 => sext,
-            I1 => add,
-            I2 => dout_r_b,
+            I0 => dout_d,
+            I1 => alu,
+            I2 => add,
             I3 => (others => '0'),
-            Sel => ALUSrc,
+            Sel => WBSel,
             O => mux_4
-        );
+        );    
 
-    MULTIFUNCIONAL_ALU: entity work.ULA
-        generic map (
-            NB => 32,
-            Tsom => 1 ns,
-            Tsub => 1.25 ns
-        )
-        port map (
-            Veum => '0',
-            A => dout_r_a,
-            B => mux_4,
-            cUla => ALUOpe(2 downto 0),
-            Sinal => open,
-            Vaum => open,
-            Zero => Zero,
-            C => alu
-        );
-
-    rs1 <= ri(19 downto 15);
-    rs2 <= ri(24 downto 20);
-    rd <= ri(11 downto 7);
-
-    opcode <= ri(6 downto 0);
-    funct3 <= ri(14 downto 12);
-    funct7 <= ri(31 downto 25);
+    opcode <= dout_i(6 downto 0);
+    funct3 <= dout_i(14 downto 12);
+    funct7 <= dout_i(31 downto 25);
 
 end architecture_fd;

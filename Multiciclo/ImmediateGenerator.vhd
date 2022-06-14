@@ -32,29 +32,29 @@ architecture ImmediateGenerator of ImmediateGenerator is
 
 begin
 
-Gen:
-process (ImmSel)
+    Gen:
+    process (ImmSel)
 
-begin
-	case ImmSel is
-        -- R-Type
-		when "00" =>
-            immed(31 downto 0) <= (others => '0')                       after Tsel;
-        -- I-Type
-        when "01" =>
-            immed(11 downto 0) <= ri(31 downto 20)                      after Tsel;
-            immed(31 downto 12)<= (others => ri(31))                    after Tsel;
-        -- S-Type
-        when "10" =>
-            immed(10 downto 0) <= ri(31 downto 25) & ri(11 downto 7)    after Tsel;
-            immed(31 downto 11) <= (others => ri(31))                   after Tsel;
-        -- U-Type
-        when "11" =>
-            immed(19 downto 0) <= ri(31 downto 12)                      after Tsel;
-            immed(31 downto 20) <= (others => ri(31))                   after Tsel;
-		when others => immed <= (others => 'X')                         after Tsel;
-	end case;
+    begin
+        case ImmSel is
+            -- R-Type
+            when "00" =>
+                immed(31 downto 0) <= (others => '0')                       after Tsel;
+            -- I-Type
+            when "01" =>
+                immed(11 downto 0) <= ri(31 downto 20)                      after Tsel;
+                immed(31 downto 12) <= (others => ri(31))                   after Tsel;
+            -- S-Type
+            when "10" =>
+                immed(10 downto 0) <= ri(31 downto 25) & ri(11 downto 7)    after Tsel;
+                immed(31 downto 11) <= (others => ri(31))                   after Tsel;
+            -- U-Type
+            when "11" =>
+                immed(19 downto 0) <= ri(31 downto 12)                      after Tsel;
+                immed(31 downto 20) <= (others => ri(31))                   after Tsel;
+            when others => immed <= (others => 'X')                         after Tsel;
+        end case;
 
-end process;
+    end process;
 
 end ImmediateGenerator;

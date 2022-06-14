@@ -1,23 +1,15 @@
 -------------------------------------------------------------------------------
 --
--- Title       : No Title
--- Design      : Biblioteca_de_Componentes
--- Author      : Wilson Ruggiero
+-- Title       : FD
+-- Design      : T-FIVE-MC
+-- Author      : Gustavo Oliveira
 -- Company     : LARC-EPUSP
 --
 -------------------------------------------------------------------------------
 --
--- File        : C:\My_Designs\Biblioteca_de_ComponentesV4.5\compile\ULA.vhd
--- Generated   : Thu Feb  1 16:01:18 2018
--- From        : C:\My_Designs\Biblioteca_de_ComponentesV4.5\src\ULA.bde
--- By          : Bde2Vhdl ver. 2.6
+-- Description : Implementation of a generic bit ALU.
 --
 -------------------------------------------------------------------------------
---
--- Description : 
---
--------------------------------------------------------------------------------
--- Design unit header --
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.std_logic_arith.all;

@@ -49,6 +49,6 @@ begin
           end if;
      end process Registrador;
 
-     Q <= qi after Tprop;
+     dout <= qi after Tprop;
 
 end Reg;

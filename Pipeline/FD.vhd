@@ -44,7 +44,7 @@ entity FD is
 
         -- Operation code
         Cop:            out std_logic_vector(6 downto 0);
-        CopExt:         out std_logic_vector(6 downto 0);
+        funct3:         out std_logic_vector(2 downto 0);
 
         -- Zero indication for ALU
         Zero:           out std_logic
@@ -210,7 +210,7 @@ begin
             I0 => add_1,
             I1 => sl2_1,
             I2 => b3_1,
-            I3 => (others => '0'),
+            I3 => alu,
             Sel => Brch,
             O => mux_1
         );
@@ -494,7 +494,6 @@ begin
             Q => b3_3
         );
 
-    -- TODO: adicionar esse
     BUFFER_3_4: entity work.Reg_ClkEnable
         generic map (
             NumeroBits => 32,
@@ -520,6 +519,6 @@ begin
     jump <= ri(31 downto 12);
 
     Cop <= ri(6 downto 0);
-    CopExt <= ri(6 downto 0);
+    funct3 <= ri(14 downto 12);
 
 end architecture_fd;

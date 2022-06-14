@@ -17,17 +17,17 @@ use IEEE.std_logic_signed.all;
 
 entity Comparator is
     generic(
-        BitCount: integer := 32;
-        Tsub:    time := 1.25 ns
+        BitCount:   integer := 32;
+        Tsub:       time := 1.25 ns
     );
     port(
-        A:        in std_logic_vector(BitCount - 1 downto 0);
-        B:        in std_logic_vector(BitCount - 1 downto 0);
-        eq:       out std_logic;
-        lt:       out std_logic;
-        gt:       out std_logic;
-        le:       out std_logic;
-        ge:       out std_logic
+        A:          in std_logic_vector(BitCount - 1 downto 0);
+        B:          in std_logic_vector(BitCount - 1 downto 0);
+        eq:         out std_logic;
+        lt:         out std_logic;
+        gt:         out std_logic;
+        le:         out std_logic;
+        ge:         out std_logic
     );
 end Comparator;
 

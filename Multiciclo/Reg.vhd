@@ -15,7 +15,7 @@ use IEEE.std_logic_1164.all;
 
 entity Reg is
      generic(
-          BitCount:      INTEGER := 32;
+          BitCount:      integer := 32;
           Tsetup:        time := 0.25 ns;
           Thold:         time := 0.25 ns;
           Tprop:         time := 1 ns

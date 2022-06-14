@@ -15,31 +15,32 @@ use IEEE.std_logic_1164.all;
 
 entity Reg is
      generic(
-          NumeroBits : INTEGER := 8;
-          Tprop : time := 5 ns;
-          Tsetup : time := 2 ns
+          BitCount: INTEGER := 32;
+          Tsetup:   time := 0.25 ns;
+          Thold:    time := 0.25 ns;
+          Tprop:    time := 1 ns
      );
      port(
-          clk:    in std_logic;
-          ce:     in std_logic;
-          rst:    in std_logic;
-          din:    in std_logic_vector(NumeroBits - 1 downto 0);
-          dout:   out std_logic_vector(NumeroBits - 1 downto 0)
+          clk:      in std_logic;
+          ce:       in std_logic;
+          rst:      in std_logic;
+          din:      in std_logic_vector(BitCount - 1 downto 0);
+          dout:     out std_logic_vector(BitCount - 1 downto 0)
      );
 end Reg;
 
 architecture Reg of Reg is
 
-signal qi : std_logic_vector(NumeroBits - 1 downto 0);
+signal qi : std_logic_vector(BitCount - 1 downto 0);
 
 begin
 
-     Registrador :
+     Reg:
      process (clk, rst, ce)
 
      begin
           if rst = '1' then
-               qi(NumeroBits -1 downto 0) <= (others => '0');
+               qi(BitCount -1 downto 0) <= (others => '0');
           elsif (rising_edge(clk)) then
                if ce = '1' then
                     qi <= din;
@@ -47,7 +48,7 @@ begin
                     null;
                end if;
           end if;
-     end process Registrador;
+     end process;
 
      dout <= qi after Tprop;
 

@@ -17,8 +17,8 @@ use IEEE.std_logic_signed.all;
 
 entity Comparator is
     generic(
-        NumeroBits: integer := 8;
-        Tcomp:    time := 3 ns
+        NumeroBits: integer := 32;
+        Tcomp:    time := 1.25 ns
     );
     port(
         A:        in std_logic_vector(NumeroBits - 1 downto 0);

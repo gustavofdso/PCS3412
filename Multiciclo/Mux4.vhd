@@ -18,23 +18,23 @@ use IEEE.std_logic_unsigned.all;
 
 entity Mux4 is
      generic(
-          NB:       integer := 8;
-          Tsel:     time := 3 ns
+          BitCount: integer := 32;
+          Tsel:     time := 0.5 ns;
+          Tdata:    time := 0.25 ns
      );
      port(
-          I0:       in std_logic_vector(NB - 1 downto 0);
-          I1:       in std_logic_vector(NB - 1 downto 0);
-          I2:       in std_logic_vector(NB - 1 downto 0);
-          I3:       in std_logic_vector(NB - 1 downto 0);
+          I0:       in std_logic_vector(BitCount - 1 downto 0);
+          I1:       in std_logic_vector(BitCount - 1 downto 0);
+          I2:       in std_logic_vector(BitCount - 1 downto 0);
+          I3:       in std_logic_vector(BitCount - 1 downto 0);
           Sel:      in std_logic_vector(1 downto 0);
-          O:        out std_logic_vector(NB - 1 downto 0)
+          O:        out std_logic_vector(BitCount - 1 downto 0)
      );
 end Mux4;
 
 architecture Mux4 of Mux4 is
 
 begin
-
      Mux4:
      process (I0, I1, I2, I3, Sel)
 

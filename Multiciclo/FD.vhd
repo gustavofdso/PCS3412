@@ -80,10 +80,6 @@ architecture architecture_fd of FD is
 
 begin
     MULTIPLEXER_1: entity work.Mux2
-        generic map (
-            NB => 32,
-            Tsel => 0.5 ns
-        )
         port map (
             I0 => add,
             I1 => alu,
@@ -92,11 +88,6 @@ begin
         );
 
     PROGRAM_COUNTER: entity work.Reg
-        generic map (
-            NumeroBits => 32,
-            Tprop => 1 ns,
-            Tsetup => 0.25 ns
-        )
         port map (
             clk => clk,
             ce => ce_pc,
@@ -106,10 +97,6 @@ begin
         );
 
     ADD4: entity work.Adder
-        generic map (
-            NumeroBits => 32,
-            Tsoma => 1 ns
-        )
         port map (
             cin => '0',
             A => pc,
@@ -119,11 +106,7 @@ begin
 
     INSTRUCTION_MEMORY: entity work.Ram
         generic map (
-            BE => 32,
-            BP => 32,
-            NA => "instruction_memory.txt",
-            Twrite => 5 ns,
-            Tread => 5 ns
+            NA => "instruction_memory.txt"
         )
         port map (
             Clock => clk,
@@ -134,13 +117,7 @@ begin
             dado => dout_i
         );
 
-    REGISTER_FILE: entity work.RegisterFile
-        generic map (
-            NBend => 5,
-            NBdado => 32,
-            Tread => 5 ns,
-            Twrite => 5 ns
-        )
+    REGISTER_FILE: entity work.RegFile
         port map (
             clk => clk,
             we => RegWEn,
@@ -153,9 +130,6 @@ begin
         );
 
     IMMED_GENERATOR: entity work.ImmediateGenerator
-        generic map (
-            Tsel => 0.5 ns
-        )
         port map (
             ri => dout_i,
             ImmSel => ImmSel,
@@ -163,10 +137,6 @@ begin
         );
 
     BRANCH_COMP: entity work.Comparator
-        generic map (
-            NumeroBits => 32,
-            Tcomp => 1 ns
-        )
         port map (
             A => dout_r_a,
             B => dout_r_b,
@@ -175,10 +145,6 @@ begin
         );
 
     MULTIPLEXER_2: entity work.Mux2
-        generic map (
-            NB => 32,
-            Tsel => 0.5 ns
-        )
         port map (
             I0 => dout_r_a,
             I1 => pc,
@@ -187,10 +153,6 @@ begin
         );
         
     MULTIPLEXER_3: entity work.Mux2
-        generic map (
-            NB => 32,
-            Tsel => 0.5 ns
-        )
         port map (
             I0 => dout_r_b,
             I1 => immed,
@@ -199,11 +161,6 @@ begin
         );
 
     MULTIFUNCIONAL_ALU: entity work.ULA
-        generic map (
-            NB => 32,
-            Tsom => 1 ns,
-            Tsub => 1.25 ns
-        )
         port map (
             Veum => '0',
             A => mux_2,
@@ -217,11 +174,7 @@ begin
 
     DATA_MEMORY: entity work.Ram
         generic map (
-            BE => 32,
-            BP => 32,
-            NA => "data_memory.txt",
-            Twrite => 5 ns,
-            Tread => 5 ns
+            NA => "data_memory.txt"
         )
         port map (
             Clock => clk,
@@ -233,10 +186,6 @@ begin
         );
 
     MULTIPLEXER_4: entity work.Mux4
-        generic map (
-            NB => 32,
-            Tsel => 0.5 ns
-        )
         port map (
             I0 => dout_d,
             I1 => alu,

@@ -17,15 +17,14 @@ use IEEE.std_logic_signed.all;
 use IEEE.std_logic_unsigned.all;
 
 entity ImmediateGenerator is
-  generic(
-       Tsel : time := 3 ns;
-       Tdata : time := 2 ns
-  );
-  port(
-       ri:      in std_logic_vector(31 downto 0);
-       ImmSel:  in std_logic_vector(1 downto 0);
-       immed:   out std_logic_vector(31 downto 0)
-  );
+    generic(
+        Tsel : time := 0.5 ns
+    );
+    port(
+        ri:      in std_logic_vector(31 downto 0);
+        ImmSel:  in std_logic_vector(1 downto 0);
+        immed:   out std_logic_vector(31 downto 0)
+    );
 end ImmediateGenerator;
 
 architecture ImmediateGenerator of ImmediateGenerator is

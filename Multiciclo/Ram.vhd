@@ -26,7 +26,6 @@ use std.textio.all;
 use ieee.std_logic_arith.all;
 use ieee.math_real.all;
 
-
 entity Ram is
   generic(
        BE : integer := 8;
@@ -63,13 +62,13 @@ variable endereco: integer range 0 to (2**BE - 1);
 variable inicio: std_logic := '1';
 function fill_memory return tipo_memoria is
 	type HexTable is array (character range <>) of integer;
-	-- Caracteres HEX válidos: o, 1, 2 , 3, 4, 5, 6, 6, 7, 8, 9, A, B, C, D, E, F  (somente caracteres maiúsculos)
+	-- Caracteres HEX vï¿½lidos: o, 1, 2 , 3, 4, 5, 6, 6, 7, 8, 9, A, B, C, D, E, F  (somente caracteres maiï¿½sculos)
 	constant lookup: HexTable ('0' to 'F') :=
 		(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, -1, -1, -1, -1, -1, -1, -1, 10, 11, 12, 13, 14, 15);
 	file infile: text open read_mode is NA; -- Abre o arquivo para leitura
 	variable buff: line; 
-	variable addr_s: string ((integer(ceil(real(BE)/4.0)) + 1) downto 1); -- Digitos de endereço mais um espaço
-	variable data_s: string ((integer(ceil(real(BP)/4.0)) + 1) downto 1); -- ùltimo byte sempre tem um espaço separador
+	variable addr_s: string ((integer(ceil(real(BE)/4.0)) + 1) downto 1); -- Digitos de endereï¿½o mais um espaï¿½o
+	variable data_s: string ((integer(ceil(real(BP)/4.0)) + 1) downto 1); -- ï¿½ltimo byte sempre tem um espaï¿½o separador
 	variable addr_1, pal_cnt: integer;
 	variable data: std_logic_vector((BP - 1) downto 0);
 	variable up: integer;
@@ -77,9 +76,9 @@ function fill_memory return tipo_memoria is
 	variable Mem: tipo_memoria := ( others  => (others => '0')) ;
 	begin
 		while (not endfile(infile)) loop
-			readline(infile,buff); -- Lê um linha do infile e coloca no buff
-			read(buff, addr_s); -- Leia o conteudo de buff até encontrar um espaço e atribui à addr_s, ou seja, leio o endereço
-			read(buff, pal_cnT); -- Leia o número de bytes da próxima linha
+			readline(infile,buff); -- Lï¿½ um linha do infile e coloca no buff
+			read(buff, addr_s); -- Leia o conteudo de buff atï¿½ encontrar um espaï¿½o e atribui ï¿½ addr_s, ou seja, leio o endereï¿½o
+			read(buff, pal_cnT); -- Leia o nï¿½mero de bytes da prï¿½xima linha
 			-- addr_1 := lookup(addr_s(4)) * 4096 + lookup(addr_s(3)) * 256 + lookup(addr_s(2)) * 16 + lookup(addr_s(1));
 			addr_1 := 0;
 			upreal := real(BE)/4.0;
@@ -91,7 +90,7 @@ function fill_memory return tipo_memoria is
 			end loop;
 			readline(infile, buff);
 			for i in 1 to pal_cnt loop
-				read(buff, data_s); -- Leia dois dígitos Hex e o espaço separador
+				read(buff, data_s); -- Leia dois dï¿½gitos Hex e o espaï¿½o separador
 				-- data := lookup(data_s(3)) * 16 + lookup(data_s(2)); -- Converte o valor lido em Hex para inteiro
 				data := (others => '0');
 				upreal := real(BP)/4.0;
@@ -100,8 +99,8 @@ function fill_memory return tipo_memoria is
 				for i in (up + 1) downto 2 loop
 					data((4*(i-2))+3 downto 4*(i-2)) := conv_std_logic_vector(lookup(data_s(i)),4);
 				end loop;
-				Mem(addr_1) := data; -- Converte o conteúdo da palavra para std_logic_vector
-				addr_1 := addr_1 + 1;	-- Endereça a próxima palavra a ser carregada
+				Mem(addr_1) := data; -- Converte o conteï¿½do da palavra para std_logic_vector
+				addr_1 := addr_1 + 1;	-- Endereï¿½a a prï¿½xima palavra a ser carregada
 			end loop;
 		end loop;
 	return Mem;
@@ -109,9 +108,9 @@ end fill_memory;
  
 begin
 if inicio = '1' then
-	-- Roda somente uma vez na inicialização
+	-- Roda somente uma vez na inicializaï¿½ï¿½o
 	Mram <= fill_memory;
-	-- Insere o conteúdo na memória
+	-- Insere o conteï¿½do na memï¿½ria
 	inicio := '0';
 end if;
 if enable = '1' then
@@ -126,7 +125,7 @@ if enable = '1' then
 			when '1' => --Ciclo de Escrita
 				Mram(endereco) <= dado after Twrite;
 				pronto <= '1' after Twrite;
-			when others => -- Ciclo inválido
+			when others => -- Ciclo invï¿½lido
 				Null;
 		end case;
 	end if;

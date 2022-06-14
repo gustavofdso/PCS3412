@@ -1,31 +1,31 @@
 v 4
-file . "FD.vhd" "a275d2d1fcce394cd266724bc03f281088579623" "20220614214134.846":
-  entity fd at 13( 450) + 0 on 29;
-  architecture architecture_fd of fd at 61( 1816) + 0 on 30;
-file . "Adder.vhd" "35dde600174cebb9133b3bb5e2106ed849969041" "20220614213928.941":
-  entity adder at 13( 432) + 0 on 25;
-  architecture adder of adder at 31( 918) + 0 on 26;
-file . "comparator.vhd" "61def6c50c257dd8bfe3fd2aff1edbab9dc99c5d" "20220614213913.906":
-  entity comparator at 13( 442) + 0 on 21;
-  architecture comparator of comparator at 34( 1016) + 0 on 22;
-file . "RegFile.vhd" "f0b427a72b9932f8509827ca21e853085baa2e55" "20220614213902.129":
-  entity regfile at 13( 432) + 0 on 17;
-  architecture regfile of regfile at 36( 1241) + 0 on 18;
-file . "Mux4.vhd" "83d5682b4328a11a0f509a4a9d165c15ad90b15c" "20220614213855.225":
-  entity mux4 at 13( 437) + 0 on 13;
-  architecture mux4 of mux4 at 35( 1144) + 0 on 14;
-file . "Reg.vhd" "929fb5f2b04a306469f20f027006a4f3afd74e01" "20220614213851.916":
-  entity reg at 13( 433) + 0 on 11;
-  architecture reg of reg at 32( 978) + 0 on 12;
-file . "Mux2.vhd" "6cb59583714def2f12290ddb27308003aee9c8e1" "20220614213857.109":
-  entity mux2 at 13( 437) + 0 on 15;
-  architecture mux2 of mux2 at 33( 989) + 0 on 16;
-file . "Ram.vhd" "6ab13616d07a4bdaf00efcae3ae0508fe3057694" "20220614213905.478":
-  entity ram at 21( 812) + 0 on 19;
-  architecture ram of ram at 49( 1469) + 0 on 20;
-file . "Alu.vhd" "6b48a495a72f49c2fc9cd792a7920f728d50d164" "20220614213923.575":
-  entity alu at 13( 428) + 0 on 23;
-  architecture alu of alu at 38( 1249) + 0 on 24;
 file . "ImmediateGenerator.vhd" "268b7d7f3593e3e86d04d366a3ba9c324a01fee7" "20220614214133.268":
   entity immediategenerator at 13( 449) + 0 on 27;
   architecture immediategenerator of immediategenerator at 30( 877) + 0 on 28;
+file . "Alu.vhd" "6b48a495a72f49c2fc9cd792a7920f728d50d164" "20220614213923.575":
+  entity alu at 13( 428) + 0 on 23;
+  architecture alu of alu at 38( 1249) + 0 on 24;
+file . "Ram.vhd" "6ab13616d07a4bdaf00efcae3ae0508fe3057694" "20220614213905.478":
+  entity ram at 21( 812) + 0 on 19;
+  architecture ram of ram at 49( 1469) + 0 on 20;
+file . "Mux2.vhd" "6cb59583714def2f12290ddb27308003aee9c8e1" "20220614213857.109":
+  entity mux2 at 13( 437) + 0 on 15;
+  architecture mux2 of mux2 at 33( 989) + 0 on 16;
+file . "Reg.vhd" "929fb5f2b04a306469f20f027006a4f3afd74e01" "20220614213851.916":
+  entity reg at 13( 433) + 0 on 11;
+  architecture reg of reg at 32( 978) + 0 on 12;
+file . "Mux4.vhd" "83d5682b4328a11a0f509a4a9d165c15ad90b15c" "20220614213855.225":
+  entity mux4 at 13( 437) + 0 on 13;
+  architecture mux4 of mux4 at 35( 1144) + 0 on 14;
+file . "RegFile.vhd" "f0b427a72b9932f8509827ca21e853085baa2e55" "20220614213902.129":
+  entity regfile at 13( 432) + 0 on 17;
+  architecture regfile of regfile at 36( 1241) + 0 on 18;
+file . "comparator.vhd" "61def6c50c257dd8bfe3fd2aff1edbab9dc99c5d" "20220614213913.906":
+  entity comparator at 13( 442) + 0 on 21;
+  architecture comparator of comparator at 34( 1016) + 0 on 22;
+file . "Adder.vhd" "35dde600174cebb9133b3bb5e2106ed849969041" "20220614213928.941":
+  entity adder at 13( 432) + 0 on 25;
+  architecture adder of adder at 31( 918) + 0 on 26;
+file . "FD.vhd" "3fc1f5a2f5b1d4936fd18251da4f79dd38b145dc" "20220614215059.630":
+  entity fd at 13( 450) + 0 on 31;
+  architecture architecture_fd of fd at 61( 1816) + 0 on 32;

@@ -337,15 +337,6 @@ begin
             dout => add_mem_wb
         );
 
-    PROGRAM_COUNTER_MEM_WB: entity work.Reg
-        port map(
-            clk => clk,
-            ce => '1',
-            rst => rst,
-            din => pc_ex_mem,
-            dout => pc_mem_wb
-        );
-
     MULTIFUNCIONAL_ALU_MEM_WB: entity work.Reg
         port map(
             clk => clk,

@@ -1,6 +1,6 @@
 -------------------------------------------------------------------------------
 --
--- Title       : FD
+-- Title       : ALU
 -- Design      : T-FIVE-MC
 -- Author      : Gustavo Oliveira
 -- Company     : LARC-EPUSP

@@ -46,7 +46,6 @@ entity FD is
         ALUSEl:         in std_logic_vector(3 downto 0);
 
         -- Enable and R/W signal for Data Memory
-        menable:        in std_logic;
         MemRW:          in std_logic;
 
         -- Selecting Write-back data
@@ -189,7 +188,7 @@ begin
         )
         port map (
             Clock => clk,
-            enable => menable,
+            enable => '1',
             rw => MemRW,
             ender => dout_r_b,
             pronto => open,

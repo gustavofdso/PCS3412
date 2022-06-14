@@ -31,6 +31,6 @@ end Adder;
 architecture Adder of Adder is
 
 begin
-     sum <= (A + B + cin) 	after Tadd;
+     sum <= (A + B + cin) after Tadd;
 
 end Adder;

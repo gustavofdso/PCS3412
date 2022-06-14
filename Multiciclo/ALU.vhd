@@ -11,9 +11,9 @@
 --
 -------------------------------------------------------------------------------
 library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.STD_LOGIC_UNSIGNED.ALL;
-use ieee.NUMERIC_STD.all;
+use IEEE.std_logic_1164.ALL;
+use IEEE.std_logic_unsigned.ALL;
+use ieee.numeric_std.all;
 
 entity ALU is
      generic(
@@ -35,7 +35,6 @@ end ALU;
 
 architecture ALU of ALU is
 
----- Architecture declarations -----
 signal qi:               std_logic_vector (BitCount downto 0);
 
 begin
@@ -72,18 +71,18 @@ begin
                when "1101" => -- Logical xnor
                     qi <= A xnor B;
                when "1110" => -- Greater comparison
-                    if(A>B) then
+                    if(A > B) then
                          qi <= x"01";
                     else
                          qi <= x"00";
                     end if; 
                when "1111" => -- Equal comparison   
-                    if(A=B) then
+                    if(A = B) then
                          qi <= x"01";
                     else
                          qi <= x"00";
                     end if;
-                    when others => qi <= A + B; 
+               when others => qi <= A + B; 
           end case;
      end process;
 

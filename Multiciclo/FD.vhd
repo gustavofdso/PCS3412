@@ -25,26 +25,34 @@ entity FD is
         -- Clock enable for PC
         ce_pc:          in std_logic;
 
+        -- Selecting the new adress for PC
         PCsel:          in std_logic;
 
+        -- Selecting the immediate based on instruction type
         ImmSel:         in std_logic_vector(1 downto 0);
 
+        -- Write enable for the Register File
         RegWEn:         in std_logic;
 
-        BrUn:           in std_logic;
+        -- Branch comparisons
         BrEq:           out std_logic;
         BrLt:           out std_logic;
 
+        -- Selecting ALU inputs
         ASEl:           in std_logic;
         BSEl:           in std_logic;
 
+        -- Selecting ALU operation
         ALUSEl:         in std_logic_vector(3 downto 0);
 
+        -- Enable and R/W signal for Data Memory
         menable:        in std_logic;
         MemRW:          in std_logic;
 
+        -- Selecting Write-back data
         WBSel:          in std_logic_vector(1 downto 0);
         
+        -- Instruction fields for control
         opcode:         out std_logic_vector(6 downto 0);
         funct3:         out std_logic_vector(2 downto 0);
         funct7:         out std_logic_vector(6 downto 0)

@@ -20,30 +20,29 @@
 -- Design unit header --
 library IEEE;
 use IEEE.std_logic_1164.all;
---use IEEE.numeric_std.all;
 use IEEE.std_logic_unsigned.all;
 use std.textio.all;
 use ieee.std_logic_arith.all;
 use ieee.math_real.all;
 
 entity Ram is
-  generic(
-       BE : integer := 8;
-       BP : integer := 16;
-       NA : string := "mram.txt";
-       Tz : time := 2 ns;
-       Twrite : time := 5 ns;
-       Tsetup : time := 2 ns;
-       Tread : time := 5 ns
-  );
-  port(
-       Clock : in std_logic;
-       enable : in STD_LOGIC;
-       rw : in std_logic;
-       ender : in std_logic_vector(BE - 1 downto 0);
-       pronto : out std_logic;
-       dado : inout std_logic_vector(BP - 1 downto 0)
-  );
+	generic(
+		BE:				integer := 32;
+		BP:				integer := 32;
+		NA:				string := "mram.txt";
+		Tz:				time := 2 ns;
+		Twrite:			time := 5 ns;
+		Tsetup:			time := 2 ns;
+		Tread:			time := 5 ns
+	);
+	port(
+		Clock:			in std_logic;
+		enable:			in STD_LOGIC;
+		rw:				in std_logic;
+		ender:			in std_logic_vector(BE - 1 downto 0);
+		pronto:			out std_logic;
+		dado:			inout std_logic_vector(BP - 1 downto 0)
+	);
 end Ram;
 
 architecture Ram of Ram is

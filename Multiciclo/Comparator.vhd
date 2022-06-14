@@ -34,9 +34,9 @@ end Comparator;
 architecture Comparator of Comparator is
 
 begin
-    eq <= '1' when (A = B) else '0' after Tcomp;
-    lt <= '1' when (A < B) else '0' after Tcomp;
-    gt <= '1' when (A > B) else '0' after Tcomp;
+    eq <= '1' when (A = B)  else '0' after Tcomp;
+    lt <= '1' when (A < B)  else '0' after Tcomp;
+    gt <= '1' when (A > B)  else '0' after Tcomp;
     le <= '1' when (A <= B) else '0' after Tcomp;
     ge <= '1' when (A >= B) else '0' after Tcomp;
 

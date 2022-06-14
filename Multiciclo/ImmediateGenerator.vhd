@@ -47,8 +47,8 @@ begin
                 immed(31 downto 11) <= (others => ri(31))                   after Tsel;
             -- U-Type
             when "11" =>
-                immed(19 downto 0) <= ri(31 downto 12)                      after Tsel;
-                immed(31 downto 20) <= (others => ri(31))                   after Tsel;
+                immed(18 downto 0) <= ri(30 downto 12)                      after Tsel;
+                immed(31 downto 19) <= (others => ri(31))                   after Tsel;
             when others => immed <= (others => 'X')                         after Tsel;
         end case;
     end process;

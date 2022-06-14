@@ -83,6 +83,31 @@ architecture architecture_fd of FD is
     signal dout_d:      std_logic_vector(31 downto 0);
     signal mux_4:       std_logic_vector(31 downto 0);
 
+    -- Buffers
+    signal pc_if_de:            std_logic_vector(31 downto 0);
+    signal pc_de_ex:            std_logic_vector(31 downto 0);
+    signal pc_ex_mem:           std_logic_vector(31 downto 0);
+    signal pc_mem_wb:           std_logic_vector(31 downto 0);
+
+    signal add_if_de:           std_logic_vector(31 downto 0);
+    signal add_de_ex:           std_logic_vector(31 downto 0);
+    signal add_ex_mem:          std_logic_vector(31 downto 0);
+    signal add_mem_wb:          std_logic_vector(31 downto 0);
+    
+    signal alu_ex_mem:          std_logic_vector(31 downto 0);
+    signal alu_mem_wb:          std_logic_vector(31 downto 0);
+
+    signal dout_i_if_de:        std_logic_vector(31 downto 0);
+
+    signal dout_r_a_de_ex:      std_logic_vector(31 downto 0);
+    
+    signal dout_r_b_de_ex:      std_logic_vector(31 downto 0);
+    signal dout_r_b_ex_mem:     std_logic_vector(31 downto 0);
+
+    signal immed_de_ex:   std_logic_vector(31 downto 0);
+
+    signal dout_d_mem_wb:   std_logic_vector(31 downto 0);
+
 begin
     MULTIPLEXER_1: entity work.Mux2
         port map (
@@ -123,29 +148,101 @@ begin
             dado_out => dout_i
         );
 
+    ADD4_IF_DE: entity work.Reg
+        port map(
+            clk => clk,
+            ce => '1',
+            rst => rst,
+            din => add,
+            dout => add_if_de
+        );
+
+    PROGRAM_COUNTER_IF_DE: entity work.Reg
+        port map(
+            clk => clk,
+            ce => '1',
+            rst => rst,
+            din => pc,
+            dout => pc_if_de
+        );
+
+    INSTRUCTION_MEMORY_IF_DE: entity work.Reg
+        port map(
+            clk => clk,
+            ce => '1',
+            rst => rst,
+            din => dout_i,
+            dout => dout_i_if_de
+        );
+
     REGISTER_FILE: entity work.RegFile
         port map (
             clk => clk,
             we => RegWEn,
             din => mux_4,
-            addrin => dout_i(11 downto 7),
-            addra => dout_i(19 downto 15),
-            addrb => dout_i(24 downto 20),
+            addrin => dout_i_if_de(11 downto 7),
+            addra => dout_i_if_de(19 downto 15),
+            addrb => dout_i_if_de(24 downto 20),
             douta => dout_r_a,
             doutb => dout_r_b
         );
 
     IMMED_GENERATOR: entity work.ImmediateGenerator
         port map (
-            ri => dout_i,
+            ri => dout_i_if_de,
             ImmSel => ImmSel,
             immed => immed
         );
 
+    ADD4_DE_EX: entity work.Reg
+        port map(
+            clk => clk,
+            ce => '1',
+            rst => rst,
+            din => add_if_de,
+            dout => add_de_ex
+        );
+
+    PROGRAM_COUNTER_DE_EX: entity work.Reg
+        port map(
+            clk => clk,
+            ce => '1',
+            rst => rst,
+            din => pc_if_de,
+            dout => pc_de_ex
+        );
+
+    REGISTER_FILE_A_DE_EX: entity work.Reg
+        port map(
+            clk => clk,
+            ce => '1',
+            rst => rst,
+            din => dout_r_a,
+            dout => dout_r_a_de_ex
+        );
+
+    REGISTER_FILE_B_DE_EX: entity work.Reg
+        port map(
+            clk => clk,
+            ce => '1',
+            rst => rst,
+            din => dout_r_b,
+            dout => dout_r_b_de_ex
+        );
+
+    IMMEDIATE_GENERATOR_DE_EX: entity work.Reg
+        port map(
+            clk => clk,
+            ce => '1',
+            rst => rst,
+            din => immed,
+            dout => immed_de_ex
+        );
+
     BRANCH_COMP: entity work.Comparator
         port map (
-            A => dout_r_a,
-            B => dout_r_b,
+            A => dout_r_a_de_ex,
+            B => dout_r_b_de_ex,
             eq => BrEq,
             lt => BrLt,
             gt => open,
@@ -155,16 +252,16 @@ begin
 
     MULTIPLEXER_2: entity work.Mux2
         port map (
-            I0 => dout_r_a,
-            I1 => pc,
+            I0 => dout_r_a_de_ex,
+            I1 => pc_de_ex,
             Sel => ASel,
             O => mux_2
         );
         
     MULTIPLEXER_3: entity work.Mux2
         port map (
-            I0 => dout_r_b,
-            I1 => immed,
+            I0 => dout_r_b_de_ex,
+            I1 => immed_de_ex,
             Sel => BSel,
             O => mux_3
         );
@@ -181,6 +278,42 @@ begin
             result => alu
         );
 
+    ADD4_EX_MEM: entity work.Reg
+        port map(
+            clk => clk,
+            ce => '1',
+            rst => rst,
+            din => add_de_ex,
+            dout => add_ex_mem
+        );
+
+    PROGRAM_COUNTER_EX_MEM: entity work.Reg
+        port map(
+            clk => clk,
+            ce => '1',
+            rst => rst,
+            din => pc_de_ex,
+            dout => pc_ex_mem
+        );
+
+    MULTIFUNCIONAL_ALU_EX_MEM: entity work.Reg
+        port map(
+            clk => clk,
+            ce => '1',
+            rst => rst,
+            din => alu,
+            dout => alu_ex_mem
+        );
+
+    REGISTER_FILE_B_EX_MEM: entity work.Reg
+        port map(
+            clk => clk,
+            ce => '1',
+            rst => rst,
+            din => dout_r_b_de_ex,
+            dout => dout_r_b_ex_mem
+        );
+
     DATA_MEMORY: entity work.Ram
         generic map (
             NA => "data_memory.txt"
@@ -189,21 +322,57 @@ begin
             Clock => clk,
             enable => '1',
             rw => MemRW,
-            ender => alu,
+            ender => alu_ex_mem,
             pronto => open,
-            dado_in => dout_r_b,
+            dado_in => dout_r_b_ex_mem,
             dado_out => dout_d
+        ); 
+    
+    ADD4_MEM_WB: entity work.Reg
+        port map(
+            clk => clk,
+            ce => '1',
+            rst => rst,
+            din => add_ex_mem,
+            dout => add_mem_wb
+        );
+
+    PROGRAM_COUNTER_MEM_WB: entity work.Reg
+        port map(
+            clk => clk,
+            ce => '1',
+            rst => rst,
+            din => pc_ex_mem,
+            dout => pc_mem_wb
+        );
+
+    MULTIFUNCIONAL_ALU_MEM_WB: entity work.Reg
+        port map(
+            clk => clk,
+            ce => '1',
+            rst => rst,
+            din => alu_ex_mem,
+            dout => alu_mem_wb
+        );
+
+    DATA_MEMORY_MEM_WB: entity work.Reg
+        port map(
+            clk => clk,
+            ce => '1',
+            rst => rst,
+            din => dout_d,
+            dout => dout_d_mem_wb
         );
 
     MULTIPLEXER_4: entity work.Mux4
         port map (
-            I0 => dout_d,
-            I1 => alu,
-            I2 => add,
+            I0 => dout_d_mem_wb,
+            I1 => alu_mem_wb,
+            I2 => add_mem_wb,
             I3 => (others => '0'),
             Sel => WBSel,
             O => mux_4
-        );    
+        );   
 
     opcode <= dout_i(6 downto 0);
     funct3 <= dout_i(14 downto 12);

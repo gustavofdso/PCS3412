@@ -72,8 +72,8 @@ begin
                     qi <= A nand B after Tgate;
                when "1101" => -- Logical xnor
                     qi <= A xnor B after 2*Tgate;
-               when "1110" => -- Greater comparison
-                    if(A > B) then
+               when "1110" => -- Lower comparison
+                    if(A < B) then
                          qi <= x"01" after Tsub;
                     else
                          qi <= x"00" after Tsub;

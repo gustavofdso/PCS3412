@@ -56,10 +56,10 @@ begin
                     qi <= std_logic_vector(unsigned(A) sll to_integer(signed(B))) after Tsetup;
                when "0101" => -- Logical shift right
                     qi <= std_logic_vector(unsigned(A) srl to_integer(signed(B))) after Tsetup;
-               when "0110" => --  Rotate left
-                    qi <= std_logic_vector(unsigned(A) rol to_integer(signed(B))) after Tsetup;
-               when "0111" => -- Rotate right
-                    qi <= std_logic_vector(unsigned(A) ror to_integer(signed(B))) after Tsetup;
+               when "0110" => -- Arithmetic shift left
+                    qi <= std_logic_vector(signed(A) sll to_integer(signed(B))) after Tsetup;
+               when "0111" => -- Arithmetic shift risht
+                    qi <= std_logic_vector(signed(A) srl to_integer(signed(B))) after Tsetup;
                when "1000" => -- Logical and 
                     qi <= A and B after Tgate;
                when "1001" => -- Logical or

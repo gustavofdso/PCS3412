@@ -37,7 +37,7 @@ end ALU;
 
 architecture ALU of ALU is
 
-signal qi:               std_logic_vector (BitCount-1 downto 0);
+signal qi:               std_logic_vector (BitCount downto 0);
 
 begin
 
@@ -74,21 +74,21 @@ begin
                     qi <= A xnor B after 2*Tgate;
                when "1110" => -- Lower comparison
                     if(A < B) then
-                         qi <= x"00000001" after Tsub;
+                         qi <= x"01" after Tsub;
                     else
-                         qi <= x"00000000" after Tsub;
+                         qi <= x"00" after Tsub;
                     end if; 
                when "1111" => -- Equal comparison   
                     if(A = B) then
-                         qi <= x"00000001" after Tsub;
+                         qi <= x"01" after Tsub;
                     else
-                         qi <= x"00000000" after Tsub;
+                         qi <= x"00" after Tsub;
                     end if;
                when others => qi <= A + B; 
           end case;
      end process;
 
-     cout <= qi(BitCount-1);
+     cout <= qi(BitCount);
      zero <= '1' after Tadd when unsigned(qi) = 0 else '0' after Tadd;
      negative <= qi(BitCount - 1) after Tadd;
 

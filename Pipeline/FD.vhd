@@ -95,6 +95,9 @@ architecture architecture_fd of FD is
     
     -- Instruction Memory Buffers
     signal dout_i_if_de:        std_logic_vector(31 downto 0);
+    signal rd_de_ex:            std_logic_vector(31 downto 0);
+    signal rd_ex_mem:           std_logic_vector(31 downto 0);
+    signal rd_mem_wb:           std_logic_vector(31 downto 0);
 
     -- Register File Buffers
     signal dout_r_a_de_ex:      std_logic_vector(31 downto 0);
@@ -183,7 +186,7 @@ begin
             clk => clk,
             we => RegWEn,
             din => mux_4,
-            addrin => dout_i_if_de(11 downto 7),
+            addrin => rd_mem_wb,
             addra => dout_i_if_de(19 downto 15),
             addrb => dout_i_if_de(24 downto 20),
             douta => dout_r_a,
@@ -213,6 +216,15 @@ begin
             rst => rst,
             din => pc_if_de,
             dout => pc_de_ex
+        );
+
+    DESTINY_REGISTER_DE_EX: entity work.Reg
+        port map(
+            clk => clk,
+            ce => '1',
+            rst => rst,
+            din => dout_i_if_de(11 downto 7),
+            dout => rd_de_ex
         );
 
     REGISTER_FILE_A_DE_EX: entity work.Reg
@@ -290,6 +302,15 @@ begin
             dout => add_ex_mem
         );
 
+    DESTINY_REGISTER_EX_MEM: entity work.Reg
+        port map(
+            clk => clk,
+            ce => '1',
+            rst => rst,
+            din => rd_de_ex,
+            dout => rd_ex_mem
+        );
+
     MULTIFUNCIONAL_ALU_EX_MEM: entity work.Reg
         port map(
             clk => clk,
@@ -329,6 +350,15 @@ begin
             rst => rst,
             din => add_ex_mem,
             dout => add_mem_wb
+        );
+
+    DESTINY_REGISTER_MEM_WB: entity work.Reg
+        port map(
+            clk => clk,
+            ce => '1',
+            rst => rst,
+            din => rd_ex_mem,
+            dout => rd_mem_wb
         );
 
     MULTIFUNCIONAL_ALU_MEM_WB: entity work.Reg

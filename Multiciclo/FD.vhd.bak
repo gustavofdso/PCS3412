@@ -24,9 +24,6 @@ entity FD is
 
         -- Clock enable for PC
         ce_pc:          in std_logic;
-		  
-		  -- enable do banco de reg
-		  enable_reg:     in std_logic;
 
         -- Selecting the new adress for PC
         PCsel:          in std_logic;
@@ -57,54 +54,38 @@ entity FD is
         -- Instruction fields for control
         opcode:         out std_logic_vector(6 downto 0);
         funct3:         out std_logic_vector(2 downto 0);
-        funct7:         out std_logic_vector(6 downto 0);
-		  
-		  -- sinais para inicializar o Imem
-		  pc_end:         in std_logic_vector(31 downto 0);
-		  pc_data:        in std_logic_vector(31 downto 0);
-		  Irw:            in std_logic;
-		  
-		  -- sinais de saidas para verificacoes
-		  
+        funct7:         out std_logic_vector(6 downto 0)
     ) ;
 end FD;
 
 architecture architecture_fd of FD is
-    -- PC signals
-    signal mux_1:       std_logic_vector(31 downto 0);
+    -- Program Counter signals
     signal pc:          std_logic_vector(31 downto 0);
-	 signal pc_init:     std_logic_vector(31 downto 0); -- sinal para inicializacao do Imem
+
+    -- Instruction signals
+    signal immed:       std_logic_vector(31 downto 0);
+    
+    -- Branch signals
+    signal mux_1:       std_logic_vector(31 downto 0);
     signal add:         std_logic_vector(31 downto 0);
 
     -- Instruction Memory signals
     signal dout_i:      std_logic_vector(31 downto 0);
 
-    -- Immediate Generator sinals
-    signal immed:       std_logic_vector(31 downto 0);
-    
+    -- Data Memory signals
+    signal dout_d:      std_logic_vector(31 downto 0);
+
     -- Register File signals
+    signal mux_2:       std_logic_vector(31 downto 0);
+    signal mux_3:       std_logic_vector(31 downto 0);
     signal dout_r_a:    std_logic_vector(31 downto 0);
     signal dout_r_b:    std_logic_vector(31 downto 0);
 
     -- ALU signals
-    signal mux_2:       std_logic_vector(31 downto 0);
-    signal mux_3:       std_logic_vector(31 downto 0);
+    signal mux_4:       std_logic_vector(31 downto 0);
     signal alu:         std_logic_vector(31 downto 0);
 
-    -- Data Memory signals
-    signal dout_d:      std_logic_vector(31 downto 0);
-    signal mux_4:       std_logic_vector(31 downto 0);
-	 
 begin
-
-Process(clk,rst) is
-begin
-	if(rst = '1') then
-		pc_init <= pc_end;
-	else pc_init <= pc;
-	end if;
-end process;
-
     MULTIPLEXER_1: entity work.Mux2
         port map (
             I0 => add,
@@ -126,39 +107,27 @@ end process;
         port map (
             cin => '0',
             A => pc,
-            B => x"00000004",
-            sum => add    -- PC+4
+            B => B"0100",
+            sum => add
         );
-		  
 
---    INSTRUCTION_MEMORY: entity work.Ram
---        generic map (
---            NA => "instruction_memory.txt"
---        )
---        port map (
---            Clock => clk,
---            enable => '1',
---            rw => '0',
---            ender => pc,
---            pronto => open,
---            dado_in => (others => '0'),
---            dado_out => dout_i    -- IR
---        );
-
-	Instruction_mem: entity work.ram_mem
-		port map(
-			clock    => clk,
-			we       => Irw,
-			address  => pc_init,
-			datain   => pc_data,
-			dataout  => dout_i
-		  );
+    INSTRUCTION_MEMORY: entity work.Ram
+        generic map (
+            NA => "instruction_memory.txt"
+        )
+        port map (
+            Clock => clk,
+            enable => '1',
+            rw => '0',
+            ender => pc,
+            pronto => open,
+            dado => dout_i
+        );
 
     REGISTER_FILE: entity work.RegFile
         port map (
             clk => clk,
             we => RegWEn,
-				ce_regfile => enable_reg,
             din => mux_4,
             addrin => dout_i(11 downto 7),
             addra => dout_i(19 downto 15),
@@ -213,30 +182,18 @@ end process;
             result => alu
         );
 
-		  
---    DATA_MEMORY: entity work.Ram
---        generic map (
---            NA => "data_memory.txt"
---        )
---        port map (
---            Clock => clk,
---            enable => '1',
---            rw => MemRW,
---            ender => alu,
---            pronto => open,
---            dado_in => dout_r_b,
---            dado_out => dout_d
---        );
-
-	Data_mem: entity work.ram_mem
-		port map(
-			clock    => clk,
-			we       => MemRW,
-			address  => alu,
-			datain   => dout_r_b,
-			dataout  => dout_d
-		  );
-		  
+    DATA_MEMORY: entity work.Ram
+        generic map (
+            NA => "data_memory.txt"
+        )
+        port map (
+            Clock => clk,
+            enable => '1',
+            rw => MemRW,
+            ender => dout_r_b,
+            pronto => open,
+            dado => dout_d
+        );
 
     MULTIPLEXER_4: entity work.Mux4
         port map (
@@ -251,5 +208,5 @@ end process;
     opcode <= dout_i(6 downto 0);
     funct3 <= dout_i(14 downto 12);
     funct7 <= dout_i(31 downto 25);
-	 
+
 end architecture_fd;

@@ -37,7 +37,7 @@ end ALU;
 
 architecture ALU of ALU is
 
-signal qi:               std_logic_vector (BitCount-1 downto 0);
+signal qi:               std_logic_vector (BitCount downto 0);
 
 begin
 
@@ -56,10 +56,10 @@ begin
                     qi <= std_logic_vector(unsigned(A) sll to_integer(signed(B))) after Tsetup;
                when "0101" => -- Logical shift right
                     qi <= std_logic_vector(unsigned(A) srl to_integer(signed(B))) after Tsetup;
-               when "0110" => -- Arithmetic shift left
-                    qi <= std_logic_vector(signed(A) sll to_integer(signed(B))) after Tsetup;
-               when "0111" => -- Arithmetic shift risht
-                    qi <= std_logic_vector(signed(A) srl to_integer(signed(B))) after Tsetup;
+               when "0110" => --  Rotate left
+                    qi <= std_logic_vector(unsigned(A) rol to_integer(signed(B))) after Tsetup;
+               when "0111" => -- Rotate right
+                    qi <= std_logic_vector(unsigned(A) ror to_integer(signed(B))) after Tsetup;
                when "1000" => -- Logical and 
                     qi <= A and B after Tgate;
                when "1001" => -- Logical or
@@ -74,21 +74,21 @@ begin
                     qi <= A xnor B after 2*Tgate;
                when "1110" => -- Lower comparison
                     if(A < B) then
-                         qi <= x"00000001" after Tsub;
+                         qi <= x"01" after Tsub;
                     else
-                         qi <= x"00000000" after Tsub;
+                         qi <= x"00" after Tsub;
                     end if; 
                when "1111" => -- Equal comparison   
                     if(A = B) then
-                         qi <= x"00000001" after Tsub;
+                         qi <= x"01" after Tsub;
                     else
-                         qi <= x"00000000" after Tsub;
+                         qi <= x"00" after Tsub;
                     end if;
                when others => qi <= A + B; 
           end case;
      end process;
 
-     cout <= qi(BitCount-1);
+     cout <= qi(BitCount);
      zero <= '1' after Tadd when unsigned(qi) = 0 else '0' after Tadd;
      negative <= qi(BitCount - 1) after Tadd;
 

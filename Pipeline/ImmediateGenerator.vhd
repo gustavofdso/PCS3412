@@ -34,22 +34,24 @@ begin
     process (ImmSel)
     begin
         case ImmSel is
-            -- R-Type
-            when "00" =>
-                immed(31 downto 0) <= (others => '0')                       after Tsel;
             -- I-Type
-            when "01" =>
+            when "00" =>
                 immed(10 downto 0) <= ri(30 downto 20)                      after Tsel;
                 immed(31 downto 11) <= (others => ri(31))                   after Tsel;
             -- S-Type
-            when "10" =>
+            when "01" =>
                 immed(10 downto 0) <= ri(30 downto 25) & ri(11 downto 7)    after Tsel;
                 immed(31 downto 11) <= (others => ri(31))                   after Tsel;
-            -- U-Type
+            -- B-Type
+            when "10" =>
+                immed(12 downto 0)  <= ri(7) & ri(30 downto 25) & ri(11 downto 8) & "00"      after Tsel;
+                immed(31 downto 13) <= (others => ri(31))                   after Tsel;
+			   -- J-Type
             when "11" =>
-                immed(18 downto 0) <= ri(30 downto 12)                      after Tsel;
-                immed(31 downto 19) <= (others => ri(31))                   after Tsel;
-            when others => immed <= (others => 'X')                         after Tsel;
+                immed(20 downto 0) <= ri(19 downto 12) & ri(20) & ri(30 downto 21) & "00"     after Tsel;	
+					 immed(31 downto 21) <= (others => ri(31))                    after Tsel;
+					 
+            when others => immed <= (others => 'X')                          after Tsel;
         end case;
     end process;
 

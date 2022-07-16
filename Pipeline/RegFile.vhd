@@ -45,13 +45,11 @@ begin
 
     process (clk)
     begin
-        if (rising_edge(clk)) then
-            if (we = '1') then
-                ram(to_integer(unsigned(addrin))) <= din after Twrite;
-            end if;
-            enda_reg <= addra;
-            endb_reg <= addrb;
+        if (rising_edge(clk) and we = '1') then
+            ram(to_integer(unsigned(addrin))) <= din after Twrite;
         end if;
+        enda_reg <= addra;
+        endb_reg <= addrb;
     end process;
 
     douta <= ram(to_integer(unsigned(enda_reg))) after Tread;

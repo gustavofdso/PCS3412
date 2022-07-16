@@ -54,7 +54,7 @@ entity FD is
         -- Instruction fields for control
         opcode:         out std_logic_vector(6 downto 0);
         funct3:         out std_logic_vector(2 downto 0);
-        funct7:         out std_logic_vector(6 downto 0);
+        funct7:         out std_logic_vector(6 downto 0)
 		  
     ) ;
 end FD;
@@ -86,14 +86,6 @@ architecture architecture_fd of FD is
 	 
 begin
 
-Process(clk,rst) is
-begin
-	if(rst = '1') then
-		pc_init <= pc_end;
-	else pc_init <= pc;
-	end if;
-end process;
-
     MULTIPLEXER_1: entity work.Mux2
         port map (
             I0 => add,
@@ -116,9 +108,8 @@ end process;
             cin => '0',
             A => pc,
             B => x"00000004",
-            sum => add    -- PC+4
+            sum => add
         );
-		  
 
     INSTRUCTION_MEMORY: entity work.Ram
         generic map (
@@ -131,7 +122,7 @@ end process;
             ender => pc,
             pronto => open,
             dado_in => (others => '0'),
-            dado_out => dout_i    -- IR
+            dado_out => dout_i
         );
 
     REGISTER_FILE: entity work.RegFile
@@ -192,7 +183,6 @@ end process;
             result => alu
         );
 
-		  
     DATA_MEMORY: entity work.Ram
         generic map (
             NA => "data_memory.txt"

@@ -1,7 +1,7 @@
 -------------------------------------------------------------------------------
 --
--- Title       : FD
--- Design      : T-FIVE-MC
+-- Title       : FD_PL
+-- Design      : T-FIVE-Pipe
 -- Author      : Gustavo Oliveira
 -- Company     : LARC-EPUSP
 --
@@ -16,7 +16,7 @@ use IEEE.numeric_std.all;
 
 library work;
 
-entity FD is
+entity FD_PL is
     port (
         -- Global Clock and Reset signals
         clk:            in std_logic;
@@ -57,9 +57,9 @@ entity FD is
         funct7:         out std_logic_vector(6 downto 0)
 		  
     ) ;
-end FD;
+end FD_PL;
 
-architecture architecture_fd of FD is
+architecture arch of FD_PL is
     -- PC signals
     signal mux_1:       std_logic_vector(31 downto 0);
     signal pc:          std_logic_vector(31 downto 0);
@@ -90,6 +90,7 @@ architecture architecture_fd of FD is
     signal ex_mem:      std_logic_vector(255 downto 0);
     signal mem_wb:      std_logic_vector(255 downto 0);
 
+    -- Control Buffer signals
     signal c_if_id:     std_logic_vector(13 downto 0);
     signal c_id_ex:     std_logic_vector(13 downto 0);
     signal c_ex_mem:    std_logic_vector(13 downto 0);
@@ -373,4 +374,4 @@ begin
             dout => mem_wb
         );
 
-end architecture_fd;
+end arch;

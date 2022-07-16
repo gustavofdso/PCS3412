@@ -16,7 +16,7 @@ use IEEE.numeric_std.all;
 
 library work;
 
-entity FD is
+entity FD_MC is
     port (
         -- Global Clock and Reset signals
         clk:            in std_logic;
@@ -57,9 +57,9 @@ entity FD is
         funct7:         out std_logic_vector(6 downto 0)
 		  
     ) ;
-end FD;
+end FD_MC;
 
-architecture architecture_fd of FD is
+architecture arch of FD_MC is
     -- PC signals
     signal mux_1:       std_logic_vector(31 downto 0);
     signal pc:          std_logic_vector(31 downto 0);
@@ -211,4 +211,4 @@ begin
     funct3 <= dout_i(14 downto 12);
     funct7 <= dout_i(31 downto 25);
 	 
-end architecture_fd;
+end arch;

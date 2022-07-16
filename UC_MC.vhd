@@ -1,6 +1,6 @@
 -------------------------------------------------------------------------------
 --
--- Title       : FD
+-- Title       : UC_MC
 -- Design      : T-FIVE-MC
 -- Author      : Gustavo Oliveira
 -- Company     : LARC-EPUSP
@@ -10,7 +10,7 @@
 -- Description : Implementation of the Control unity entity.
 --
 -------------------------------------------------------------------------------
-entity UC is
+entity UC_MC is
     port (
         -- Global Clock and Reset signals
         clk:            in std_logic;
@@ -47,9 +47,9 @@ entity UC is
         funct3:         in std_logic_vector(2 downto 0);
         funct7:         in std_logic_vector(6 downto 0);
     );
-end UC;
+end UC_MC;
 
-architecture architecture_uc of UC is
+architecture arch of UC_MC is
 
     -- RE signals
     signal re:          std_logic_vector(5 downto 0);
@@ -100,4 +100,4 @@ begin
     link <= prom(18 downto 13);
     saida <= prom(12 downto 0);
 
-end architecture_uc;
+end arch;

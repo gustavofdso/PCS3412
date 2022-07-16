@@ -45,7 +45,8 @@ entity UC_MC is
         -- Instruction fields for control
         opcode:         in std_logic_vector(6 downto 0);
         funct3:         in std_logic_vector(2 downto 0);
-        funct7:         in std_logic_vector(6 downto 0);
+        funct7:         in std_logic_vector(6 downto 0)
+		  
     );
 end UC_MC;
 

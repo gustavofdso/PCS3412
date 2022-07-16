@@ -22,9 +22,6 @@ entity FD_PL is
         clk:            in std_logic;
         rst:            in std_logic;
 
-        -- Clock enable for PC
-        ce_pc:          in std_logic;
-
         -- Selecting the new adress for PC
         PCsel:          in std_logic;
 
@@ -56,7 +53,7 @@ entity FD_PL is
         funct3:         out std_logic_vector(2 downto 0);
         funct7:         out std_logic_vector(6 downto 0)
 		  
-    ) ;
+    );
 end FD_PL;
 
 architecture arch of FD_PL is
@@ -109,7 +106,7 @@ begin
     PROGRAM_COUNTER: entity work.Reg
         port map (
             clk => clk,
-            ce => ce_pc,
+            ce => '1',
             rst => rst,
             din => mux_1,
             dout => pc

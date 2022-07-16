@@ -85,15 +85,15 @@ architecture architecture_fd of FD is
     signal mux_4:       std_logic_vector(31 downto 0);
 
     -- Buffer signals
-    signal if_id:       std_logic_vector(95 downto 0);
-    signal id_ex:       std_logic_vector(164 downto 0);
-    signal ex_mem:      std_logic_vector(132 downto 0);
-    signal mem_wb:      std_logic_vector(132 downto 0);
+    signal if_id:       std_logic_vector(255 downto 0);
+    signal id_ex:       std_logic_vector(255 downto 0);
+    signal ex_mem:      std_logic_vector(255 downto 0);
+    signal mem_wb:      std_logic_vector(255 downto 0);
 
-    signal c_if_id:       std_logic_vector(13 downto 0);
-    signal c_id_ex:       std_logic_vector(13 downto 0);
-    signal c_ex_mem:      std_logic_vector(13 downto 0);
-    signal c_mem_wb:      std_logic_vector(13 downto 0);
+    signal c_if_id:     std_logic_vector(13 downto 0);
+    signal c_id_ex:     std_logic_vector(13 downto 0);
+    signal c_ex_mem:    std_logic_vector(13 downto 0);
+    signal c_mem_wb:    std_logic_vector(13 downto 0);
 	 
 begin
 
@@ -136,29 +136,16 @@ begin
             dado_out => dout_i
         );
 
-    IF_ID_BUFFER: entity work.Reg
-        generic map (
-            BitCount => 96
-        )
-        -- [31:0]       add
-        -- [63:32]      pc
-        -- [95:64]      dout_i
-        port map (
-            clk => clk,
-            ce => '1',
-            rst => rst,
-            din(31 downto 0) => add,
-            din(63 downto 32) => pc,
-            din(95 downto 64) => dout_i,
-            dout => if_id
-        );
+    opcode <= dout_i(6 downto 0);
+    funct3 <= dout_i(14 downto 12);
+    funct7 <= dout_i(31 downto 25);
 
     REGISTER_FILE: entity work.RegFile
         port map (
             clk => clk,
             we => c_if_id(4),
             din => mux_4,
-            addrin => mem_wb(132 downto 128),
+            addrin => mem_wb(75 downto 71),
             addra => if_id(83 downto 79),
             addrb => if_id(88 downto 84),
             douta => dout_r_a,
@@ -172,33 +159,10 @@ begin
             immed => immed
         );
 
-    ID_EX_BUFFER: entity work.Reg
-        generic map (
-            BitCount => 165
-        )
-        -- [31:0]       add
-        -- [63:32]      pc
-        -- [95:64]      dout_r_a
-        -- [127:96]     dout_r_b
-        -- [159:128]    immed
-        -- [165:160]    rd
-        port map (
-            clk => clk,
-            ce => '1',
-            rst => rst,
-            din(31 downto 0) => if_id(31 downto 0),
-            din(63 downto 32) => if_id(63 downto 32),
-            din(95 downto 64) => dout_r_a,
-            din(127 downto 96) => dout_r_b,
-            din(159 downto 128) => immed,
-            din(164 downto 160) => if_id(75 downto 71),
-            dout => id_ex
-        );
-
     BRANCH_COMP: entity work.Comparator
         port map (
-            A => id_ex(95 downto 64),
-            B => id_ex(127 downto 96),
+            A => id_ex(127 downto 96),
+            B => id_ex(159 downto 128),
             eq => BrEq,
             lt => BrLt,
             gt => open,
@@ -208,7 +172,7 @@ begin
 
     MULTIPLEXER_2: entity work.Mux2
         port map (
-            I0 => id_ex(95 downto 64),
+            I0 => id_ex(127 downto 96),
             I1 => id_ex(63 downto 32),
             Sel => c_id_ex(5),
             O => mux_2
@@ -216,8 +180,8 @@ begin
         
     MULTIPLEXER_3: entity work.Mux2
         port map (
-            I0 => id_ex(127 downto 96),
-            I1 => id_ex(160 downto 128),
+            I0 => id_ex(159 downto 128),
+            I1 => id_ex(191 downto 160),
             Sel => c_id_ex(6),
             O => mux_3
         );
@@ -234,27 +198,6 @@ begin
             result => alu
         );
 
-    EX_MEM_BUFFER: entity work.Reg
-        generic map (
-            BitCount => 133
-        )
-        -- [31:0]       add
-        -- [63:32]      pc
-        -- [95:64]      alu
-        -- [127:96]     dout_r_b
-        -- [132:128]    rd
-        port map (
-            clk => clk,
-            ce => '1',
-            rst => rst,
-            din(31 downto 0) => id_ex(31 downto 0),
-            din(63 downto 32) => id_ex(63 downto 32),
-            din(95 downto 64) => alu,
-            din(127 downto 96) => dout_r_b,
-            din(132 downto 128) => id_ex(164 downto 160),
-            dout => ex_mem
-        );
-
     DATA_MEMORY: entity work.Ram
         generic map (
             NA => "data_memory.txt"
@@ -263,46 +206,31 @@ begin
             Clock => clk,
             enable => '1',
             rw => c_ex_mem(11),
-            ender => ex_mem(95 downto 64),
+            ender => ex_mem(223 downto 192),
             pronto => open,
-            dado_in => ex_mem(127 downto 96),
+            dado_in => ex_mem(191 downto 160),
             dado_out => dout_d
-        );
-
-    MEM_WB_BUFFER: entity work.Reg
-        generic map (
-            BitCount => 133
-        )
-        -- [31:0]       add
-        -- [63:32]      pc
-        -- [95:64]      alu
-        -- [127:96]     dout_r_b
-        -- [132:128]    rd
-        port map (
-            clk => clk,
-            ce => '1',
-            rst => rst,
-            din(31 downto 0) => ex_mem(31 downto 0),
-            din(63 downto 32) => ex_mem(63 downto 32),
-            din(95 downto 64) => alu,
-            din(127 downto 96) => dout_d,
-            din(132 downto 128) => id_ex(164 downto 160),
-            dout => mem_wb
         );
 
     MULTIPLEXER_4: entity work.Mux4
         port map (
-            I0 => mem_wb(127 downto 96),
-            I1 => mem_wb(95 downto 64),
-            I2 => mem_wb(31 downto 0),
+            I0 => mem_wb(255 downto 224),
+            I1 => mem_wb(223 downto 192),
+            I2 => mem_wb(63 downto 32),
             I3 => (others => '0'),
             Sel => c_mem_wb(13 downto 12),
             O => mux_4
-        );    
+        );
 
-    opcode <= dout_i(6 downto 0);
-    funct3 <= dout_i(14 downto 12);
-    funct7 <= dout_i(31 downto 25);
+    -- [0]          ce_pc
+    -- [1]          PCsel
+    -- [3:2]        ImmSel
+    -- [4]          RegWEn
+    -- [5]          ASEl
+    -- [6]          BSEl
+    -- [10:7]       ALUSEl
+    -- [11]         MemRW
+    -- [13:12]      WBSel
 
     CONTROL_IF_ID: entity work.Reg
         generic map (
@@ -358,6 +286,91 @@ begin
             rst => rst,
             din => c_ex_mem,
             dout => c_mem_wb
+        );
+
+    -- [31:0]       add
+    -- [63:32]      pc
+    -- [95:64]      dout_i
+    -- [127:96]     dout_r_a
+    -- [159:128]    dout_r_b
+    -- [191:160]    immed
+    -- [223:192]    alu
+    -- [255:224]    dout_d
+
+    BUFFER_IF_ID: entity work.Reg
+        generic map (
+            BitCount => 256
+        )
+        port map (
+            clk => clk,
+            ce => '1',
+            rst => rst,
+            din(31 downto 0) => add,
+            din(63 downto 32) => pc,
+            din(95 downto 64) => dout_i,
+            din(127 downto 96) => (others => '0'),
+            din(159 downto 128) => (others => '0'),
+            din(191 downto 160) => (others => '0'),
+            din(223 downto 192) => (others => '0'),
+            din(255 downto 224) => (others => '0'),
+            dout => if_id
+        );
+
+    BUFFER_ID_EX: entity work.Reg
+        generic map (
+            BitCount => 256
+        )
+        port map (
+            clk => clk,
+            ce => '1',
+            rst => rst,
+            din(31 downto 0) => if_id(31 downto 0),
+            din(63 downto 32) => if_id(63 downto 32),
+            din(95 downto 64) => if_id(95 downto 64),
+            din(127 downto 96) => dout_r_a,
+            din(159 downto 128) => dout_r_b,
+            din(191 downto 160) => immed,
+            din(223 downto 192) => (others => '0'),
+            din(255 downto 224) => (others => '0'),
+            dout => id_ex
+        );
+
+    BUFFER_EX_MEM: entity work.Reg
+        generic map (
+            BitCount => 256
+        )
+        port map (
+            clk => clk,
+            ce => '1',
+            rst => rst,
+            din(31 downto 0) => id_ex(31 downto 0),
+            din(63 downto 32) => id_ex(63 downto 32),
+            din(95 downto 64) => id_ex(95 downto 64),
+            din(127 downto 96) => id_ex(127 downto 96),
+            din(159 downto 128) => id_ex(159 downto 128),
+            din(191 downto 160) => id_ex(191 downto 160),
+            din(223 downto 192) => alu,
+            din(255 downto 224) => (others => '0'),
+            dout => ex_mem
+        );
+
+    BUFFER_MEM_WB: entity work.Reg
+        generic map (
+            BitCount => 256
+        )
+        port map (
+            clk => clk,
+            ce => '1',
+            rst => rst,
+            din(31 downto 0) => ex_mem(31 downto 0),
+            din(63 downto 32) => ex_mem(63 downto 32),
+            din(95 downto 64) => ex_mem(95 downto 64),
+            din(127 downto 96) => ex_mem(127 downto 96),
+            din(159 downto 128) => ex_mem(159 downto 128),
+            din(191 downto 160) => ex_mem(191 downto 160),
+            din(223 downto 192) => ex_mem(223 downto 192),
+            din(255 downto 224) => dout_d,
+            dout => mem_wb
         );
 
 end architecture_fd;

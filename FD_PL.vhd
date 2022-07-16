@@ -233,7 +233,7 @@ begin
     -- [11]         MemRW
     -- [13:12]      WBSel
 
-    CONTROL_IF_ID: entity work.Reg
+    CONTROL_BUFFER_IF_ID: entity work.Reg
         generic map (
             BitCount => 14
         )
@@ -253,7 +253,7 @@ begin
             dout => c_if_id
         );
 
-    CONTROL_ID_EX: entity work.Reg
+    CONTROL_BUFFER_ID_EX: entity work.Reg
         generic map (
             BitCount => 14
         )
@@ -265,7 +265,7 @@ begin
             dout => c_id_ex
         );
 
-    CONTROL_EX_MEM: entity work.Reg
+    CONTROL_BUFFER_EX_MEM: entity work.Reg
         generic map (
             BitCount => 14
         )
@@ -277,7 +277,7 @@ begin
             dout => c_ex_mem
         );
 
-    CONTROL_MEM_WB: entity work.Reg
+    CONTROL_BUFFER_MEM_WB: entity work.Reg
         generic map (
             BitCount => 14
         )

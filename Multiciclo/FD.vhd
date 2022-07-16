@@ -24,9 +24,6 @@ entity FD is
 
         -- Clock enable for PC
         ce_pc:          in std_logic;
-		  
-		  -- enable do banco de reg
-		  enable_reg:     in std_logic;
 
         -- Selecting the new adress for PC
         PCsel:          in std_logic;
@@ -59,13 +56,6 @@ entity FD is
         funct3:         out std_logic_vector(2 downto 0);
         funct7:         out std_logic_vector(6 downto 0);
 		  
-		  -- sinais para inicializar o Imem
-		  pc_end:         in std_logic_vector(31 downto 0);
-		  pc_data:        in std_logic_vector(31 downto 0);
-		  Irw:            in std_logic;
-		  
-		  -- sinais de saidas para verificacoes
-		  
     ) ;
 end FD;
 
@@ -73,7 +63,6 @@ architecture architecture_fd of FD is
     -- PC signals
     signal mux_1:       std_logic_vector(31 downto 0);
     signal pc:          std_logic_vector(31 downto 0);
-	 signal pc_init:     std_logic_vector(31 downto 0); -- sinal para inicializacao do Imem
     signal add:         std_logic_vector(31 downto 0);
 
     -- Instruction Memory signals
@@ -131,34 +120,24 @@ end process;
         );
 		  
 
---    INSTRUCTION_MEMORY: entity work.Ram
---        generic map (
---            NA => "instruction_memory.txt"
---        )
---        port map (
---            Clock => clk,
---            enable => '1',
---            rw => '0',
---            ender => pc,
---            pronto => open,
---            dado_in => (others => '0'),
---            dado_out => dout_i    -- IR
---        );
-
-	Instruction_mem: entity work.ram_mem
-		port map(
-			clock    => clk,
-			we       => Irw,
-			address  => pc_init,
-			datain   => pc_data,
-			dataout  => dout_i
-		  );
+    INSTRUCTION_MEMORY: entity work.Ram
+        generic map (
+            NA => "instruction_memory.txt"
+        )
+        port map (
+            Clock => clk,
+            enable => '1',
+            rw => '0',
+            ender => pc,
+            pronto => open,
+            dado_in => (others => '0'),
+            dado_out => dout_i    -- IR
+        );
 
     REGISTER_FILE: entity work.RegFile
         port map (
             clk => clk,
             we => RegWEn,
-				ce_regfile => enable_reg,
             din => mux_4,
             addrin => dout_i(11 downto 7),
             addra => dout_i(19 downto 15),
@@ -214,29 +193,19 @@ end process;
         );
 
 		  
---    DATA_MEMORY: entity work.Ram
---        generic map (
---            NA => "data_memory.txt"
---        )
---        port map (
---            Clock => clk,
---            enable => '1',
---            rw => MemRW,
---            ender => alu,
---            pronto => open,
---            dado_in => dout_r_b,
---            dado_out => dout_d
---        );
-
-	Data_mem: entity work.ram_mem
-		port map(
-			clock    => clk,
-			we       => MemRW,
-			address  => alu,
-			datain   => dout_r_b,
-			dataout  => dout_d
-		  );
-		  
+    DATA_MEMORY: entity work.Ram
+        generic map (
+            NA => "data_memory.txt"
+        )
+        port map (
+            Clock => clk,
+            enable => '1',
+            rw => MemRW,
+            ender => alu,
+            pronto => open,
+            dado_in => dout_r_b,
+            dado_out => dout_d
+        );
 
     MULTIPLEXER_4: entity work.Mux4
         port map (

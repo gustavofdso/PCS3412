@@ -24,7 +24,6 @@ entity RegFile is
     port(
         clk:            in std_logic;
         we:             in std_logic;
-		  ce_regfile:     in std_logic;
         din:            in std_logic_vector(DatBitCount - 1 downto 0);
         addrin:         in std_logic_vector(AdrBitCount - 1 downto 0);
         addra:          in std_logic_vector(AdrBitCount - 1 downto 0);
@@ -46,13 +45,11 @@ begin
 
     process (clk)
     begin
-        if (rising_edge(clk) and ce_regfile = '1') then
-            if (we = '1') then
-                ram(to_integer(unsigned(addrin))) <= din after Twrite;
-            end if;
-            enda_reg <= addra;
-            endb_reg <= addrb;
+        if (rising_edge(clk) and we = '1') then
+            ram(to_integer(unsigned(addrin))) <= din after Twrite;
         end if;
+        enda_reg <= addra;
+        endb_reg <= addrb;
     end process;
 
     douta <= ram(to_integer(unsigned(enda_reg))) after Tread;

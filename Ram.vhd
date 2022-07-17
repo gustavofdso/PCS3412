@@ -27,7 +27,7 @@ use ieee.math_real.all;
 
 entity Ram is
 	generic(
-		BE:				integer := 32;
+		BE:				integer := 12;
 		BP:				integer := 32;
 		NA:				string := "mram.txt";
 		Tz:				time := 2 ns;

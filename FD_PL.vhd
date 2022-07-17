@@ -128,7 +128,7 @@ begin
             Clock => clk,
             enable => '1',
             rw => '0',
-            ender => pc,
+            ender => pc(11 downto 0),
             pronto => open,
             dado_in => (others => '0'),
             dado_out => dout_i
@@ -206,7 +206,7 @@ begin
             Clock => clk,
             enable => '1',
             rw => c_ex_mem(9),
-            ender => ex_mem(223 downto 192),
+            ender => ex_mem(203 downto 192),
             pronto => open,
             dado_in => ex_mem(159 downto 128),
             dado_out => dout_d

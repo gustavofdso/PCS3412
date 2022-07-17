@@ -28,7 +28,11 @@ use ieee.math_real.all;
 entity Ram is
 	generic(
 		BE:				integer := 12;
+<<<<<<< HEAD
+		BP:				integer := 8;
+=======
 		BP:				integer := 32;
+>>>>>>> ee0a1d756cff630b94f76c73608087ac7ac1c476
 		NA:				string := "mram.txt";
 		Tz:				time := 2 ns;
 		Twrite:			time := 5 ns;
@@ -41,8 +45,8 @@ entity Ram is
 		rw:				in std_logic;
 		ender:			in std_logic_vector(BE - 1 downto 0);
 		pronto:			out std_logic;
-		dado_in:		in std_logic_vector(BP - 1 downto 0);
-		dado_out:		out std_logic_vector(BP - 1 downto 0)
+		dado_in:		in std_logic_vector(31 downto 0);
+		dado_out:		out std_logic_vector(31 downto 0)
 	);
 end Ram;
 
@@ -103,6 +107,38 @@ begin
 					addr_1 := addr_1 + 1;	-- Endere�a a pr�xima palavra a ser carregada
 				end loop;
 			end loop;
+<<<<<<< HEAD
+		end loop;
+	return Mem;
+end fill_memory;
+ 
+begin
+if inicio = '1' then
+	-- Roda somente uma vez na inicializa��o
+	Mram <= fill_memory;
+	-- Insere o conte�do na mem�ria
+	inicio := '0';
+end if;
+if enable = '1' then
+	if (ender'last_event < Tsetup) or (dado_in'last_event < Tsetup) then
+		dado_out <= (others => 'X');
+	else
+		endereco := conv_integer(ender);
+		case rw is
+			when '0' => -- Ciclo de Leitura
+				dado_out <= Mram(endereco)&Mram(endereco+1)&Mram(endereco+2)&Mram(endereco+3) after Tread;
+				pronto <= '1' after Tread;				 
+			when '1' => --Ciclo de Escrita
+				Mram(endereco+0) <= dado_in(7 downto 0) after Twrite;
+				Mram(endereco+1) <= dado_in(15 downto 8) after Twrite;
+				Mram(endereco+2) <= dado_in(23 downto 16) after Twrite;
+				Mram(endereco+3) <= dado_in(31 downto 24) after Twrite;
+
+				pronto <= '1' after Twrite;
+			when others => -- Ciclo inv�lido
+				Null;
+		end case;
+=======
 		return Mem;
 	end fill_memory;
 	
@@ -112,6 +148,7 @@ begin
 		Mram <= fill_memory;
 		-- Insere o conte�do na mem�ria
 		inicio := '0';
+>>>>>>> ee0a1d756cff630b94f76c73608087ac7ac1c476
 	end if;
 	if enable = '1' then
 		if (ender'last_event < Tsetup) or (dado_in'last_event < Tsetup) then

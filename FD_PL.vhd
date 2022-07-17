@@ -44,11 +44,8 @@ entity FD_PL is
         -- Selecting Write-back data
         WBSel:          in std_logic_vector(1 downto 0);
         
-        -- Instruction fields for control
-        opcode:         out std_logic_vector(6 downto 0);
-        funct3:         out std_logic_vector(2 downto 0);
-        funct7:         out std_logic_vector(6 downto 0)
-		  
+        -- Instruction field
+        instruction:    out std_logic_vector(31 downto 0)
     );
 end FD_PL;
 
@@ -101,7 +98,7 @@ begin
     MULTIPLEXER_PC: entity work.Mux2
         port map (
             I0 => ex_mem(31 downto 0),
-            I1 => ex_mem(95 downto 64),
+            I1 => ex_mem(223 downto 192),
             Sel => c_ex_mem(1),
             O => mux_pc
         );
@@ -137,9 +134,7 @@ begin
             dado_out => dout_i
         );
 
-    opcode <= dout_i(6 downto 0);
-    funct3 <= dout_i(14 downto 12);
-    funct7 <= dout_i(31 downto 25);
+    instruction <= if_id(95 downto 64);
 
     REGISTER_FILE: entity work.RegFile
         port map (
@@ -155,7 +150,7 @@ begin
 
     IMMEDIATE_GENERATOR: entity work.ImmediateGenerator
         port map (
-            ri => if_id(95 downto 64),
+            instruction => if_id(95 downto 64),
             ImmSel => ImmSel,
             immed => immed
         );
@@ -213,7 +208,7 @@ begin
             rw => c_ex_mem(9),
             ender => ex_mem(223 downto 192),
             pronto => open,
-            dado_in => ex_mem(191 downto 160),
+            dado_in => ex_mem(159 downto 128),
             dado_out => dout_d
         );
 
@@ -221,7 +216,7 @@ begin
         port map (
             I0 => mem_wb(255 downto 224),
             I1 => mem_wb(223 downto 192),
-            I2 => mem_wb(63 downto 32),
+            I2 => mem_wb(31 downto 0),
             I3 => (others => '0'),
             Sel => c_mem_wb(11 downto 10),
             O => mux_wb

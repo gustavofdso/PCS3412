@@ -51,11 +51,8 @@ entity FD_MC is
         -- Selecting Write-back data
         WBSel:          in std_logic_vector(1 downto 0);
         
-        -- Instruction fields for control
-        opcode:         out std_logic_vector(6 downto 0);
-        funct3:         out std_logic_vector(2 downto 0);
-        funct7:         out std_logic_vector(6 downto 0)
-		  
+        -- Instruction field
+        instruction:    out std_logic_vector(31 downto 0)
     );
 end FD_MC;
 
@@ -125,9 +122,7 @@ begin
             dado_out => dout_i
         );
 
-    opcode <= dout_i(6 downto 0);
-    funct3 <= dout_i(14 downto 12);
-    funct7 <= dout_i(31 downto 25);
+    instruction <= dout_i;
 
     REGISTER_FILE: entity work.RegFile
         port map (
@@ -143,7 +138,7 @@ begin
 
     IMMEDIATE_GENERATOR: entity work.ImmediateGenerator
         port map (
-            ri => dout_i,
+            instruction => dout_i,
             ImmSel => ImmSel,
             immed => immed
         );

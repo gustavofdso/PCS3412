@@ -22,6 +22,9 @@ entity FD_MC is
         clk:            in std_logic;
         rst:            in std_logic;
 
+        -- Write enable for PC
+        PCWEn:          in std_logic;
+        
         -- Selecting the new adress for PC
         PCsel:          in std_logic;
 
@@ -94,7 +97,7 @@ begin
     PROGRAM_COUNTER: entity work.Reg
         port map (
             clk => clk,
-            ce => '1',
+            ce => PCWEn,
             rst => rst,
             din => mux_pc,
             dout => pc

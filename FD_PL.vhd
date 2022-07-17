@@ -22,9 +22,6 @@ entity FD_PL is
         clk:            in std_logic;
         rst:            in std_logic;
 
-        -- Write enable for PC
-        PCWEn:          in std_logic;
-
         -- Selecting the new adress for PC
         PCsel:          in std_logic;
 
@@ -37,10 +34,6 @@ entity FD_PL is
         -- Branch comparisons
         BrEq:           out std_logic;
         BrLt:           out std_logic;
-
-        -- Selecting ALU inputs
-        ASEl:           in std_logic;
-        BSEl:           in std_logic;
 
         -- Selecting ALU operation
         ALUSEl:         in std_logic_vector(3 downto 0);
@@ -91,9 +84,17 @@ architecture arch of FD_PL is
     signal mem_wb:      std_logic_vector(255 downto 0);
 
     -- Control Buffer signals
-    signal c_id_ex:     std_logic_vector(13 downto 0);
-    signal c_ex_mem:    std_logic_vector(13 downto 0);
-    signal c_mem_wb:    std_logic_vector(13 downto 0);
+    signal c_id_ex:     std_logic_vector(11 downto 0);
+    signal c_ex_mem:    std_logic_vector(11 downto 0);
+    signal c_mem_wb:    std_logic_vector(11 downto 0);
+
+    -- Forwarding Unit signals
+    signal Asel:        std_logic_vector(1 downto 0);
+    signal Bsel:        std_logic_vector(1 downto 0);
+
+    -- Hazard Detection Unit signals
+    signal PCWEn:       std_logic;
+    signal not_PCWEn:   std_logic;
 	 
 begin
 
@@ -143,7 +144,7 @@ begin
     REGISTER_FILE: entity work.RegFile
         port map (
             clk => clk,
-            we => c_if_id(4),
+            we => c_mem_wb(4),
             din => mux_wb,
             addrin => mem_wb(75 downto 71),
             addra => if_id(83 downto 79),
@@ -155,7 +156,7 @@ begin
     IMMEDIATE_GENERATOR: entity work.ImmediateGenerator
         port map (
             ri => if_id(95 downto 64),
-            ImmSel => c_if_id(3 downto 2),
+            ImmSel => ImmSel,
             immed => immed
         );
 
@@ -170,19 +171,23 @@ begin
             ge => open
         );
 
-    MULTIPLEXER_2: entity work.Mux2
+    MULTIPLEXER_A: entity work.Mux4
         port map (
             I0 => id_ex(127 downto 96),
             I1 => id_ex(63 downto 32),
-            Sel => c_id_ex(5),
+            I2 => ex_mem(223 downto 192),
+            I3 => (others => '0'),
+            Sel => Asel,
             O => mux_a
         );
         
-    MULTIPLEXER_3: entity work.Mux2
+    MULTIPLEXER_B: entity work.Mux4
         port map (
             I0 => id_ex(159 downto 128),
             I1 => id_ex(191 downto 160),
-            Sel => c_id_ex(6),
+            I2 => ex_mem(223 downto 192),
+            I3 => (others => '0'),
+            Sel => Bsel,
             O => mux_b
         );
 
@@ -191,7 +196,7 @@ begin
             cin => '0',
             A => mux_a,
             B => mux_b,
-            ALUOpe => c_id_ex(10 downto 7),
+            ALUOpe => c_id_ex(8 downto 5),
             cout => open,
             zero => open,
             negative => open,
@@ -205,20 +210,20 @@ begin
         port map (
             Clock => clk,
             enable => '1',
-            rw => c_ex_mem(11),
+            rw => c_ex_mem(9),
             ender => ex_mem(223 downto 192),
             pronto => open,
             dado_in => ex_mem(191 downto 160),
             dado_out => dout_d
         );
 
-    MULTIPLEXER_4: entity work.Mux4
+    MULTIPLEXER_WB: entity work.Mux4
         port map (
             I0 => mem_wb(255 downto 224),
             I1 => mem_wb(223 downto 192),
             I2 => mem_wb(63 downto 32),
             I3 => (others => '0'),
-            Sel => c_mem_wb(13 downto 12),
+            Sel => c_mem_wb(11 downto 10),
             O => mux_wb
         );
 
@@ -226,15 +231,13 @@ begin
     -- [1]          PCsel
     -- [3:2]        ImmSel
     -- [4]          RegWEn
-    -- [5]          ASEl
-    -- [6]          BSEl
-    -- [10:7]       ALUSEl
-    -- [11]         MemRW
-    -- [13:12]      WBSel
+    -- [8:5]        ALUSEl
+    -- [9]          MemRW
+    -- [11:10]      WBSel
 
     CONTROL_BUFFER_ID_EX: entity work.Reg
         generic map (
-            BitCount => 14
+            BitCount => 12
         )
         port map (
             clk => clk,
@@ -244,29 +247,29 @@ begin
             din(1) => PCsel,
             din(3 downto 2) => ImmSel,
             din(4) => RegWEn,
-            din(5) => ASEl,
-            din(6) => BSEl,
-            din(10 downto 7) => ALUSEl,
-            din(11) => MemRW,
-            din(13 downto 12) => WBSel,
+            din(8 downto 5) => ALUSEl,
+            din(9) => MemRW,
+            din(11 downto 10) => WBSel,
             dout => c_id_ex
         );
 
+    not_PCWEn <= not(PCWEn);
+
     CONTROL_BUFFER_EX_MEM: entity work.Reg
         generic map (
-            BitCount => 14
+            BitCount => 12
         )
         port map (
             clk => clk,
             ce => '1',
-            rst => rst,
+            rst => not_PCWEn,
             din => c_id_ex,
             dout => c_ex_mem
         );
 
     CONTROL_BUFFER_MEM_WB: entity work.Reg
         generic map (
-            BitCount => 14
+            BitCount => 12
         )
         port map (
             clk => clk,
@@ -291,7 +294,7 @@ begin
         )
         port map (
             clk => clk,
-            ce => '1',
+            ce => PCWEn,
             rst => rst,
             din(31 downto 0) => add,
             din(63 downto 32) => pc,
@@ -359,6 +362,27 @@ begin
             din(223 downto 192) => ex_mem(223 downto 192),
             din(255 downto 224) => dout_d,
             dout => mem_wb
+        );
+
+    FORWARDING_UNIT: entity work.ForwardingUnit
+        port map (
+            ex_mem_RegWEn => c_ex_mem(4),
+            mem_wb_RegWEn => c_mem_wb(4),
+            ex_mem_Rd => ex_mem(75 downto 71),
+            mem_wb_Rd => mem_wb(75 downto 71),
+            id_ex_Rs1 => id_ex(83 downto 79),
+            id_ex_Rs2 => id_ex(88 downto 84),
+            Asel => Asel,
+            Bsel => Bsel
+        );
+
+    HAZARD_DETECTION_UNIT: entity work.HazardDetectionUnit
+        port map (
+            id_ex_Rd => id_ex(75 downto 71),
+            if_id_Rs1 => if_id(83 downto 79),
+            if_id_Rs2 => if_id(88 downto 84),
+            ex_mem_MemRW => c_ex_mem(9),
+            PCWEn => PCWEn
         );
 
 end arch;

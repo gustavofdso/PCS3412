@@ -17,44 +17,44 @@ use IEEE.numeric_std.all;
 entity ForwardingUnit is
     port (
         -- Register write enables
-        mem_RegWEn:     in std_logic;
-        wb_RegWEn:      in std_logic;
+        ex_mem_RegWEn:      in std_logic;
+        mem_wb_RegWEn:      in std_logic;
 
         -- Destination registers
-        mem_Rd:         in std_logic_vector(4 downto 0);
-        wb_Rd:          in std_logic_vector(4 downto 0);
+        ex_mem_Rd:          in std_logic_vector(4 downto 0);
+        mem_wb_Rd:          in std_logic_vector(4 downto 0);
 
         -- Source registers
-        ex_Rs:          in std_logic_vector(4 downto 0);
-        ex_Rt:          in std_logic_vector(4 downto 0);
+        id_ex_Rs1:          in std_logic_vector(4 downto 0);
+        id_ex_Rs2:          in std_logic_vector(4 downto 0);
 
         -- Multiplexer selectors
-        ASel:           out std_logic_vector(1 downto 0);
-        BSel:           out std_logic_vector(1 downto 0)
+        ASel:               out std_logic_vector(1 downto 0);
+        BSel:               out std_logic_vector(1 downto 0)
     );
 end ForwardingUnit;
 
 architecture arch of ForwardingUnit is
 
-    signal a, b, c, d:  std_logic;
+    signal a, b, c, d:      std_logic;
 
 begin
 
-    process (mem_RegWEn, wb_RegWEn, mem_Rd, wb_Rd, ex_Rs, ex_Rt)
+    process (ex_mem_RegWEn, mem_wb_RegWEn, ex_mem_Rd, mem_wb_Rd, id_ex_Rs1, id_ex_Rs2)
     begin
-        if mem_RegWEn = '1' and mem_Rd = ex_Rs then a <= '1';
+        if ex_mem_RegWEn = '1' and ex_mem_Rd = id_ex_Rs1 then a <= '1';
         else a <= '0';
         end if;
         
-        if wb_RegWEn = '1' and wb_Rd = ex_Rs then b <= '1';
+        if mem_wb_RegWEn = '1' and mem_wb_Rd = id_ex_Rs1 then b <= '1';
         else b <= '0';
         end if;
 
-        if mem_RegWEn = '1' and mem_Rd = ex_Rt then c <= '1';
+        if ex_mem_RegWEn = '1' and ex_mem_Rd = id_ex_Rs2 then c <= '1';
         else c <= '0';
         end if;
         
-        if wb_RegWEn = '1' and wb_Rd = ex_Rt then d <= '1';
+        if mem_wb_RegWEn = '1' and mem_wb_Rd = id_ex_Rs2 then d <= '1';
         else d <= '0';
         end if;
     end process;

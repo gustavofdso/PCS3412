@@ -16,6 +16,9 @@ entity UC_MC is
         clk:            in std_logic;
         rst:            in std_logic;
 
+        -- Write enable for PC
+        PCWEn:          out std_logic;
+
         -- Selecting the new adress for PC
         PCsel:          out std_logic;
 
@@ -126,7 +129,7 @@ begin
             O => mux_in
         );
 
-    MULTIPLEXER_RE: entity work.Mux2
+    MULTIPLEXER_SR: entity work.Mux2
         generic map (
             BitCount => 6
         )

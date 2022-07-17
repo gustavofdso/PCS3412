@@ -61,11 +61,37 @@ begin
         PCsel <= '0';
         ImmSel <= "00";
         RegWEn <= '1';
-        ASEl <= '1';
+        ASEl <= '0';
+        BSEl <= '1';
+        ALUSEl <= "0000";
+        MemRW <= '0';
+        WBSel <= "01";
+
+        wait for 30 ns;
+
+        rst <= '0';
+        PCWEn <= '1';
+        PCsel <= '0';
+        ImmSel <= "00";
+        RegWEn <= '1';
+        ASEl <= '0';
+        BSEl <= '1';
+        ALUSEl <= "0000";
+        MemRW <= '0';
+        WBSel <= "01";
+
+        wait for 30 ns;
+
+        rst <= '0';
+        PCWEn <= '1';
+        PCsel <= '0';
+        ImmSel <= "00";
+        RegWEn <= '1';
+        ASEl <= '0';
         BSEl <= '0';
         ALUSEl <= "0000";
         MemRW <= '0';
-        WBSel <= "00";
+        WBSel <= "01";
 
         wait for 30 ns;
     

@@ -29,9 +29,9 @@ entity Ram is
 	generic(
 		BE:				integer := 12;
 		NA:				string := "mram.txt";
-		Tz:				time := 2 ns;
+		Tz:				time := 0 ns;
 		Twrite:			time := 5 ns;
-		Tsetup:			time := 2 ns;
+		Tsetup:			time := 0 ns;
 		Tread:			time := 5 ns
 	);
 	port(

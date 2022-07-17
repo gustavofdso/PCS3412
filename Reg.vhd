@@ -31,7 +31,7 @@ end Reg;
 
 architecture Reg of Reg is
 
-     signal qi : std_logic_vector(BitCount - 1 downto 0);
+     signal qi : std_logic_vector(BitCount - 1 downto 0)  := (others => '0');
 
 begin
 

@@ -28,11 +28,7 @@ use ieee.math_real.all;
 entity Ram is
 	generic(
 		BE:				integer := 12;
-<<<<<<< HEAD
 		BP:				integer := 8;
-=======
-		BP:				integer := 32;
->>>>>>> ee0a1d756cff630b94f76c73608087ac7ac1c476
 		NA:				string := "mram.txt";
 		Tz:				time := 2 ns;
 		Twrite:			time := 5 ns;
@@ -107,7 +103,6 @@ begin
 					addr_1 := addr_1 + 1;	-- Endere�a a pr�xima palavra a ser carregada
 				end loop;
 			end loop;
-<<<<<<< HEAD
 		end loop;
 	return Mem;
 end fill_memory;
@@ -138,17 +133,6 @@ if enable = '1' then
 			when others => -- Ciclo inv�lido
 				Null;
 		end case;
-=======
-		return Mem;
-	end fill_memory;
-	
-	begin
-	if inicio = '1' then
-		-- Roda somente uma vez na inicializa��o
-		Mram <= fill_memory;
-		-- Insere o conte�do na mem�ria
-		inicio := '0';
->>>>>>> ee0a1d756cff630b94f76c73608087ac7ac1c476
 	end if;
 	if enable = '1' then
 		if (ender'last_event < Tsetup) or (dado_in'last_event < Tsetup) then

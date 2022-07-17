@@ -7,7 +7,7 @@
 --
 -------------------------------------------------------------------------------
 --
--- Description : Implementation of the Control unity entity.
+-- Description : Implementation of the Control Unit entity.
 --
 -------------------------------------------------------------------------------
 entity UC_MC is
@@ -53,17 +53,22 @@ end UC_MC;
 architecture arch of UC_MC is
 
     -- RE signals
-    signal re:          std_logic_vector(5 downto 0);
+    signal sr:          std_logic_vector(5 downto 0);
 
     -- PROM signals
-    signal adress:      std_logic_vector(23 downto 0);
-    signal prom:        std_logic_vector(18 downto 0);
-    signal link:        std_logic_vector(5 downto 0);
-    signal saidas:      std_logic_vector(12 downto 0);
+    signal prom:        std_logic_vector(34 downto 0);
+    signal test:        std_logic_vector(6 downto 0);
+    signal link_true:   std_logic_vector(5 downto 0);
+    signal link_false:  std_logic_vector(5 downto 0);
+    signal outputs:     std_logic_vector(18 downto 0);
 
+    -- MUX signals
+    signal mux_in:      std_logic;
+    signal mux_sr:      std_logic_vector(5 downto 0);
+    
 begin
 
-    RE: entity work.Reg
+    STATE_REGISTER: entity work.Reg
         generic map (
             BitCount => 6
         )
@@ -71,34 +76,65 @@ begin
             clk => clk,
             ce => '1',
             rst => rst,
-            din => link,
-            dout => re
+            din => mux_sr,
+            dout => sr
         );
-
-    adress(5 downto 0) <= re;
-    adress(11 downto 6) <= funct7;
-    adress(14 downto 12) <= funct3;
-    adress(21 downto 15) <= opcode;
-    adress(22) <= BrLt;
-    adress(23) <= BrEq;
 
     CONTROL_MEMORY: entity work.Ram
         generic map (
-            BE => 24,
-		    BP => 28,
+            BE => 6,
+		    BP => 35,
             NA => "uc_memory.txt"
         )
         port map (
             Clock => clk,
             enable => '1',
             rw => '0',
-            ender => adress,
+            ender => sr,
             pronto => open,
             dado_in => (others => '0'),
             dado_out => prom
         );
 
-    link <= prom(18 downto 13);
-    saida <= prom(12 downto 0);
+    outputs => prom(18 downto 0)
+    link_false => prom(24 downto 19)
+    link_true => prom(30 downto 25)
+    test => prom(34 downto 31)
+
+    MULTIPLEXER_IN: entity work.Mux16
+        generic map (
+            BitCount => 1
+        )
+        port map (
+            I0 => ,
+            I1 => ,
+            I2 => ,
+            I3 => ,
+            I4 => ,
+            I5 => ,
+            I6 => ,
+            I7 => ,
+            I8 => ,
+            I9 => ,
+            I10 => ,
+            I11 => ,
+            I12 => ,
+            I13 => ,
+            I14 => ,
+            I15 => ,
+            Sel => ,
+            O => mux_in
+        );
+
+    MULTIPLEXER_RE: entity work.Mux2
+        generic map (
+            BitCount => 6
+        )
+        port map (
+            I0 => link_false,
+            I1 => link_true,
+            Sel => mux_in,
+            O => mux_sr
+        );
 
 end arch;

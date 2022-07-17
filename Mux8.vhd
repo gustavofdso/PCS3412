@@ -1,6 +1,6 @@
 -------------------------------------------------------------------------------
 --
--- Title       : Mux4
+-- Title       : Mux8
 -- Design      : T-FIVE-MC
 -- Author      : Gustavo Oliveira
 -- Company     : LARC-EPUSP
@@ -16,7 +16,7 @@ use IEEE.std_logic_arith.all;
 use IEEE.std_logic_signed.all;
 use IEEE.std_logic_unsigned.all;
 
-entity Mux4 is
+entity Mux8 is
      generic(
           BitCount: integer := 32;
           Tsel:     time := 0.5 ns;
@@ -34,9 +34,9 @@ entity Mux4 is
           Sel:      in std_logic_vector(2 downto 0);
           O:        out std_logic_vector(BitCount - 1 downto 0)
      );
-end Mux4;
+end Mux8;
 
-architecture Mux4 of Mux4 is
+architecture arch of Mux8 is
 
 begin
 
@@ -55,4 +55,4 @@ begin
           end case;
      end process;
 
-end Mux4;
+end arch;

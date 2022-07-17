@@ -58,7 +58,7 @@ end FD_MC;
 
 architecture arch of FD_MC is
     -- PC signals
-    signal mux_1:       std_logic_vector(31 downto 0);
+    signal mux_pc:      std_logic_vector(31 downto 0);
     signal pc:          std_logic_vector(31 downto 0);
     signal add:         std_logic_vector(31 downto 0);
 
@@ -73,22 +73,22 @@ architecture arch of FD_MC is
     signal dout_r_b:    std_logic_vector(31 downto 0);
 
     -- ALU signals
-    signal mux_2:       std_logic_vector(31 downto 0);
-    signal mux_3:       std_logic_vector(31 downto 0);
+    signal mux_a:       std_logic_vector(31 downto 0);
+    signal mux_b:       std_logic_vector(31 downto 0);
     signal alu:         std_logic_vector(31 downto 0);
 
     -- Data Memory signals
     signal dout_d:      std_logic_vector(31 downto 0);
-    signal mux_4:       std_logic_vector(31 downto 0);
+    signal mux_wb:      std_logic_vector(31 downto 0);
 	 
 begin
 
-    MULTIPLEXER_1: entity work.Mux2
+    MULTIPLEXER_PC: entity work.Mux2
         port map (
             I0 => add,
             I1 => alu,
             Sel => PCSel,
-            O => mux_1
+            O => mux_pc
         );
 
     PROGRAM_COUNTER: entity work.Reg
@@ -96,7 +96,7 @@ begin
             clk => clk,
             ce => '1',
             rst => rst,
-            din => mux_1,
+            din => mux_pc,
             dout => pc
         );
 
@@ -122,11 +122,15 @@ begin
             dado_out => dout_i
         );
 
+    opcode <= dout_i(6 downto 0);
+    funct3 <= dout_i(14 downto 12);
+    funct7 <= dout_i(31 downto 25);
+
     REGISTER_FILE: entity work.RegFile
         port map (
             clk => clk,
             we => RegWEn,
-            din => mux_4,
+            din => mux_wb,
             addrin => dout_i(11 downto 7),
             addra => dout_i(19 downto 15),
             addrb => dout_i(24 downto 20),
@@ -134,14 +138,14 @@ begin
             doutb => dout_r_b
         );
 
-    IMMED_GENERATOR: entity work.ImmediateGenerator
+    IMMEDIATE_GENERATOR: entity work.ImmediateGenerator
         port map (
             ri => dout_i,
             ImmSel => ImmSel,
             immed => immed
         );
 
-    BRANCH_COMP: entity work.Comparator
+    BRANCH_COMPARATOR: entity work.Comparator
         port map (
             A => dout_r_a,
             B => dout_r_b,
@@ -152,27 +156,27 @@ begin
             ge => open
         );
 
-    MULTIPLEXER_2: entity work.Mux2
+    MULTIPLEXER_A: entity work.Mux2
         port map (
             I0 => dout_r_a,
             I1 => pc,
             Sel => ASel,
-            O => mux_2
+            O => mux_a
         );
         
-    MULTIPLEXER_3: entity work.Mux2
+    MULTIPLEXER_B: entity work.Mux2
         port map (
             I0 => dout_r_b,
             I1 => immed,
             Sel => BSel,
-            O => mux_3
+            O => mux_b
         );
 
     MULTIFUNCIONAL_ALU: entity work.ALU
         port map (
             cin => '0',
-            A => mux_2,
-            B => mux_3,
+            A => mux_a,
+            B => mux_b,
             ALUOpe => ALUSel,
             cout => open,
             zero => open,
@@ -194,18 +198,14 @@ begin
             dado_out => dout_d
         );
 
-    MULTIPLEXER_4: entity work.Mux4
+    MULTIPLEXER_WB: entity work.Mux4
         port map (
             I0 => dout_d,
             I1 => alu,
             I2 => add,
             I3 => (others => '0'),
             Sel => WBSel,
-            O => mux_4
-        );    
-
-    opcode <= dout_i(6 downto 0);
-    funct3 <= dout_i(14 downto 12);
-    funct7 <= dout_i(31 downto 25);
+            O => mux_wb
+        );
 	 
 end arch;

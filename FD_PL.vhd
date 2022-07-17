@@ -22,6 +22,9 @@ entity FD_PL is
         clk:            in std_logic;
         rst:            in std_logic;
 
+        -- Write enable for PC
+        PCWEn:          in std_logic;
+
         -- Selecting the new adress for PC
         PCsel:          in std_logic;
 
@@ -58,7 +61,7 @@ end FD_PL;
 
 architecture arch of FD_PL is
     -- PC signals
-    signal mux_1:       std_logic_vector(31 downto 0);
+    signal mux_pc:      std_logic_vector(31 downto 0);
     signal pc:          std_logic_vector(31 downto 0);
     signal add:         std_logic_vector(31 downto 0);
 
@@ -73,13 +76,13 @@ architecture arch of FD_PL is
     signal dout_r_b:    std_logic_vector(31 downto 0);
 
     -- ALU signals
-    signal mux_2:       std_logic_vector(31 downto 0);
-    signal mux_3:       std_logic_vector(31 downto 0);
+    signal mux_a:       std_logic_vector(31 downto 0);
+    signal mux_b:       std_logic_vector(31 downto 0);
     signal alu:         std_logic_vector(31 downto 0);
 
     -- Data Memory signals
     signal dout_d:      std_logic_vector(31 downto 0);
-    signal mux_4:       std_logic_vector(31 downto 0);
+    signal mux_wb:      std_logic_vector(31 downto 0);
 
     -- Buffer signals
     signal if_id:       std_logic_vector(255 downto 0);
@@ -88,27 +91,26 @@ architecture arch of FD_PL is
     signal mem_wb:      std_logic_vector(255 downto 0);
 
     -- Control Buffer signals
-    signal c_if_id:     std_logic_vector(13 downto 0);
     signal c_id_ex:     std_logic_vector(13 downto 0);
     signal c_ex_mem:    std_logic_vector(13 downto 0);
     signal c_mem_wb:    std_logic_vector(13 downto 0);
 	 
 begin
 
-    MULTIPLEXER_1: entity work.Mux2
+    MULTIPLEXER_PC: entity work.Mux2
         port map (
             I0 => ex_mem(31 downto 0),
             I1 => ex_mem(95 downto 64),
             Sel => c_ex_mem(1),
-            O => mux_1
+            O => mux_pc
         );
 
     PROGRAM_COUNTER: entity work.Reg
         port map (
             clk => clk,
-            ce => '1',
+            ce => PCWEn,
             rst => rst,
-            din => mux_1,
+            din => mux_pc,
             dout => pc
         );
 
@@ -142,7 +144,7 @@ begin
         port map (
             clk => clk,
             we => c_if_id(4),
-            din => mux_4,
+            din => mux_wb,
             addrin => mem_wb(75 downto 71),
             addra => if_id(83 downto 79),
             addrb => if_id(88 downto 84),
@@ -150,14 +152,14 @@ begin
             doutb => dout_r_b
         );
 
-    IMMED_GENERATOR: entity work.ImmediateGenerator
+    IMMEDIATE_GENERATOR: entity work.ImmediateGenerator
         port map (
             ri => if_id(95 downto 64),
             ImmSel => c_if_id(3 downto 2),
             immed => immed
         );
 
-    BRANCH_COMP: entity work.Comparator
+    BRANCH_COMPARATOR: entity work.Comparator
         port map (
             A => id_ex(127 downto 96),
             B => id_ex(159 downto 128),
@@ -173,7 +175,7 @@ begin
             I0 => id_ex(127 downto 96),
             I1 => id_ex(63 downto 32),
             Sel => c_id_ex(5),
-            O => mux_2
+            O => mux_a
         );
         
     MULTIPLEXER_3: entity work.Mux2
@@ -181,14 +183,14 @@ begin
             I0 => id_ex(159 downto 128),
             I1 => id_ex(191 downto 160),
             Sel => c_id_ex(6),
-            O => mux_3
+            O => mux_b
         );
 
     MULTIFUNCIONAL_ALU: entity work.ALU
         port map (
             cin => '0',
-            A => mux_2,
-            B => mux_3,
+            A => mux_a,
+            B => mux_b,
             ALUOpe => c_id_ex(10 downto 7),
             cout => open,
             zero => open,
@@ -217,10 +219,10 @@ begin
             I2 => mem_wb(63 downto 32),
             I3 => (others => '0'),
             Sel => c_mem_wb(13 downto 12),
-            O => mux_4
+            O => mux_wb
         );
 
-    -- [0]          ce_pc
+    -- [0]          PCWEn
     -- [1]          PCsel
     -- [3:2]        ImmSel
     -- [4]          RegWEn
@@ -230,26 +232,6 @@ begin
     -- [11]         MemRW
     -- [13:12]      WBSel
 
-    CONTROL_BUFFER_IF_ID: entity work.Reg
-        generic map (
-            BitCount => 14
-        )
-        port map (
-            clk => clk,
-            ce => '1',
-            rst => rst,
-            din(0) => ce_pc,
-            din(1) => PCsel,
-            din(3 downto 2) => ImmSel,
-            din(4) => RegWEn,
-            din(5) => ASEl,
-            din(6) => BSEl,
-            din(10 downto 7) => ALUSEl,
-            din(11) => MemRW,
-            din(13 downto 12) => WBSel,
-            dout => c_if_id
-        );
-
     CONTROL_BUFFER_ID_EX: entity work.Reg
         generic map (
             BitCount => 14
@@ -258,7 +240,15 @@ begin
             clk => clk,
             ce => '1',
             rst => rst,
-            din => c_if_id,
+            din(0) => PCWEn,
+            din(1) => PCsel,
+            din(3 downto 2) => ImmSel,
+            din(4) => RegWEn,
+            din(5) => ASEl,
+            din(6) => BSEl,
+            din(10 downto 7) => ALUSEl,
+            din(11) => MemRW,
+            din(13 downto 12) => WBSel,
             dout => c_id_ex
         );
 

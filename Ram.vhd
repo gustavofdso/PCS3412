@@ -48,8 +48,9 @@ end Ram;
 
 architecture arch of Ram is
 
-	---- Architecture declarations -----
-	type 	tipo_memoria  is array (0 to 2**BE - 1) of std_logic_vector(BP - 1 downto 0);
+---- Architecture declarations -----
+type tipo_memoria  is array (0 to 2**BE - 1) of std_logic_vector(BP - 1 downto 0);
+
 	signal Mram: tipo_memoria := ( others  => (others => '0')) ;
 
 begin
@@ -116,7 +117,7 @@ begin
 		if (ender'last_event < Tsetup) or (dado_in'last_event < Tsetup) then
 			dado_out <= (others => 'X');
 		else
-			endereco := conv_integer(ender)/4;
+			endereco := conv_integer(ender);
 			case rw is
 				when '0' => -- Ciclo de Leitura
 					dado_out <= Mram(endereco) after Tread;
@@ -135,4 +136,5 @@ begin
 		dado_out <= (others => 'Z') after Tz;
 	end if;
 	end process;
+
 end arch;

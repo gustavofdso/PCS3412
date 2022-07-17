@@ -116,7 +116,7 @@ begin
 		if (ender'last_event < Tsetup) or (dado_in'last_event < Tsetup) then
 			dado_out <= (others => 'X');
 		else
-			endereco := conv_integer(ender);
+			endereco := conv_integer(ender)/4;
 			case rw is
 				when '0' => -- Ciclo de Leitura
 					dado_out <= Mram(endereco) after Tread;

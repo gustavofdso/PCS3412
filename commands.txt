@@ -18,4 +18,5 @@ ghdl -a --ieee=synopsys -fexplicit FD_MC.vhd
 ghdl -e --ieee=synopsys -fexplicit FD_MC
 ghdl -r --ieee=synopsys -fexplicit FD_MC --vcd=saida.vcd
 
+
 gtkwave saida.vcd

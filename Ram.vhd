@@ -28,7 +28,6 @@ use ieee.math_real.all;
 entity Ram is
 	generic(
 		BE:				integer := 12;
-		BP:				integer := 8;
 		NA:				string := "mram.txt";
 		Tz:				time := 2 ns;
 		Twrite:			time := 5 ns;
@@ -49,7 +48,7 @@ end Ram;
 architecture arch of Ram is
 
 ---- Architecture declarations -----
-type tipo_memoria  is array (0 to 2**BE - 1) of std_logic_vector(BP - 1 downto 0);
+type tipo_memoria  is array (0 to 2**BE - 1) of std_logic_vector(7 downto 0);
 
 	signal Mram: tipo_memoria := ( others  => (others => '0')) ;
 
@@ -68,9 +67,9 @@ begin
 		file infile: text open read_mode is NA; -- Abre o arquivo para leitura
 		variable buff: line; 
 		variable addr_s: string ((integer(ceil(real(BE)/4.0)) + 1) downto 1); -- Digitos de endere�o mais um espa�o
-		variable data_s: string ((integer(ceil(real(BP)/4.0)) + 1) downto 1); -- �ltimo byte sempre tem um espa�o separador
+		variable data_s: string ((integer(ceil(real(8)/4.0)) + 1) downto 1); -- �ltimo byte sempre tem um espa�o separador
 		variable addr_1, pal_cnt: integer;
-		variable data: std_logic_vector((BP - 1) downto 0);
+		variable data: std_logic_vector((7) downto 0);
 		variable up: integer;
 		variable upreal: real;
 		variable Mem: tipo_memoria := ( others  => (others => '0')) ;
@@ -93,7 +92,7 @@ begin
 					read(buff, data_s); -- Leia dois d�gitos Hex e o espa�o separador
 					-- data := lookup(data_s(3)) * 16 + lookup(data_s(2)); -- Converte o valor lido em Hex para inteiro
 					data := (others => '0');
-					upreal := real(BP)/4.0;
+					upreal := real(8)/4.0;
 					up := integer((ceil(upreal)));
 					--report "Indice de conteudo = " & real'image(upreal) & " Indice de conteudo inteiro = " & integer'image(up);
 					for i in (up + 1) downto 2 loop

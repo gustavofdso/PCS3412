@@ -15,6 +15,9 @@ use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
 entity HazardDetectionUnit is
+    generic (
+        Tprop:              time := 1 ns
+    );
     port (
         -- Destination register
         id_ex_Rd:           in std_logic_vector(4 downto 0);
@@ -40,9 +43,9 @@ begin
     process (id_ex_Rd, if_id_Rs1, if_id_Rs2, ex_mem_MemRW)
     begin
         if ((if_id_Rs1 = id_ex_Rd) or (if_id_Rs2 = id_ex_Rd)) and ex_mem_MemRW = '1' then
-            hazard <= '1';
+            hazard <= '1' after Tprop;
         else
-            hazard <= '0';
+            hazard <= '0' after Tprop;
         end if;
     end process;
 

@@ -230,6 +230,8 @@ begin
     -- [9]          MemRW
     -- [11:10]      WBSel
 
+    not_PCWEn <= not(PCWEn);
+
     CONTROL_BUFFER_ID_EX: entity work.Reg
         generic map (
             BitCount => 12
@@ -237,7 +239,7 @@ begin
         port map (
             clk => clk,
             ce => '1',
-            rst => rst,
+            rst => not_PCWEn,
             din(0) => PCWEn,
             din(1) => PCsel,
             din(3 downto 2) => ImmSel,
@@ -248,8 +250,6 @@ begin
             dout => c_id_ex
         );
 
-    not_PCWEn <= not(PCWEn);
-
     CONTROL_BUFFER_EX_MEM: entity work.Reg
         generic map (
             BitCount => 12
@@ -257,7 +257,7 @@ begin
         port map (
             clk => clk,
             ce => '1',
-            rst => not_PCWEn,
+            rst => rst,
             din => c_id_ex,
             dout => c_ex_mem
         );

@@ -51,7 +51,6 @@ entity UC_MC is
 end UC_MC;
 
 architecture arch of UC_MC is
-
     -- RE signals
     signal sr:          std_logic_vector(5 downto 0);
 

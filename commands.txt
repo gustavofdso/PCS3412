@@ -1,0 +1,20 @@
+del *.o
+
+ghdl -a --ieee=synopsys -fexplicit Adder.vhd
+ghdl -a --ieee=synopsys -fexplicit ALU.vhd
+ghdl -a --ieee=synopsys -fexplicit Comparator.vhd
+ghdl -a --ieee=synopsys -fexplicit ImmediateGenerator.vhd
+ghdl -a --ieee=synopsys -fexplicit Mux2.vhd
+ghdl -a --ieee=synopsys -fexplicit Mux4.vhd
+ghdl -a --ieee=synopsys -fexplicit Ram.vhd
+ghdl -a --ieee=synopsys -fexplicit Reg.vhd
+ghdl -a --ieee=synopsys -fexplicit RegFile.vhd
+
+ghdl -a --ieee=synopsys -fexplicit ForwardingUnit.vhd
+ghdl -a --ieee=synopsys -fexplicit HazardDetectionUnit.vhd
+
+ghdl -a --ieee=synopsys -fexplicit FD_MC.vhd
+ghdl -e --ieee=synopsys -fexplicit FD_MC
+ghdl -r --ieee=synopsys -fexplicit FD_MC --vcd=saida.vcd
+
+gtkwave saida.vcd

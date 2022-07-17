@@ -28,6 +28,7 @@ use ieee.math_real.all;
 entity Ram is
 	generic(
 		BE:				integer := 12;
+		BP:				integer := 8;
 		NA:				string := "mram.txt";
 		Tz:				time := 2 ns;
 		Twrite:			time := 5 ns;
@@ -48,7 +49,7 @@ end Ram;
 architecture arch of Ram is
 
 ---- Architecture declarations -----
-type tipo_memoria  is array (0 to 2**BE - 1) of std_logic_vector(8 - 1 downto 0);
+type tipo_memoria  is array (0 to 2**BE - 1) of std_logic_vector(BP - 1 downto 0);
 
 	signal Mram: tipo_memoria := ( others  => (others => '0')) ;
 
@@ -67,9 +68,9 @@ begin
 		file infile: text open read_mode is NA; -- Abre o arquivo para leitura
 		variable buff: line; 
 		variable addr_s: string ((integer(ceil(real(BE)/4.0)) + 1) downto 1); -- Digitos de endere�o mais um espa�o
-		variable data_s: string ((integer(ceil(real(8)/4.0)) + 1) downto 1); -- �ltimo byte sempre tem um espa�o separador
+		variable data_s: string ((integer(ceil(real(BP)/4.0)) + 1) downto 1); -- �ltimo byte sempre tem um espa�o separador
 		variable addr_1, pal_cnt: integer;
-		variable data: std_logic_vector((8 - 1) downto 0);
+		variable data: std_logic_vector((BP - 1) downto 0);
 		variable up: integer;
 		variable upreal: real;
 		variable Mem: tipo_memoria := ( others  => (others => '0')) ;
@@ -92,7 +93,7 @@ begin
 					read(buff, data_s); -- Leia dois d�gitos Hex e o espa�o separador
 					-- data := lookup(data_s(3)) * 16 + lookup(data_s(2)); -- Converte o valor lido em Hex para inteiro
 					data := (others => '0');
-					upreal := real(8)/4.0;
+					upreal := real(BP)/4.0;
 					up := integer((ceil(upreal)));
 					--report "Indice de conteudo = " & real'image(upreal) & " Indice de conteudo inteiro = " & integer'image(up);
 					for i in (up + 1) downto 2 loop
@@ -102,36 +103,15 @@ begin
 					addr_1 := addr_1 + 1;	-- Endere�a a pr�xima palavra a ser carregada
 				end loop;
 			end loop;
-		end loop;
-	return Mem;
-end fill_memory;
- 
-begin
-if inicio = '1' then
-	-- Roda somente uma vez na inicializa��o
-	Mram <= fill_memory;
-	-- Insere o conte�do na mem�ria
-	inicio := '0';
-end if;
-if enable = '1' then
-	if (ender'last_event < Tsetup) or (dado_in'last_event < Tsetup) then
-		dado_out <= (others => 'X');
-	else
-		endereco := conv_integer(ender);
-		case rw is
-			when '0' => -- Ciclo de Leitura
-				dado_out <= Mram(endereco)&Mram(endereco+1)&Mram(endereco+2)&Mram(endereco+3) after Tread;
-				pronto <= '1' after Tread;				 
-			when '1' => --Ciclo de Escrita
-				Mram(endereco+0) <= dado_in(7 downto 0) after Twrite;
-				Mram(endereco+1) <= dado_in(15 downto 8) after Twrite;
-				Mram(endereco+2) <= dado_in(23 downto 16) after Twrite;
-				Mram(endereco+3) <= dado_in(31 downto 24) after Twrite;
-
-				pronto <= '1' after Twrite;
-			when others => -- Ciclo inv�lido
-				Null;
-		end case;
+		return Mem;
+	end fill_memory;
+	
+	begin
+	if inicio = '1' then
+		-- Roda somente uma vez na inicializa��o
+		Mram <= fill_memory;
+		-- Insere o conte�do na mem�ria
+		inicio := '0';
 	end if;
 	if enable = '1' then
 		if (ender'last_event < Tsetup) or (dado_in'last_event < Tsetup) then

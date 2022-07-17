@@ -1,4 +1,5 @@
 del *.o
+del *.lst
 
 ghdl -a --ieee=synopsys -fexplicit Adder.vhd
 ghdl -a --ieee=synopsys -fexplicit ALU.vhd

@@ -36,7 +36,7 @@ end;
 architecture RegFile of RegFile is
 
 type ram_type is array (0 to 2**AdrBitCount - 1) of std_logic_vector (DatBitCount - 1 downto 0);
-signal ram: ram_type;
+signal ram: ram_type := (others  => (others => '0'));
 
 signal enda_reg:    std_logic_vector(AdrBitCount - 1 downto 0);
 signal endb_reg:    std_logic_vector(AdrBitCount - 1 downto 0);

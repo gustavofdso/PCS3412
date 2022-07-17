@@ -50,7 +50,7 @@ architecture arch of Ram is
 ---- Architecture declarations -----
 type tipo_memoria is array (0 to 2**BE - 1) of std_logic_vector(7 downto 0);
 
-	signal Mram: tipo_memoria := ( others  => (others => '0')) ;
+	signal Mram: tipo_memoria := (others  => (others => '0'));
 
 begin
 

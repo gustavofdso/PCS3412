@@ -7,9 +7,9 @@
 --
 -------------------------------------------------------------------------------
 --
--- File        : C:\Aldec\Active-HDL-Student-Edition\vlib\Biblioteca_de_ComponentesV4.5\compile\Ram.vhd
+-- File        : C:\Aldec\Active-HDL-Student-Edition\vlib\Biblioteca_de_ComponentesV4.5\compile\Cache.vhd
 -- Generated   : Tue Mar  6 12:02:35 2018
--- From        : C:\Aldec\Active-HDL-Student-Edition\vlib\Biblioteca_de_ComponentesV4.5\src\Ram.bde
+-- From        : C:\Aldec\Active-HDL-Student-Edition\vlib\Biblioteca_de_ComponentesV4.5\src\Cache.bde
 -- By          : Bde2Vhdl ver. 2.6
 --
 -------------------------------------------------------------------------------
@@ -25,10 +25,9 @@ use std.textio.all;
 use ieee.std_logic_arith.all;
 use ieee.math_real.all;
 
-entity Ram is
+entity Cache is
 	generic(
-		BE:				integer := 32;
-		BP:				integer := 32;
+		BE:				integer := 12;
 		NA:				string := "mram.txt";
 		Tz:				time := 0 ns;
 		Twrite:			time := 5 ns;
@@ -41,22 +40,23 @@ entity Ram is
 		rw:				in std_logic;
 		ender:			in std_logic_vector(BE - 1 downto 0);
 		pronto:			out std_logic;
-		dado_in:		in std_logic_vector(BP - 1 downto 0);
-		dado_out:		out std_logic_vector(BP - 1 downto 0)
+		dado_in:		in std_logic_vector(31 downto 0);
+		dado_out:		out std_logic_vector(31 downto 0)
 	);
-end Ram;
+end Cache;
 
-architecture Ram of Ram is
+architecture arch of Cache is
 
-	---- Architecture declarations -----
-	type 	tipo_memoria  is array (0 to 2**BE - 1) of std_logic_vector(BP - 1 downto 0);
-	signal Mram: tipo_memoria := ( others  => (others => '0')) ;
+---- Architecture declarations -----
+type tipo_memoria is array (0 to 2**BE - 1) of std_logic_vector(7 downto 0);
 
-	begin
+	signal Mram: tipo_memoria := (others  => (others => '0'));
+
+begin
 
 	---- Processes ----
 
-	Carga_Inicial_e_Ram_Memoria :process (Clock, ender, dado_in, enable, rw) 
+	Carga_Inicial_e_Cache_Memoria :process (Clock, ender, dado_in, enable, rw) 
 	variable endereco: integer range 0 to (2**BE - 1);
 	variable inicio: std_logic := '1';
 	function fill_memory return tipo_memoria is
@@ -67,9 +67,9 @@ architecture Ram of Ram is
 		file infile: text open read_mode is NA; -- Abre o arquivo para leitura
 		variable buff: line; 
 		variable addr_s: string ((integer(ceil(real(BE)/4.0)) + 1) downto 1); -- Digitos de endere�o mais um espa�o
-		variable data_s: string ((integer(ceil(real(BP)/4.0)) + 1) downto 1); -- �ltimo byte sempre tem um espa�o separador
+		variable data_s: string ((integer(ceil(real(8)/4.0)) + 1) downto 1); -- �ltimo byte sempre tem um espa�o separador
 		variable addr_1, pal_cnt: integer;
-		variable data: std_logic_vector((BP - 1) downto 0);
+		variable data: std_logic_vector((7) downto 0);
 		variable up: integer;
 		variable upreal: real;
 		variable Mem: tipo_memoria := ( others  => (others => '0')) ;
@@ -92,7 +92,7 @@ architecture Ram of Ram is
 					read(buff, data_s); -- Leia dois d�gitos Hex e o espa�o separador
 					-- data := lookup(data_s(3)) * 16 + lookup(data_s(2)); -- Converte o valor lido em Hex para inteiro
 					data := (others => '0');
-					upreal := real(BP)/4.0;
+					upreal := real(8)/4.0;
 					up := integer((ceil(upreal)));
 					--report "Indice de conteudo = " & real'image(upreal) & " Indice de conteudo inteiro = " & integer'image(up);
 					for i in (up + 1) downto 2 loop
@@ -119,10 +119,16 @@ architecture Ram of Ram is
 			endereco := conv_integer(ender);
 			case rw is
 				when '0' => -- Ciclo de Leitura
-					dado_out <= Mram(endereco) after Tread;
+					dado_out(7 downto 0)   <= Mram(endereco+3)		after Tread;
+					dado_out(15 downto 8)  <= Mram(endereco+2)		after Tread;
+					dado_out(23 downto 16) <= Mram(endereco+1) 		after Tread;
+					dado_out(31 downto 24) <= Mram(endereco+0) 		after Tread;
 					pronto <= '1' after Tread;				 
 				when '1' => --Ciclo de Escrita
-					Mram(endereco) <= dado_in after Twrite;
+					Mram(endereco+3) <= dado_in(7 downto 0) 		after Twrite;
+					Mram(endereco+2) <= dado_in(15 downto 8) 		after Twrite;
+					Mram(endereco+1) <= dado_in(23 downto 16) 		after Twrite;
+					Mram(endereco+0) <= dado_in(31 downto 24) 		after Twrite;
 					pronto <= '1' after Twrite;
 				when others => -- Ciclo inv�lido
 					Null;
@@ -136,4 +142,4 @@ architecture Ram of Ram is
 	end if;
 	end process;
 
-end Ram;
+end arch;

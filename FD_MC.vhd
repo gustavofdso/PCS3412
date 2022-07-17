@@ -108,7 +108,7 @@ begin
             sum => add
         );
 
-    INSTRUCTION_MEMORY: entity work.Ram
+    INSTRUCTION_MEMORY: entity work.Cache
         generic map (
             NA => "instruction_memory.txt"
         )
@@ -182,7 +182,7 @@ begin
             result => alu
         );
 
-    DATA_MEMORY: entity work.Ram
+    DATA_MEMORY: entity work.Cache
         generic map (
             NA => "data_memory.txt"
         )

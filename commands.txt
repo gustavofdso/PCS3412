@@ -7,6 +7,7 @@ ghdl -a --ieee=synopsys -fexplicit Comparator.vhd
 ghdl -a --ieee=synopsys -fexplicit ImmediateGenerator.vhd
 ghdl -a --ieee=synopsys -fexplicit Mux2.vhd
 ghdl -a --ieee=synopsys -fexplicit Mux4.vhd
+ghdl -a --ieee=synopsys -fexplicit Cache.vhd
 ghdl -a --ieee=synopsys -fexplicit Ram.vhd
 ghdl -a --ieee=synopsys -fexplicit Reg.vhd
 ghdl -a --ieee=synopsys -fexplicit RegFile.vhd
@@ -15,6 +16,8 @@ ghdl -a --ieee=synopsys -fexplicit ForwardingUnit.vhd
 ghdl -a --ieee=synopsys -fexplicit HazardDetectionUnit.vhd
 
 ghdl -a --ieee=synopsys -fexplicit FD_MC.vhd
+ghdl -a --ieee=synopsys -fexplicit FD_PL.vhd
+
 ghdl -a --ieee=synopsys -fexplicit FD_MC_TB.vhd
 ghdl -e --ieee=synopsys -fexplicit FD_MC_TB
 ghdl -r --ieee=synopsys -fexplicit FD_MC_TB --vcd=saida.vcd

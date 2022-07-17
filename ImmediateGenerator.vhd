@@ -46,7 +46,7 @@ begin
             when "10" =>
                 immed(12 downto 0)  <= instruction(7) & instruction(30 downto 25) & instruction(11 downto 8) & "00"      after Tsel;
                 immed(31 downto 13) <= (others => instruction(31))                              after Tsel;
-			   -- J-Type
+			-- J-Type
             when "11" =>
                 immed(20 downto 0) <= instruction(19 downto 12) & instruction(20) & instruction(30 downto 21) & "00"     after Tsel;	
 				immed(31 downto 21) <= (others => instruction(31))                              after Tsel;

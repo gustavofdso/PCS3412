@@ -16,11 +16,11 @@ use IEEE.std_logic_arith.all;
 use IEEE.std_logic_signed.all;
 
 entity Comparator is
-    generic(
+    generic (
         BitCount:   integer := 32;
         Tsub:       time := 1.25 ns
     );
-    port(
+    port (
         A:          in std_logic_vector(BitCount - 1 downto 0);
         B:          in std_logic_vector(BitCount - 1 downto 0);
         eq:         out std_logic;

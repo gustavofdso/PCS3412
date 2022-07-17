@@ -31,7 +31,7 @@ architecture ImmediateGenerator of ImmediateGenerator is
 
 begin
 
-    process (ImmSel)
+    process (ImmSel, instruction)
     begin
         case ImmSel is
             -- I-Type

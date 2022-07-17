@@ -119,16 +119,16 @@ begin
 			endereco := conv_integer(ender);
 			case rw is
 				when '0' => -- Ciclo de Leitura
-					dado_out(7 downto 0)   <= Mram(endereco+0)		after Tread;
-					dado_out(15 downto 8)  <= Mram(endereco+1)		after Tread;
-					dado_out(23 downto 16) <= Mram(endereco+2) 		after Tread;
-					dado_out(31 downto 24) <= Mram(endereco+3) 		after Tread;
+					dado_out(7 downto 0)   <= Mram(endereco+3)		after Tread;
+					dado_out(15 downto 8)  <= Mram(endereco+2)		after Tread;
+					dado_out(23 downto 16) <= Mram(endereco+1) 		after Tread;
+					dado_out(31 downto 24) <= Mram(endereco+0) 		after Tread;
 					pronto <= '1' after Tread;				 
 				when '1' => --Ciclo de Escrita
-					Mram(endereco+0) <= dado_in(7 downto 0) 		after Twrite;
-					Mram(endereco+1) <= dado_in(15 downto 8) 		after Twrite;
-					Mram(endereco+2) <= dado_in(23 downto 16) 		after Twrite;
-					Mram(endereco+3) <= dado_in(31 downto 24) 		after Twrite;
+					Mram(endereco+3) <= dado_in(7 downto 0) 		after Twrite;
+					Mram(endereco+2) <= dado_in(15 downto 8) 		after Twrite;
+					Mram(endereco+1) <= dado_in(23 downto 16) 		after Twrite;
+					Mram(endereco+0) <= dado_in(31 downto 24) 		after Twrite;
 					pronto <= '1' after Twrite;
 				when others => -- Ciclo inv�lido
 					Null;

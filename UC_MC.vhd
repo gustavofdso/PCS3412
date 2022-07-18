@@ -114,7 +114,7 @@ begin
     CONTROL_MEMORY: entity work.Ram
         generic map (
             BE => 6,
-		    BP => 26,
+		    BP => 31,
             NA => "control_memory.txt"
         )
         port map (

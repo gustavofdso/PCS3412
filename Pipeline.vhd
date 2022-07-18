@@ -26,15 +26,15 @@ end entity;
 
 architecture arch of Pipeline is
 
-    signal PCsel:           out std_logic;
-    signal ImmSel:          out std_logic_vector(1 downto 0);
-    signal RegWEn:          out std_logic;
-    signal BrEq:            in std_logic;
-    signal BrLt:            in std_logic;
-    signal ALUSEl:          out std_logic_vector(3 downto 0);
-    signal MemRW:           out std_logic;
-    signal WBSel:           out std_logic_vector(1 downto 0);
-    signal instruction:     in std_logic_vector(31 downto 0)
+    signal PCsel:           std_logic;
+    signal ImmSel:          std_logic_vector(1 downto 0);
+    signal RegWEn:          std_logic;
+    signal BrEq:            std_logic;
+    signal BrLt:            std_logic;
+    signal ALUSEl:          std_logic_vector(3 downto 0);
+    signal MemRW:           std_logic;
+    signal WBSel:           std_logic_vector(1 downto 0);
+    signal instruction:     std_logic_vector(31 downto 0);
 
 begin
 

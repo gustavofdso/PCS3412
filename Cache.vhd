@@ -1,23 +1,3 @@
--------------------------------------------------------------------------------
---
--- Title       : No Title
--- Design      : Biblioteca_de_Componentes
--- Author      : Wilson Ruggiero
--- Company     : LARC-EPUSP
---
--------------------------------------------------------------------------------
---
--- File        : C:\Aldec\Active-HDL-Student-Edition\vlib\Biblioteca_de_ComponentesV4.5\compile\Cache.vhd
--- Generated   : Tue Mar  6 12:02:35 2018
--- From        : C:\Aldec\Active-HDL-Student-Edition\vlib\Biblioteca_de_ComponentesV4.5\src\Cache.bde
--- By          : Bde2Vhdl ver. 2.6
---
--------------------------------------------------------------------------------
---
--- Description : 
---
--------------------------------------------------------------------------------
--- Design unit header --
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.std_logic_unsigned.all;

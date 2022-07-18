@@ -23,9 +23,9 @@ entity Mux2 is
           Tdata:    time := 0.25 ns
      );
      port (
-          Sel:      in std_logic;
           I0:       in std_logic_vector(BitCount-1 downto 0);
           I1:       in std_logic_vector(BitCount-1 downto 0);
+          Sel:      in std_logic;
           O:        out std_logic_vector(BitCount-1 downto 0)
      );
 end Mux2;

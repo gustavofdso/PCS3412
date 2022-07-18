@@ -1,7 +1,7 @@
 -------------------------------------------------------------------------------
 --
--- Title       : UC_MC
--- Design      : T-FIVE-MC
+-- Title       : UC_PL
+-- Design      : T-FIVE-Pipe
 -- Author      : Gustavo Oliveira
 -- Company     : LARC-EPUSP
 --
@@ -16,14 +16,11 @@ use IEEE.numeric_std.all;
 
 library work;
 
-entity UC_MC is
+entity UC_PL is
     port (
         -- Global Clock and Reset signals
         clk:                    in std_logic;
         rst:                    in std_logic;
-
-        -- Write enable for PC
-        PCWEn:                  out std_logic;
 
         -- Selecting the new adress for PC
         PCsel:                  out std_logic;
@@ -38,10 +35,6 @@ entity UC_MC is
         BrEq:                   in std_logic;
         BrLt:                   in std_logic;
 
-        -- Selecting ALU inputs
-        ASEl:                   out std_logic;
-        BSEl:                   out std_logic;
-
         -- Selecting ALU operation
         ALUSEl:                 out std_logic_vector(3 downto 0);
 
@@ -54,9 +47,9 @@ entity UC_MC is
         -- Instruction fields for control
         instruction:            in std_logic_vector(31 downto 0)
     );
-end UC_MC;
+end UC_PL;
 
-architecture arch of UC_MC is
+architecture arch of UC_PL is
     -- Instruction signals
     signal opcode:              std_logic_vector(6 downto 0);
     signal funct3:              std_logic_vector(2 downto 0);
@@ -67,8 +60,8 @@ architecture arch of UC_MC is
     signal link:                std_logic_vector(5 downto 0);
     
     -- PROM signals
-    signal prom:                std_logic_vector(30 downto 0);
-    signal outputs:             std_logic_vector(13 downto 0);
+    signal prom:                std_logic_vector(27 downto 0);
+    signal outputs:             std_logic_vector(10 downto 0);
     signal link_true:           std_logic_vector(5 downto 0);
     signal link_false:          std_logic_vector(5 downto 0);
     signal test:                std_logic_vector(4 downto 0);
@@ -127,20 +120,17 @@ begin
             dado_out => prom
         );
 
-    outputs <= prom(13 downto 0);
-    link_true <= prom(19 downto 14);
-    link_false <= prom(25 downto 20);
-    test <= prom(30 downto 26);
+    outputs <= prom(10 downto 0);
+    link_true <= prom(16 downto 11);
+    link_false <= prom(22 downto 17);
+    test <= prom(27 downto 23);
 
-    PCWEn <= outputs(0);
-    PCsel <= outputs(1);
-    ImmSel <= outputs(3 downto 2);
-    RegWEn <= outputs(4);
-    ASel <= outputs(5);
-    BSel <= outputs(6);
-    ALUSEl <= outputs(10 downto 7);
-    MemRW <= outputs(11);
-    WBSel <= outputs(13 downto 12);
+    PCsel <= outputs(0);
+    ImmSel <= outputs(2 downto 1);
+    RegWEn <= outputs(3);
+    ALUSEl <= outputs(7 downto 4);
+    MemRW <= outputs(8);
+    WBSel <= outputs(10 downto 9);
 
     COMPARATOR_OPCODE_0110011: entity work.Comparator
         generic map (

@@ -5,27 +5,25 @@
 swap:
 	# Troca os valores entre v[k] e v[k+1]
 
-	# $a0 = &v[0]
-	# $a1 = k
+	# a0 = &v[0]
+	# a1 = k
 	
-	# $t0 = v[k]
-	# $t1 = &v[k]
-	# $t2 = v[k+1]
+	# t0 = v[k]
+	# t1 = &v[k]
+	# t2 = v[k+1]
 
-	SLLI	$a1, $t1, 2		# reg $t1 = k*4
-	ADD 	$t1, $a0, $t1	# reg $t1 = v + (k*4)
+	SLLI	a1, t1, 2		# reg t1 = k*4
+	ADD 	t1, a0, t1	# reg t1 = v + (k*4)
 	
-	# reg $t1 has the address of v[k]
-	LW 		$t0, 0($t1) 	# reg $t0 (temp) = v[k]
-	LW 		$t2, 4($t1) 	# reg $t2 = v[k+1]
+	# reg t1 has the address of v[k]
+	LW 		t0, 0(t1) 	# reg t0 (temp) = v[k]
+	LW 		t2, 4(t1) 	# reg t2 = v[k+1]
 	
 	# refers to next element of v
-	SW 		$t2, 0($t1) 	# v[k] = reg $t2
-	SW 		$t0, 4($t1) 	# v[k+1] = reg $t0(temp)
+	SW 		t2, 0(t1) 	# v[k] = reg t2
+	SW 		t0, 4(t1) 	# v[k+1] = reg t0(temp)
 	
-	JR 		$ra 			# return from Swap to calling
-routine
-.end swap 					# End of subroutine swap code
+	JR 		ra 			# return from Swap to calling
 
 # Data declarations
 	.data
@@ -37,16 +35,15 @@ n:	.word 5 				# Number of elements in the data set
 	
 main:
 	# Prepare the parameters of SORT routine
-	LW 		$a0, v 			# load the address of data set v in $a0 - 1st parameter
-	LW 		$a1, n 			# load the number of elements n in $a1 - 2nd parameter
+	LW 		a0, v 			# load the address of data set v in a0 - 1st parameter
+	LW 		a1, n 			# load the number of elements n in a1 - 2nd parameter
 	
 	# Call sort routine
 	JAL 	sort 			# Call the sort routine
 	
 	# Stop program execution
-	LI 		$v0, 10 		# Call the Halt system call
+	LI 		v0, 10 		# Call the Halt system call
 	syscall 				# Halt the program
-.end main
 
 	# Procedure SORT
 	.globl sort 			# make name sort global
@@ -55,70 +52,69 @@ main:
 sort:
 	# Ordena v
 	
-	# $a0 = &v[0]
-	# $a1 = len(v)
+	# a0 = &v[0]
+	# a1 = len(v)
 	
-	# $s0 = i
-	# $s1 = j
-	# $s2 = &v[0]
-	# $s3 = len(v)
+	# s0 = i
+	# s1 = j
+	# s2 = &v[0]
+	# s3 = len(v)
 
 	# Saving registers
-	ADDI 	$sp, $sp, -20 	# make room on the stack for 5 registers
-	SW 		$ra, 16($sp) 	# save $ra on stack
-	SW 		$s3, 12($sp) 	# save $s3 on stack
-	SW 		$s2, 8($sp) 	# save $s2 on stack
-	SW 		$s1, 4($sp) 	# save $s1 on stack ==> j
-	SW 		$s0, 0($sp) 	# save $s0 on stack ==> i
+	ADDI 	sp, sp, -20 	# make room on the stack for 5 registers
+	SW 		ra, 16(sp) 	# save ra on stack
+	SW 		s3, 12(sp) 	# save s3 on stack
+	SW 		s2, 8(sp) 	# save s2 on stack
+	SW 		s1, 4(sp) 	# save s1 on stack ==> j
+	SW 		s0, 0(sp) 	# save s0 on stack ==> i
 	
 	# Procedure body
 	# Move parameters
-	MV 		$s2, $a0 		# copy parameter $a0 into $s2 ==> v
-	MV	 	$s3, $a1 		# copy parameter $a1 into $s3 ==> n
+	MV 		s2, a0 		# copy parameter a0 into s2 ==> v
+	MV	 	s3, a1 		# copy parameter a1 into s3 ==> n
 
 	# Outer Loop
-	MV	 	$s0, $zero 		# i = 0
+	MV	 	s0, zero 		# i = 0
 
 for1tst:
-	SLT 	$t0, $s0, $s3 	# $t0 = 1 if $s0 < $s3 else $t0 = 0 (i < n)
-	BEQ 	$t0, $zero, exit1 # go to exit1 if $s0
+	SLT 	t0, s0, s3 	# t0 = 1 if s0 < s3 else t0 = 0 (i < n)
+	BEQ 	t0, zero, exit1 # go to exit1 if s0
 	
 	# Inner Loop
-	ADDI 	$s1, $s0, -1 	# j = i - 1
+	ADDI 	s1, s0, -1 	# j = i - 1
 	
 for2tst:
-	SLTI 	$t0, $s1, 0 	# $t0 = 1 if $s1 < 0 else $t0 = 0 (j < 0)
-	BNE 	$t0, $zero, exit2 # go to exit2 if $s1 < 0 (j < 0)
-	SLLI 	$t1, $s1, 2 	# $t1 = j*4
-	ADD 	$t2, $s2, $t1 	# $t2 = v + (j*4)
-	LW 		$t3, 0($t2) 	# $t3 = v[j]
-	LW 		$t4, 4($t2) 	# $t4 = v[j+1]
-	SLT 	$t0, $t4, $t3 	# $t0 = 1 if $t4 < $t3 else $t0 = 0
-	BEQ 	$t0, $zero, exit2 # go to exit2 if $t4 >= $t3
+	SLTI 	t0, s1, 0 	# t0 = 1 if s1 < 0 else t0 = 0 (j < 0)
+	BNE 	t0, zero, exit2 # go to exit2 if s1 < 0 (j < 0)
+	SLLI 	t1, s1, 2 	# t1 = j*4
+	ADD 	t2, s2, t1 	# t2 = v + (j*4)
+	LW 		t3, 0(t2) 	# t3 = v[j]
+	LW 		t4, 4(t2) 	# t4 = v[j+1]
+	SLT 	t0, t4, t3 	# t0 = 1 if t4 < t3 else t0 = 0
+	BEQ 	t0, zero, exit2 # go to exit2 if t4 >= t3
 	
 	# pass parameters and call Swap
-	MV	 	$a0, $s2 		# First parameter of Swap is v (old $a0)
-	MV	 	$a1, $s1 		# Second parameter of Swap is j
+	MV	 	a0, s2 		# First parameter of Swap is v (old a0)
+	MV	 	a1, s1 		# Second parameter of Swap is j
 	JAL 	swap 			# Call subrotine Swap
 
 	# Inner Loop
-	ADDI 	$s1, $s1, -1 	# j = j - 1
+	ADDI 	s1, s1, -1 	# j = j - 1
 	J 		for2tst 		# Jump to test of the innerloop
 	
 # Outer Loop
 exit2:
-	ADDI 	$s0, $s0, 1 # i = i + 1
+	ADDI 	s0, s0, 1 # i = i + 1
 	J 		for1tst 		# Jump to test of the outer loop
 	
 # Restoring Registers
 exit1:
-	LW 		$s0, 0($sp) 	# Restore $s0 from stack
-	LW 		$s1, 4($sp) 	# Restore $s1 from stack
-	LW 		$s2, 8($sp) 	# Restore $s2 from stack
-	LW 		$s3, 12($sp) 	# Restore $s3 from stack
-	LW 		$ra, 16($sp) 	# Restore $ra from stack
-	ADDI 	$sp, $sp, 20 	# Restore Stack Pointer
+	LW 		s0, 0(sp) 	# Restore s0 from stack
+	LW 		s1, 4(sp) 	# Restore s1 from stack
+	LW 		s2, 8(sp) 	# Restore s2 from stack
+	LW 		s3, 12(sp) 	# Restore s3 from stack
+	LW 		ra, 16(sp) 	# Restore ra from stack
+	ADDI 	sp, sp, 20 	# Restore Stack Pointer
 	
 	# Procedure sort Return
-	JR 		$ra 			# Return from SORT to the calling routine
-.end sort 					# End of routine sort code
+	JR 		ra 			# Return from SORT to the calling routine

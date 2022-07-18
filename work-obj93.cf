@@ -1,76 +1,76 @@
 v 4
-file . "Multiciclo.vhd" "9c53e58f4af78241d20e329cd5630a35b4dd304e" "20220718193622.557":
-  entity multiciclo at 13( 440) + 0 on 1225;
-  architecture arch of multiciclo at 27( 716) + 0 on 1226;
-file . "UC_MC.vhd" "1d011425582b5bc96f436e655ddcaa104038e476" "20220718193621.889":
-  entity uc_mc at 13( 436) + 0 on 1221;
-  architecture arch of uc_mc at 59( 1808) + 0 on 1222;
-file . "UC_PL.vhd" "e7dc342c9e1ec826e17ac2797af982354c7b1f9e" "20220718193622.229":
-  entity uc_pl at 13( 438) + 0 on 1223;
-  architecture arch of uc_pl at 52( 1597) + 0 on 1224;
-file . "Mux32.vhd" "0fcd8697a5a5239a9b8620c38684c385813d87d8" "20220718193620.139":
-  entity mux32 at 13( 439) + 0 on 1205;
-  architecture arch of mux32 at 63( 2970) + 0 on 1206;
-file . "Mux8.vhd" "0fc160e85ffd73eda450e6a7012cd7eb20597031" "20220718193619.785":
-  entity mux8 at 13( 437) + 0 on 1201;
-  architecture arch of mux8 at 39( 1406) + 0 on 1202;
-file . "Cache.vhd" "484873d2e5c65e88924ed0ac4275e42021666b58" "20220718193618.835":
-  entity cache at 1( 0) + 0 on 1191;
-  architecture arch of cache at 28( 628) + 0 on 1192;
+file . "Multiciclo.vhd" "9c53e58f4af78241d20e329cd5630a35b4dd304e" "20220718234821.382":
+  entity multiciclo at 13( 440) + 0 on 1309;
+  architecture arch of multiciclo at 27( 716) + 0 on 1310;
+file . "UC_MC.vhd" "7bea86351f5dd438c37db014e739fab1f3724a65" "20220718234820.644":
+  entity uc_mc at 13( 436) + 0 on 1305;
+  architecture arch of uc_mc at 59( 1808) + 0 on 1306;
+file . "UC_PL.vhd" "7726cd17529ec0e7aeab3f4374ebfe23e1c8a62e" "20220718234821.009":
+  entity uc_pl at 13( 438) + 0 on 1307;
+  architecture arch of uc_pl at 52( 1597) + 0 on 1308;
+file . "Mux32.vhd" "0fcd8697a5a5239a9b8620c38684c385813d87d8" "20220718234818.669":
+  entity mux32 at 13( 439) + 0 on 1289;
+  architecture arch of mux32 at 63( 2970) + 0 on 1290;
+file . "Mux8.vhd" "0fc160e85ffd73eda450e6a7012cd7eb20597031" "20220718234818.239":
+  entity mux8 at 13( 437) + 0 on 1285;
+  architecture arch of mux8 at 39( 1406) + 0 on 1286;
+file . "Cache.vhd" "484873d2e5c65e88924ed0ac4275e42021666b58" "20220718234817.131":
+  entity cache at 1( 0) + 0 on 1275;
+  architecture arch of cache at 28( 628) + 0 on 1276;
 file . "GenericRam.vhd" "85d73d301e8ef7deabcff58383eae4ba0f19678e" "20220717203528.213":
   entity genericram at 21( 812) + 0 on 987;
   architecture genericram of genericram at 49( 1483) + 0 on 988;
 file . "Ram_tb.vhd" "7eec2803b0cb3d13d465988965a7efa5a9b31fe0" "20220717161822.022":
   entity ram_tb at 1( 0) + 0 on 487;
   architecture ram_tb_arch of ram_tb at 21( 458) + 0 on 488;
-file . "Ram.vhd" "c1843508b7125dfd52d49eb2698047f9572ebffb" "20220718193620.403":
-  entity ram at 21( 812) + 0 on 1207;
-  architecture ram of ram at 49( 1469) + 0 on 1208;
-file . "FD_PL.vhd" "c7f896cc7f785e38c45eed82f17d695b70fd4140" "20220718193621.533":
-  entity fd_pl at 13( 455) + 0 on 1219;
-  architecture arch of fd_pl at 52( 1510) + 0 on 1220;
-file . "HazardDetectionUnit.vhd" "b73cce239d99031ce6a53e07c5fd53cf3ef866a9" "20220718193621.095":
-  entity hazarddetectionunit at 13( 454) + 0 on 1215;
-  architecture arch of hazarddetectionunit at 37( 1066) + 0 on 1216;
-file . "ALU.vhd" "6bef55466b3288ad0edda78b9e8230fb437261ae" "20220718193618.645":
-  entity alu at 13( 428) + 0 on 1189;
-  architecture alu of alu at 38( 1249) + 0 on 1190;
-file . "RegFile.vhd" "086dd8cc4cc21cd425eea173506d86dfdbe5f917" "20220718193620.755":
-  entity regfile at 13( 432) + 0 on 1211;
-  architecture regfile of regfile at 36( 1241) + 0 on 1212;
-file . "Mux2.vhd" "44a7d9486b2aed03c9f12ff9a3b0795cc741fdfa" "20220718193619.406":
-  entity mux2 at 13( 437) + 0 on 1197;
-  architecture mux2 of mux2 at 33( 991) + 0 on 1198;
-file . "Comparator.vhd" "709c511d2e04e843d3b1d15612af45264543ffa3" "20220718193619.028":
-  entity comparator at 13( 442) + 0 on 1193;
-  architecture comparator of comparator at 34( 1018) + 0 on 1194;
-file . "Adder.vhd" "35dde600174cebb9133b3bb5e2106ed849969041" "20220718193618.493":
-  entity adder at 13( 432) + 0 on 1187;
-  architecture adder of adder at 31( 918) + 0 on 1188;
-file . "ImmediateGenerator.vhd" "397ab97aec5c410b9307aca311615d468fbd99f0" "20220718193619.186":
-  entity immediategenerator at 13( 449) + 0 on 1195;
-  architecture immediategenerator of immediategenerator at 30( 923) + 0 on 1196;
-file . "Mux4.vhd" "bc3a783d2e131dcbc8ec270145c0dded5781d030" "20220718193619.565":
-  entity mux4 at 13( 437) + 0 on 1199;
-  architecture mux4 of mux4 at 35( 1146) + 0 on 1200;
-file . "Reg.vhd" "f6c7fb9ccee6614e0c740bf28950160ee479de2f" "20220718193620.594":
-  entity reg at 13( 433) + 0 on 1209;
-  architecture reg of reg at 32( 978) + 0 on 1210;
+file . "Ram.vhd" "c1843508b7125dfd52d49eb2698047f9572ebffb" "20220718234818.912":
+  entity ram at 21( 812) + 0 on 1291;
+  architecture ram of ram at 49( 1469) + 0 on 1292;
+file . "FD_PL.vhd" "c7f896cc7f785e38c45eed82f17d695b70fd4140" "20220718234820.276":
+  entity fd_pl at 13( 455) + 0 on 1303;
+  architecture arch of fd_pl at 52( 1510) + 0 on 1304;
+file . "HazardDetectionUnit.vhd" "b73cce239d99031ce6a53e07c5fd53cf3ef866a9" "20220718234819.761":
+  entity hazarddetectionunit at 13( 454) + 0 on 1299;
+  architecture arch of hazarddetectionunit at 37( 1066) + 0 on 1300;
+file . "ALU.vhd" "6bef55466b3288ad0edda78b9e8230fb437261ae" "20220718234816.902":
+  entity alu at 13( 428) + 0 on 1273;
+  architecture alu of alu at 38( 1249) + 0 on 1274;
+file . "RegFile.vhd" "086dd8cc4cc21cd425eea173506d86dfdbe5f917" "20220718234819.343":
+  entity regfile at 13( 432) + 0 on 1295;
+  architecture regfile of regfile at 36( 1241) + 0 on 1296;
+file . "Mux2.vhd" "44a7d9486b2aed03c9f12ff9a3b0795cc741fdfa" "20220718234817.783":
+  entity mux2 at 13( 437) + 0 on 1281;
+  architecture mux2 of mux2 at 33( 991) + 0 on 1282;
+file . "Comparator.vhd" "709c511d2e04e843d3b1d15612af45264543ffa3" "20220718234817.393":
+  entity comparator at 13( 442) + 0 on 1277;
+  architecture comparator of comparator at 34( 1018) + 0 on 1278;
+file . "Adder.vhd" "35dde600174cebb9133b3bb5e2106ed849969041" "20220718234816.723":
+  entity adder at 13( 432) + 0 on 1271;
+  architecture adder of adder at 31( 918) + 0 on 1272;
+file . "ImmediateGenerator.vhd" "397ab97aec5c410b9307aca311615d468fbd99f0" "20220718234817.584":
+  entity immediategenerator at 13( 449) + 0 on 1279;
+  architecture immediategenerator of immediategenerator at 30( 923) + 0 on 1280;
+file . "Mux4.vhd" "bc3a783d2e131dcbc8ec270145c0dded5781d030" "20220718234818.048":
+  entity mux4 at 13( 437) + 0 on 1283;
+  architecture mux4 of mux4 at 35( 1146) + 0 on 1284;
+file . "Reg.vhd" "f6c7fb9ccee6614e0c740bf28950160ee479de2f" "20220718234819.149":
+  entity reg at 13( 433) + 0 on 1293;
+  architecture reg of reg at 32( 978) + 0 on 1294;
 file . "FD.vhd" "a83cdaeddf613c486ba410edf52fcda080ee27c5" "20220716154122.680":
   entity fd at 13( 450) + 0 on 67;
   architecture architecture_fd of fd at 62( 1822) + 0 on 68;
-file . "ForwardingUnit.vhd" "614a7527535579c48f23bf613c06274778deaed5" "20220718193620.929":
-  entity forwardingunit at 13( 443) + 0 on 1213;
-  architecture arch of forwardingunit at 40( 1248) + 0 on 1214;
-file . "FD_MC.vhd" "84eb4f7b6db226c3235e91cb93239d1600ecc7de" "20220718193621.284":
-  entity fd_mc at 13( 450) + 0 on 1217;
-  architecture arch of fd_mc at 59( 1699) + 0 on 1218;
+file . "ForwardingUnit.vhd" "614a7527535579c48f23bf613c06274778deaed5" "20220718234819.577":
+  entity forwardingunit at 13( 443) + 0 on 1297;
+  architecture arch of forwardingunit at 40( 1248) + 0 on 1298;
+file . "FD_MC.vhd" "84eb4f7b6db226c3235e91cb93239d1600ecc7de" "20220718234819.957":
+  entity fd_mc at 13( 450) + 0 on 1301;
+  architecture arch of fd_mc at 59( 1699) + 0 on 1302;
 file . "FD_MC_TB.vhd" "47dbe3b3e37376f34588ef47488e4fe1925631e3" "20220717203946.296":
   entity fd_mc_tb at 1( 0) + 0 on 1023;
   architecture arch of fd_mc_tb at 10( 128) + 0 on 1024;
-file . "Mux16.vhd" "9596f6d9021640836c776125100880b272248d87" "20220718193619.952":
-  entity mux16 at 13( 439) + 0 on 1203;
-  architecture arch of mux16 at 47( 1930) + 0 on 1204;
-file . "Pipeline.vhd" "3960ba87569c1a8800e8707b75ccffee037c36ba" "20220718193624.084":
-  entity pipeline at 13( 437) + 0 on 1227;
-  architecture arch of pipeline at 27( 711) + 0 on 1228;
+file . "Mux16.vhd" "9596f6d9021640836c776125100880b272248d87" "20220718234818.451":
+  entity mux16 at 13( 439) + 0 on 1287;
+  architecture arch of mux16 at 47( 1930) + 0 on 1288;
+file . "Pipeline.vhd" "3960ba87569c1a8800e8707b75ccffee037c36ba" "20220718234822.527":
+  entity pipeline at 13( 437) + 0 on 1311;
+  architecture arch of pipeline at 27( 711) + 0 on 1312;

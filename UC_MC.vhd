@@ -67,7 +67,7 @@ architecture arch of UC_MC is
     signal link:                std_logic_vector(5 downto 0);
     
     -- PROM signals
-    signal prom:                std_logic_vector(30 downto 0);
+    signal prom:                std_logic_vector(31 downto 0);
     signal outputs:             std_logic_vector(13 downto 0);
     signal link_true:           std_logic_vector(5 downto 0);
     signal link_false:          std_logic_vector(5 downto 0);
@@ -85,6 +85,7 @@ architecture arch of UC_MC is
     signal funct3_010:          std_logic;
     signal funct3_001:          std_logic;
     signal funct3_101:          std_logic;
+    signal funct3_100:          std_logic;
     signal funct7_0000010:      std_logic;
     signal funct7_0000000:      std_logic;
     signal funct7_0000001:      std_logic;
@@ -114,8 +115,8 @@ begin
     CONTROL_MEMORY: entity work.Ram
         generic map (
             BE => 6,
-		    BP => 31,
-            NA => "control_memory.txt"
+		    BP => 32,
+            NA => "control_memory_mc.txt"
         )
         port map (
             Clock => clk,
@@ -296,6 +297,20 @@ begin
             ge => open
         );
 
+    COMPARATOR_FUNCT3_100: entity work.Comparator
+        generic map (
+            BitCount => 3
+        )
+        port map (
+            A => funct3,
+            B => "100",
+            eq => funct3_100,
+            lt => open, 
+            gt => open,
+            le => open,
+            ge => open
+        );
+
     COMPARATOR_FUNCT7_0000010: entity work.Comparator
         generic map (
             BitCount => 7
@@ -374,7 +389,7 @@ begin
             I14(0) => funct7_0000100,
             I15(0) => BrLt,
             I16(0) => BrEq,
-            I17 => (others => '0'),
+            I17(0) => funct3_100,
             I18 => (others => '0'),
             I19 => (others => '0'),
             I20 => (others => '0'),

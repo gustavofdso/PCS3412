@@ -45,7 +45,7 @@ begin
 
     process (ex_mem_RegWEn, mem_wb_RegWEn, ex_mem_Rd, mem_wb_Rd, id_ex_Rs1, id_ex_Rs2)
     begin
-        if ex_mem_RegWEn = '1' and ex_mem_Rd = id_ex_Rs1 then a <= '1' after Tprop;
+        if ex_mem_RegWEn = '1' and ex_mem_Rd /= "00000" and ex_mem_Rd = id_ex_Rs1 then a <= '1' after Tprop;
         else a <= '0' after Tprop;
         end if;
         
@@ -53,7 +53,7 @@ begin
         else b <= '0' after Tprop;
         end if;
 
-        if ex_mem_RegWEn = '1' and ex_mem_Rd = id_ex_Rs2 then c <= '1' after Tprop;
+        if ex_mem_RegWEn = '1' and ex_mem_Rd /= "00000" and ex_mem_Rd = id_ex_Rs2 then c <= '1' after Tprop;
         else c <= '0' after Tprop;
         end if;
         
